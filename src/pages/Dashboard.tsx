@@ -73,15 +73,19 @@ export default function Dashboard() {
             Here's what needs your attention today.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="inline-flex items-center gap-3">
           <Button
             variant="outline"
-            className="rounded-full bg-card hover:bg-secondary/60 border-border h-10 px-5"
+            className="bg-card hover:bg-secondary/60 border-border h-10 px-5"
             onClick={() => navigate("/review-qp")}
           >
             <FileSearch className="h-4 w-4 mr-2" />
             Review QP
           </Button>
+          <span
+            aria-hidden="true"
+            className="h-7 w-px bg-border/80"
+          />
           <Button
             className="h-10 px-5"
             onClick={() => navigate("/create")}
