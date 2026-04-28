@@ -115,12 +115,22 @@ export default {
           "0%": { opacity: "0", transform: "translateY(12px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        shimmer: {
+          "0%": { transform: "translateX(-120%)" },
+          "100%": { transform: "translateX(220%)" },
+        },
+        "progress-grow": {
+          "0%": { width: "0%" },
+          "100%": { width: "var(--progress-target, 0%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         float: "float 6s ease-in-out infinite",
         "fade-in-up": "fadeInUp 0.6s ease-out",
+        shimmer: "shimmer 2.4s ease-in-out infinite",
+        "progress-grow": "progress-grow 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards",
       },
     },
   },
