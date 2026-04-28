@@ -106,16 +106,12 @@ export default function Login() {
           </div>
 
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-soft text-primary text-xs mb-4">
-              <Sparkles className="h-3 w-3" />
-              Welcome to Lumen LMS
-            </div>
-            <h2 className="text-[30px] text-foreground leading-tight">
-              Welcome Back
+          <div className="mb-8">
+            <h2 className="text-[28px] text-foreground leading-tight">
+              Welcome back
             </h2>
-            <p className="text-sm text-muted-foreground mt-2">
-              Please sign in to your account
+            <p className="text-sm text-muted-foreground mt-1.5">
+              Sign in to continue
             </p>
           </div>
 
