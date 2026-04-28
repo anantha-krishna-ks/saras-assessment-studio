@@ -287,18 +287,59 @@ function PastelStat({
         {caption}
       </p>
 
-      <div
-        className={cn("mt-4 h-2 w-full rounded-full overflow-hidden", t.barTrack)}
-        role="progressbar"
-        aria-valuenow={Math.round(pct)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={`${label} progress`}
-      >
+      {/* Modern progress bar */}
+      <div className="mt-5 flex items-center gap-3">
         <div
-          className={cn("h-full rounded-full transition-all", t.bar)}
-          style={{ width: `${pct}%` }}
-        />
+          className={cn(
+            "relative h-2.5 flex-1 rounded-full overflow-hidden",
+            "bg-white/60 ring-1 ring-inset ring-black/5",
+            "shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]"
+          )}
+          role="progressbar"
+          aria-valuenow={Math.round(pct)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`${label} progress`}
+        >
+          <div
+            className={cn(
+              "relative h-full rounded-full animate-progress-grow",
+              t.bar,
+              "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.35),0_2px_8px_-1px_currentColor]"
+            )}
+            style={
+              {
+                ["--progress-target" as string]: `${pct}%`,
+                width: `${pct}%`,
+              } as React.CSSProperties
+            }
+          >
+            {/* glossy top highlight */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-white/35"
+            />
+            {/* shimmer sweep */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent blur-[2px] animate-shimmer"
+            />
+            {/* glow tip */}
+            <span
+              aria-hidden="true"
+              className="absolute right-0 top-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.9)]"
+            />
+          </div>
+        </div>
+        <span
+          className={cn(
+            "text-sm font-medium tabular-nums min-w-[3ch] text-right",
+            t.ink
+          )}
+          aria-hidden="true"
+        >
+          {Math.round(pct)}%
+        </span>
       </div>
     </Card>
   );
