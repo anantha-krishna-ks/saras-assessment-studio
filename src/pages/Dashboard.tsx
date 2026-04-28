@@ -57,7 +57,7 @@ export default function Dashboard() {
             Review QP
           </Button>
           <Button
-            className="rounded-full bg-foreground text-background hover:bg-foreground/90 h-10 px-5"
+            className="h-10 px-5"
             onClick={() => navigate("/create")}
           >
             <Plus className="h-4 w-4 mr-2" />
@@ -351,7 +351,7 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
         Create your first assessment to get started.
       </p>
       <Button
-        className="mt-5 rounded-full bg-foreground text-background hover:bg-foreground/90"
+        className="mt-5"
         onClick={onCreate}
       >
         <Plus className="h-4 w-4 mr-2" /> Create Assessment
