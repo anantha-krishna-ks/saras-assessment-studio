@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Send } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Send, ChevronDown, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const types = ["PA1", "PA2", "Mid-term", "Final Exam", "Unit Test 1", "Unit Test 2", "Unit Test 3"];
@@ -33,6 +37,13 @@ export default function CreateAssessment() {
   const navigate = useNavigate();
   const [hours, setHours] = useState<number | "">(1);
   const [minutes, setMinutes] = useState<number | "">(30);
+  const [selectedChapters, setSelectedChapters] = useState<string[]>([]);
+
+  const toggleChapter = (chapter: string) => {
+    setSelectedChapters((prev) =>
+      prev.includes(chapter) ? prev.filter((c) => c !== chapter) : [...prev, chapter]
+    );
+  };
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault();
