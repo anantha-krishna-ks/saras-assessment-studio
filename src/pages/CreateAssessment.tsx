@@ -19,6 +19,15 @@ const chapterOptions = [
   "Chapter 5 — Arithmetic Progressions",
   "Chapter 6 — Triangles",
 ];
+const teachers = [
+  "Mr. Rajesh Kumar",
+  "Ms. Priya Menon",
+  "Mr. Arun Verma",
+  "Ms. Kavita Iyer",
+  "Mr. Sandeep Patel",
+  "Ms. Neha Reddy",
+  "Mr. Vikram Singh",
+];
 
 export default function CreateAssessment() {
   const navigate = useNavigate();
@@ -106,6 +115,13 @@ export default function CreateAssessment() {
               </div>
             </div>
           </Field>
+
+          <FieldSelect
+            label="Teacher assigned for QP"
+            required
+            placeholder="Select teacher"
+            options={teachers}
+          />
 
         </div>
       </Card>
