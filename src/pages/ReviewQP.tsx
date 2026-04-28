@@ -193,7 +193,8 @@ export default function ReviewQP() {
             <Card className="rounded-2xl border border-border shadow-soft-xs divide-y divide-border overflow-hidden">
               {section.questions.map((q) => {
                 const qid = `${section.name}-${q.number}`;
-                const hasComment = comments[qid]?.trim().length > 0;
+                const comment = comments[qid];
+                const hasComment = (comment?.text.trim().length ?? 0) > 0;
                 return (
                   <div
                     key={qid}
@@ -238,13 +239,27 @@ export default function ReviewQP() {
                           </div>
                         )}
 
-                        {hasComment && (
+                        <div className="mt-3 p-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5">
+                          <div className="text-sm uppercase tracking-wide text-emerald-700 dark:text-emerald-400 mb-1">
+                            Correct Answer
+                          </div>
+                          <p className="text-sm text-foreground/90 whitespace-pre-wrap">
+                            {q.answer}
+                          </p>
+                        </div>
+
+                        {hasComment && comment && (
                           <div className="mt-3 p-3 rounded-lg border border-primary/20 bg-background">
-                            <div className="text-sm uppercase tracking-wide text-primary mb-1">
-                              HOD Comment
+                            <div className="flex items-center justify-between gap-3 mb-1">
+                              <div className="text-sm uppercase tracking-wide text-primary">
+                                HOD Comment
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {formatTimestamp(comment.createdAt)}
+                              </div>
                             </div>
                             <p className="text-sm text-foreground/90 whitespace-pre-wrap">
-                              {comments[qid]}
+                              {comment.text}
                             </p>
                           </div>
                         )}
