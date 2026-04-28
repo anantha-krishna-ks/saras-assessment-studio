@@ -69,49 +69,26 @@ export default function Login() {
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-background overflow-hidden">
-      {/* Left brand / illustration panel */}
-      <div className="relative hidden lg:flex flex-col justify-between p-12 bg-primary-soft border-r border-border overflow-hidden">
+      {/* Left brand / animation panel */}
+      <div className="relative hidden lg:flex flex-col justify-between p-10 bg-primary-soft border-r border-border overflow-hidden">
         {/* ambient blurred shapes */}
-        <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl animate-[pulse_6s_ease-in-out_infinite]" />
-        <div className="pointer-events-none absolute -bottom-32 -right-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl animate-[pulse_8s_ease-in-out_infinite]" />
+        <div className="pointer-events-none absolute -top-32 -left-32 h-80 w-80 rounded-full bg-primary/15 blur-3xl animate-[pulse_7s_ease-in-out_infinite]" />
+        <div className="pointer-events-none absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-primary/10 blur-3xl animate-[pulse_9s_ease-in-out_infinite]" />
 
+        {/* Logo */}
         <div className="relative flex items-center gap-2.5">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-soft-sm">
             <GraduationCap className="h-5 w-5 text-primary-foreground" />
           </div>
-          <div>
-            <div className="text-[15px] text-foreground">Lumen LMS</div>
-            <div className="text-sm text-muted-foreground">Assessment Studio</div>
-          </div>
+          <div className="text-[15px] text-foreground">Lumen LMS</div>
         </div>
 
-        <div className="relative flex flex-col items-center text-center max-w-md mx-auto">
-          <div className="relative">
-            <div className="absolute inset-0 rounded-3xl bg-primary/10 blur-2xl" />
-            <img
-              src={loginIllustration}
-              alt="Educator working on assessments"
-              width={1024}
-              height={1024}
-              className="relative w-[380px] h-[380px] object-contain animate-[float_6s_ease-in-out_infinite]"
-            />
-          </div>
-          <h1 className="mt-2 text-[30px] leading-tight text-foreground">
-            A calmer way to manage assessments.
-          </h1>
-          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            Create, review and schedule question papers across grades and
-            subjects — all in one elegant workspace built for educators.
-          </p>
-
-          <div className="mt-8 grid grid-cols-3 gap-6">
-            <Stat value="120+" label="Assessments" />
-            <Stat value="24" label="Reviewers" />
-            <Stat value="98%" label="On-time" />
-          </div>
+        {/* Premium education animation */}
+        <div className="relative flex items-center justify-center">
+          <EducationAnimation />
         </div>
 
-        <div className="relative text-sm text-muted-foreground">
+        <div className="relative text-xs text-muted-foreground">
           © 2026 Lumen Education
         </div>
       </div>
