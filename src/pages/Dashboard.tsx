@@ -6,13 +6,16 @@ import { AssessmentCalendar } from "@/components/dashboard/AssessmentCalendar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
+  ArrowUpRight,
   ClipboardCheck,
   FilePlus2,
   FileSearch,
   Inbox,
   Plus,
+  Sparkles,
   TrendingUp,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function Dashboard() {
   const { role, user } = useRole();
@@ -22,16 +25,24 @@ export default function Dashboard() {
   const review = assessments.filter((a) => a.status === "In Review").length;
   const completed = assessments.filter((a) => a.status === "Completed").length;
   const total = assessments.length;
+  const completionPct = Math.round((completed / Math.max(total, 1)) * 100);
 
-  const greeting = `Good ${new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"}`;
+  const greeting = `Good ${
+    new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"
+  }`;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fade-in-up">
       {/* Greeting */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-sm text-muted-foreground">{role} Workspace</div>
-          <h1 className="text-[28px] text-foreground mt-1">{greeting}, {user.name.split(" ")[0]}</h1>
+          <div className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            {role} Workspace
+          </div>
+          <h1 className="text-[32px] leading-tight text-foreground mt-2 tracking-tight">
+            {greeting}, {user.name.split(" ")[0]}
+          </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Here's what needs your attention today.
           </p>
@@ -39,70 +50,114 @@ export default function Dashboard() {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            className="rounded-xl bg-background hover:bg-background"
+            className="rounded-full bg-card hover:bg-secondary/60 border-border h-10 px-5"
             onClick={() => navigate("/review-qp")}
           >
             <FileSearch className="h-4 w-4 mr-2" />
             Review QP
           </Button>
-          <Button className="rounded-xl bg-primary hover:bg-primary-hover" onClick={() => navigate("/create")}>
+          <Button
+            className="rounded-full bg-foreground text-background hover:bg-foreground/90 h-10 px-5"
+            onClick={() => navigate("/create")}
+          >
             <Plus className="h-4 w-4 mr-2" />
             Create Assessment
           </Button>
         </div>
       </div>
 
-      {/* Stats — bento row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard label="Total Assessments" value={total} icon={<ClipboardCheck className="h-4 w-4" />} />
-        <StatCard label="Drafts" value={drafts} icon={<FilePlus2 className="h-4 w-4" />} tone="warning" />
-        <StatCard label="In Review" value={review} icon={<FileSearch className="h-4 w-4" />} tone="primary" />
-        <StatCard label="Completed" value={completed} icon={<TrendingUp className="h-4 w-4" />} tone="success" />
+      {/* Hero pastel stat tiles */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <PastelStat
+          tone="lavender"
+          icon={<ClipboardCheck className="h-3.5 w-3.5" />}
+          label="Total Assessments"
+          value={total}
+          caption="across all subjects"
+          progress={100}
+        />
+        <PastelStat
+          tone="peach"
+          icon={<FilePlus2 className="h-3.5 w-3.5" />}
+          label="Drafts"
+          value={drafts}
+          caption="waiting for finalisation"
+          progress={(drafts / Math.max(total, 1)) * 100}
+        />
+        <PastelStat
+          tone="sky"
+          icon={<FileSearch className="h-3.5 w-3.5" />}
+          label="In Review"
+          value={review}
+          caption="needs your sign-off"
+          progress={(review / Math.max(total, 1)) * 100}
+        />
+        <PastelStat
+          tone="mint"
+          icon={<TrendingUp className="h-3.5 w-3.5" />}
+          label="Completed"
+          value={completed}
+          caption={`${completionPct}% completion rate`}
+          progress={completionPct}
+        />
       </div>
 
-      {/* Bento grid */}
+      {/* Bento: calendar + review queue */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Calendar takes 2 cols */}
-        <Card className="lg:col-span-2 p-6 rounded-2xl border border-border shadow-soft-xs">
+        <Card className="lg:col-span-2 p-6 rounded-3xl border border-border/70 bg-card shadow-soft-xs">
           <AssessmentCalendar assessments={assessments} />
         </Card>
 
-        {/* Side: Review queue */}
-        <Card className="p-6 rounded-2xl border border-border shadow-soft-xs">
-          <div className="flex items-center justify-between mb-4">
+        <Card className="p-6 rounded-3xl border border-border/70 bg-card shadow-soft-xs">
+          <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="text-[15px] text-foreground">Review Queue</h2>
-              <p className="text-sm text-muted-foreground">Question papers awaiting your review</p>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                Papers awaiting your review
+              </p>
             </div>
+            <span className="inline-flex items-center justify-center h-7 min-w-7 px-2 rounded-full bg-primary-soft text-primary text-sm">
+              {review + drafts}
+            </span>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {assessments
               .filter((a) => a.status === "In Review" || a.status === "Draft")
               .slice(0, 4)
-              .map((a) => (
-                <div
+              .map((a, i) => (
+                <button
                   key={a.id}
-                  className="flex items-start gap-3 p-3 rounded-xl border border-border hover:bg-secondary/50 transition-colors"
+                  onClick={() => navigate(`/review-qp/${a.id}`)}
+                  className="group w-full text-left flex items-center gap-3 p-3 rounded-2xl bg-secondary/40 hover:bg-secondary transition-colors"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-soft">
-                    <FileSearch className="h-4 w-4 text-primary" />
+                  <div
+                    className={cn(
+                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm",
+                      i % 2 === 0
+                        ? "bg-[hsl(var(--pastel-lavender))] text-[hsl(var(--pastel-lavender-ink))]"
+                        : "bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))]"
+                    )}
+                  >
+                    {a.subject[0]}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="text-sm text-foreground truncate">{a.title}</div>
-                    <div className="text-sm text-muted-foreground mt-0.5">
-                      {a.subject} · Due {new Date(a.dueAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                    <div className="text-sm text-muted-foreground mt-0.5 truncate">
+                      {a.subject} ·{" "}
+                      {new Date(a.dueAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
                     </div>
                   </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="text-sm h-7 text-primary hover:text-primary hover:bg-primary-soft"
-                    onClick={() => navigate(`/review-qp/${a.id}`)}
-                  >
-                    Review
-                  </Button>
-                </div>
+                  <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </button>
               ))}
+            {review + drafts === 0 && (
+              <div className="text-sm text-muted-foreground text-center py-8">
+                You're all caught up ✨
+              </div>
+            )}
           </div>
         </Card>
       </div>
@@ -111,10 +166,14 @@ export default function Dashboard() {
       <div>
         <div className="flex items-end justify-between mb-4">
           <div>
-            <h2 className="text-[18px] text-foreground">Your Assessments</h2>
-            <p className="text-sm text-muted-foreground">PA1, PA2, Mid-term, Final Exam, Unit Tests</p>
+            <h2 className="text-[18px] text-foreground tracking-tight">Your Assessments</h2>
+            <p className="text-sm text-muted-foreground">
+              PA1, PA2, Mid-term, Final Exam, Unit Tests
+            </p>
           </div>
-          <Button variant="ghost" size="sm" className="text-sm">View all</Button>
+          <Button variant="ghost" size="sm" className="text-sm rounded-full">
+            View all
+          </Button>
         </div>
 
         {assessments.length === 0 ? (
@@ -131,46 +190,110 @@ export default function Dashboard() {
   );
 }
 
-function StatCard({
+type Tone = "lavender" | "peach" | "sky" | "mint" | "rose";
+
+const toneMap: Record<Tone, { bg: string; ink: string; bar: string; barTrack: string }> = {
+  lavender: {
+    bg: "bg-[hsl(var(--pastel-lavender))]",
+    ink: "text-[hsl(var(--pastel-lavender-ink))]",
+    bar: "bg-[hsl(var(--pastel-lavender-ink))]",
+    barTrack: "bg-white/60",
+  },
+  peach: {
+    bg: "bg-[hsl(var(--pastel-peach))]",
+    ink: "text-[hsl(var(--pastel-peach-ink))]",
+    bar: "bg-[hsl(var(--pastel-peach-ink))]",
+    barTrack: "bg-white/60",
+  },
+  sky: {
+    bg: "bg-[hsl(var(--pastel-sky))]",
+    ink: "text-[hsl(var(--pastel-sky-ink))]",
+    bar: "bg-[hsl(var(--pastel-sky-ink))]",
+    barTrack: "bg-white/60",
+  },
+  mint: {
+    bg: "bg-[hsl(var(--pastel-mint))]",
+    ink: "text-[hsl(var(--pastel-mint-ink))]",
+    bar: "bg-[hsl(var(--pastel-mint-ink))]",
+    barTrack: "bg-white/60",
+  },
+  rose: {
+    bg: "bg-[hsl(var(--pastel-rose))]",
+    ink: "text-[hsl(var(--pastel-rose-ink))]",
+    bar: "bg-[hsl(var(--pastel-rose-ink))]",
+    barTrack: "bg-white/60",
+  },
+};
+
+function PastelStat({
+  tone,
+  icon,
   label,
   value,
-  icon,
-  tone = "default",
+  caption,
+  progress,
 }: {
+  tone: Tone;
+  icon: React.ReactNode;
   label: string;
   value: number;
-  icon: React.ReactNode;
-  tone?: "default" | "primary" | "success" | "warning";
+  caption: string;
+  progress: number;
 }) {
-  const toneClass = {
-    default: "bg-secondary text-foreground",
-    primary: "bg-primary-soft text-primary",
-    success: "bg-success/10 text-success",
-    warning: "bg-warning/10 text-warning",
-  }[tone];
-
+  const t = toneMap[tone];
+  const pct = Math.max(4, Math.min(100, progress));
   return (
-    <Card className="p-5 rounded-2xl border border-border shadow-soft-xs">
+    <Card
+      className={cn(
+        "relative overflow-hidden p-5 rounded-3xl border border-border/60 shadow-soft-xs",
+        t.bg
+      )}
+    >
       <div className="flex items-center justify-between">
-        <span className="text-sm text-muted-foreground">{label}</span>
-        <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${toneClass}`}>
-          {icon}
+        <div className={cn("inline-flex items-center gap-1.5 text-sm", t.ink)}>
+          <span
+            className={cn(
+              "flex h-6 w-6 items-center justify-center rounded-full bg-white/70",
+              t.ink
+            )}
+          >
+            {icon}
+          </span>
+          {label}
         </div>
       </div>
-      <div className="text-[26px] text-foreground mt-2">{value}</div>
+
+      <div className="mt-4 flex items-baseline gap-2">
+        <div className={cn("text-[40px] leading-none tracking-tight", t.ink)}>{value}</div>
+        <div className={cn("text-sm opacity-70", t.ink)}>/ {label === "Completed" ? "100%" : "total"}</div>
+      </div>
+
+      <p className={cn("mt-1 text-sm opacity-80", t.ink)}>{caption}</p>
+
+      <div className={cn("mt-4 h-2 w-full rounded-full overflow-hidden", t.barTrack)}>
+        <div
+          className={cn("h-full rounded-full transition-all", t.bar)}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
     </Card>
   );
 }
 
 function EmptyState({ onCreate }: { onCreate: () => void }) {
   return (
-    <Card className="p-12 rounded-2xl border border-dashed border-border text-center">
+    <Card className="p-12 rounded-3xl border border-dashed border-border text-center">
       <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary">
         <Inbox className="h-5 w-5 text-muted-foreground" />
       </div>
       <h3 className="mt-4 text-[15px] text-foreground">No assessments yet</h3>
-      <p className="mt-1 text-sm text-muted-foreground">Create your first assessment to get started.</p>
-      <Button className="mt-5 rounded-xl bg-primary hover:bg-primary-hover" onClick={onCreate}>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Create your first assessment to get started.
+      </p>
+      <Button
+        className="mt-5 rounded-full bg-foreground text-background hover:bg-foreground/90"
+        onClick={onCreate}
+      >
         <Plus className="h-4 w-4 mr-2" /> Create Assessment
       </Button>
     </Card>
