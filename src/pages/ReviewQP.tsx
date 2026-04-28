@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   ArrowLeft,
+  CalendarDays,
   Check,
   ClipboardList,
   Clock,
@@ -133,6 +134,9 @@ export default function ReviewQP() {
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <ClipboardList className="h-3.5 w-3.5" /> {qp.totalMarks} marks
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <CalendarDays className="h-3.5 w-3.5" /> Created {qp.createdOn}
               </span>
             </div>
           </div>
