@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Info, Save } from "lucide-react";
+import { ArrowLeft, Info, Send } from "lucide-react";
 import { toast } from "sonner";
 
 const types = ["PA1", "PA2", "Mid-term", "Final Exam", "Unit Test 1", "Unit Test 2", "Unit Test 3"];
@@ -60,11 +60,8 @@ export default function CreateAssessment() {
             <p className="text-sm text-muted-foreground mt-1">Set up a new question paper.</p>
           </div>
           <div className="flex gap-2">
-            <Button type="button" variant="outline" className="rounded-xl">
-              <Save className="h-4 w-4 mr-2" /> Save Draft
-            </Button>
             <Button type="submit" className="rounded-xl bg-primary hover:bg-primary-hover">
-              Publish for Review
+              <Send className="h-4 w-4 mr-2" /> Assign Assessment
             </Button>
           </div>
         </div>
