@@ -85,10 +85,10 @@ export function AssessmentCalendar({ assessments }: Props) {
             <CalendarCheck2 className="h-4 w-4" aria-hidden="true" />
           </span>
           <div>
-            <h2 className="text-[15px] font-medium tracking-tight text-foreground">
+            <h2 className="text-[17px] font-medium tracking-tight text-foreground">
               Assessment Calendar
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-[13.5px] text-muted-foreground">
               {totalEvents} event{totalEvents === 1 ? "" : "s"} this month
             </p>
           </div>
@@ -107,7 +107,7 @@ export function AssessmentCalendar({ assessments }: Props) {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <div
-            className="text-sm font-medium text-foreground min-w-[120px] text-center px-2"
+            className="text-[15px] font-medium text-foreground min-w-[140px] text-center px-2"
             aria-live="polite"
           >
             {monthLabel}
@@ -135,7 +135,7 @@ export function AssessmentCalendar({ assessments }: Props) {
           <div
             key={d}
             role="columnheader"
-            className="text-sm text-muted-foreground text-center py-1.5"
+            className="text-[13px] uppercase tracking-wide text-muted-foreground text-center py-2"
           >
             {d}
           </div>
@@ -143,11 +143,10 @@ export function AssessmentCalendar({ assessments }: Props) {
       </div>
 
       {/* Days grid — minimal, like reference */}
-      <div className="grid grid-cols-7 gap-y-2 flex-1">
+      <div className="grid grid-cols-7 gap-y-3 flex-1">
         {weeks.flat().map((day, i) => {
           if (!day) return <div key={i} aria-hidden="true" />;
 
-          // Reorder Sun-first source to Mon-first display: shift Sun to end visually
           const events = eventsByDay[day.toDateString()] || [];
           const isToday = day.toDateString() === today.toDateString();
           const primaryKind: EventKind | null =
@@ -164,11 +163,28 @@ export function AssessmentCalendar({ assessments }: Props) {
             )
             .join("\n");
 
+          // Short label shown under the date number
+          const labelText = (() => {
+            if (!events.length) return null;
+            // Prefer review (deadline) over scheduled when both exist
+            const review = events.find((e) => e.type === "review");
+            const sched = events.find((e) => e.type === "scheduled");
+            const lead = review ?? sched!;
+            const more = events.length - 1;
+            const base = lead.a.type;
+            return more > 0 ? `${base} +${more}` : base;
+          })();
+
+          const labelTone =
+            primaryKind === "review"
+              ? "text-[hsl(var(--pastel-peach-ink))]"
+              : "text-[hsl(var(--pastel-sky-ink))]";
+
           return (
             <div
               key={i}
               role="gridcell"
-              className="flex items-center justify-center"
+              className="flex flex-col items-center gap-1"
             >
               <div
                 title={tooltip || undefined}
@@ -180,7 +196,7 @@ export function AssessmentCalendar({ assessments }: Props) {
                     : day.toDateString()
                 }
                 className={cn(
-                  "relative h-10 w-10 flex items-center justify-center rounded-full text-sm transition-all",
+                  "relative h-11 w-11 flex items-center justify-center rounded-full text-[15px] transition-all",
                   // base hover
                   !isToday && !primaryKind && "text-foreground hover:bg-secondary",
                   // event highlight
@@ -190,34 +206,29 @@ export function AssessmentCalendar({ assessments }: Props) {
                     kindStyles[primaryKind].ring,
                   ],
                   // today
-                  isToday && "bg-primary text-primary-foreground font-medium shadow-soft-sm",
+                  isToday &&
+                    "bg-primary text-primary-foreground font-medium shadow-soft-sm",
                 )}
               >
                 {day.getDate()}
-                {/* multi-event indicator */}
-                {events.length > 1 && !isToday && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5"
-                  >
-                    {Array.from({ length: Math.min(events.length, 3) }).map(
-                      (_, idx) => (
-                        <span
-                          key={idx}
-                          className={cn(
-                            "h-1 w-1 rounded-full",
-                            kindStyles[
-                              events[idx]?.type ?? "scheduled"
-                            ].legendDot
-                          )}
-                        />
-                      )
-                    )}
-                  </span>
-                )}
               </div>
+
+              {labelText ? (
+                <span
+                  className={cn(
+                    "text-[11px] leading-tight font-medium px-1.5 max-w-[64px] truncate text-center",
+                    isToday ? "text-primary" : labelTone
+                  )}
+                  title={labelText}
+                >
+                  {labelText}
+                </span>
+              ) : (
+                <span aria-hidden="true" className="h-[14px]" />
+              )}
             </div>
           );
+        })}
         })}
       </div>
 
