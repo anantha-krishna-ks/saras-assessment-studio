@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Plus, Trash2, FileText, Save } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Save } from "lucide-react";
 import { toast } from "sonner";
 
 interface Section {
@@ -84,109 +84,116 @@ export default function CreateAssessment() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="lg:col-span-2 p-6 rounded-2xl border border-border shadow-soft-xs space-y-5">
+      <Card className="p-6 rounded-2xl border border-border shadow-soft-xs space-y-5">
+        <div>
+          <h2 className="text-[15px] text-foreground">Basic details</h2>
+          <p className="text-[12px] text-muted-foreground">Title, type, subject and grade.</p>
+        </div>
+
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <Label className="text-[12px]">Assessment title</Label>
+            <Input required placeholder="e.g. Periodic Assessment 1 — Mathematics" className="h-10 rounded-xl" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <FieldSelect label="Type" placeholder="Select type" options={types} />
+            <FieldSelect label="Subject" placeholder="Select subject" options={subjects} />
+            <FieldSelect label="Grade" placeholder="Select grade" options={grades} />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label className="text-[12px]">Scheduled date</Label>
+              <Input required type="date" className="h-10 rounded-xl" />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[12px]">Review deadline</Label>
+              <Input required type="date" className="h-10 rounded-xl" />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label className="text-[12px]">Instructions (optional)</Label>
+            <Textarea rows={3} placeholder="Add any instructions for reviewers or students..." className="rounded-xl resize-none" />
+          </div>
+        </div>
+      </Card>
+
+      <Card className="p-6 rounded-2xl border border-border shadow-soft-xs">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <h2 className="text-[15px] text-foreground">Basic details</h2>
-            <p className="text-[12px] text-muted-foreground">Title, type, subject and grade.</p>
+            <h2 className="text-[15px] text-foreground">Sections</h2>
+            <p className="text-[12px] text-muted-foreground">Break the paper into sections.</p>
           </div>
 
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <Label className="text-[12px]">Assessment title</Label>
-              <Input required placeholder="e.g. Periodic Assessment 1 — Mathematics" className="h-10 rounded-xl" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <FieldSelect label="Type" placeholder="Select type" options={types} />
-              <FieldSelect label="Subject" placeholder="Select subject" options={subjects} />
-              <FieldSelect label="Grade" placeholder="Select grade" options={grades} />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label className="text-[12px]">Scheduled date</Label>
-                <Input required type="date" className="h-10 rounded-xl" />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-[12px]">Review deadline</Label>
-                <Input required type="date" className="h-10 rounded-xl" />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label className="text-[12px]">Instructions (optional)</Label>
-              <Textarea rows={3} placeholder="Add any instructions for reviewers or students..." className="rounded-xl resize-none" />
-            </div>
+          <div className="flex items-center gap-5">
+            <InlineStat label="Sections" value={sections.length.toString()} />
+            <div className="h-8 w-px bg-border" />
+            <InlineStat label="Questions" value={totalQuestions.toString()} />
+            <div className="h-8 w-px bg-border" />
+            <InlineStat label="Marks" value={totalMarks.toString()} />
+            <Button type="button" variant="outline" size="sm" className="rounded-lg h-9 ml-2" onClick={addSection}>
+              <Plus className="h-4 w-4 mr-1.5" /> Add section
+            </Button>
           </div>
-        </Card>
+        </div>
 
-        <Card className="p-6 rounded-2xl border border-border shadow-soft-xs h-fit">
-          <h2 className="text-[15px] text-foreground">Summary</h2>
-          <p className="text-[12px] text-muted-foreground">Auto-calculated from sections.</p>
-          <div className="mt-5 space-y-4">
-            <SummaryRow label="Sections" value={sections.length.toString()} />
-            <SummaryRow label="Total Questions" value={totalQuestions.toString()} />
-            <SummaryRow label="Total Marks" value={totalMarks.toString()} />
-          </div>
-
-          <div className="mt-6 pt-5 border-t border-border space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-[13px] text-foreground">Sections</h3>
-                <p className="text-[11px] text-muted-foreground">{sections.length} added</p>
-              </div>
-              <Button type="button" variant="outline" size="sm" className="rounded-lg h-8" onClick={addSection}>
-                <Plus className="h-3.5 w-3.5 mr-1.5" /> Add
-              </Button>
-            </div>
-
-            <div className="space-y-2">
-              {sections.map((s, idx) => (
-                <div
-                  key={s.id}
-                  className="flex items-center gap-2 p-2 rounded-lg border border-border bg-secondary/30"
-                >
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary-soft text-primary text-[12px]">
-                    {idx + 1}
-                  </div>
-                  <Input
-                    value={s.title}
-                    onChange={(e) => updateSection(s.id, { title: e.target.value })}
-                    className="h-8 rounded-md bg-card text-[12px] flex-1 min-w-0"
-                  />
-                  <Input
-                    type="number"
-                    min={1}
-                    value={s.questionCount}
-                    onChange={(e) => updateSection(s.id, { questionCount: Number(e.target.value) })}
-                    className="h-8 rounded-md bg-card text-[12px] w-14"
-                    title="Questions"
-                  />
-                  <Input
-                    type="number"
-                    min={1}
-                    value={s.marks}
-                    onChange={(e) => updateSection(s.id, { marks: Number(e.target.value) })}
-                    className="h-8 rounded-md bg-card text-[12px] w-14"
-                    title="Marks"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive"
-                    onClick={() => removeSection(s.id)}
-                    disabled={sections.length === 1}
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+        <div className="mt-5 space-y-2.5">
+          {sections.map((s, idx) => (
+            <div
+              key={s.id}
+              className="grid grid-cols-12 gap-3 items-end p-3 rounded-xl border border-border bg-secondary/30"
+            >
+              <div className="col-span-12 md:col-span-1 flex md:block items-center">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-soft text-primary text-[13px]">
+                  {idx + 1}
                 </div>
-              ))}
+              </div>
+              <div className="col-span-12 md:col-span-6 space-y-1">
+                <Label className="text-[11px]">Section title</Label>
+                <Input
+                  value={s.title}
+                  onChange={(e) => updateSection(s.id, { title: e.target.value })}
+                  className="h-9 rounded-lg bg-card"
+                />
+              </div>
+              <div className="col-span-6 md:col-span-2 space-y-1">
+                <Label className="text-[11px]">Questions</Label>
+                <Input
+                  type="number"
+                  min={1}
+                  value={s.questionCount}
+                  onChange={(e) => updateSection(s.id, { questionCount: Number(e.target.value) })}
+                  className="h-9 rounded-lg bg-card"
+                />
+              </div>
+              <div className="col-span-6 md:col-span-2 space-y-1">
+                <Label className="text-[11px]">Marks</Label>
+                <Input
+                  type="number"
+                  min={1}
+                  value={s.marks}
+                  onChange={(e) => updateSection(s.id, { marks: Number(e.target.value) })}
+                  className="h-9 rounded-lg bg-card"
+                />
+              </div>
+              <div className="col-span-12 md:col-span-1 flex justify-end">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 text-muted-foreground hover:text-destructive"
+                  onClick={() => removeSection(s.id)}
+                  disabled={sections.length === 1}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-          </div>
-        </Card>
-      </div>
+          ))}
+        </div>
+      </Card>
     </form>
   );
 }
@@ -209,11 +216,11 @@ function FieldSelect({ label, placeholder, options }: { label: string; placehold
   );
 }
 
-function SummaryRow({ label, value }: { label: string; value: string }) {
+function InlineStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-[12px] text-muted-foreground">{label}</span>
-      <span className="text-[18px] text-foreground">{value}</span>
+    <div className="text-right">
+      <div className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</div>
+      <div className="text-[18px] text-foreground leading-tight">{value}</div>
     </div>
   );
 }
