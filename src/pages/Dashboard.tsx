@@ -197,31 +197,31 @@ const toneMap: Record<Tone, { bg: string; ink: string; bar: string; barTrack: st
     bg: "bg-[hsl(var(--pastel-lavender))]",
     ink: "text-[hsl(var(--pastel-lavender-ink))]",
     bar: "bg-[hsl(var(--pastel-lavender-ink))]",
-    barTrack: "bg-white/60",
+    barTrack: "bg-white/70",
   },
   peach: {
     bg: "bg-[hsl(var(--pastel-peach))]",
     ink: "text-[hsl(var(--pastel-peach-ink))]",
     bar: "bg-[hsl(var(--pastel-peach-ink))]",
-    barTrack: "bg-white/60",
+    barTrack: "bg-white/70",
   },
   sky: {
     bg: "bg-[hsl(var(--pastel-sky))]",
     ink: "text-[hsl(var(--pastel-sky-ink))]",
     bar: "bg-[hsl(var(--pastel-sky-ink))]",
-    barTrack: "bg-white/60",
+    barTrack: "bg-white/70",
   },
   mint: {
     bg: "bg-[hsl(var(--pastel-mint))]",
     ink: "text-[hsl(var(--pastel-mint-ink))]",
     bar: "bg-[hsl(var(--pastel-mint-ink))]",
-    barTrack: "bg-white/60",
+    barTrack: "bg-white/70",
   },
   rose: {
     bg: "bg-[hsl(var(--pastel-rose))]",
     ink: "text-[hsl(var(--pastel-rose-ink))]",
     bar: "bg-[hsl(var(--pastel-rose-ink))]",
-    barTrack: "bg-white/60",
+    barTrack: "bg-white/70",
   },
 };
 
