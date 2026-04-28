@@ -117,25 +117,6 @@ export default function CreateAssessment() {
             </div>
           </Field>
 
-          {/* Instructions spans full width */}
-          <div className="md:col-span-3 space-y-2">
-            <Label className="text-sm text-foreground">
-              Instructions <span className="text-muted-foreground">(optional)</span>
-            </Label>
-            <Textarea
-              rows={8}
-              value={instructions}
-              onChange={(e) => setInstructions(e.target.value)}
-              placeholder="Add any instructions for the question paper..."
-              className="rounded-xl resize-y leading-relaxed"
-            />
-            <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-primary-soft border border-primary/15">
-              <Info className="h-4 w-4 text-primary shrink-0" />
-              <span className="text-sm text-primary/90">
-                These instructions will appear at the beginning of the question paper.
-              </span>
-            </div>
-          </div>
         </div>
       </Card>
     </form>
