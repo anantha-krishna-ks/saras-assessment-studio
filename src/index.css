@@ -49,17 +49,17 @@
     --info: 211 100% 44%;
     --info-foreground: 0 0% 100%;
 
-    /* Pastel accents (dashboard inspiration) */
-    --pastel-lavender: 256 100% 94%;
-    --pastel-lavender-ink: 256 55% 38%;
-    --pastel-mint: 158 70% 92%;
-    --pastel-mint-ink: 160 55% 30%;
-    --pastel-peach: 18 100% 94%;
-    --pastel-peach-ink: 18 60% 40%;
-    --pastel-sky: 205 100% 93%;
-    --pastel-sky-ink: 211 70% 38%;
-    --pastel-rose: 340 100% 95%;
-    --pastel-rose-ink: 340 55% 42%;
+    /* Pastel accents — softened for sober look, AAA-friendly ink */
+    --pastel-lavender: 256 60% 96.5%;
+    --pastel-lavender-ink: 256 45% 28%;
+    --pastel-mint: 158 45% 94%;
+    --pastel-mint-ink: 160 50% 22%;
+    --pastel-peach: 22 80% 95.5%;
+    --pastel-peach-ink: 18 55% 28%;
+    --pastel-sky: 205 70% 95%;
+    --pastel-sky-ink: 211 60% 26%;
+    --pastel-rose: 340 70% 96%;
+    --pastel-rose-ink: 340 45% 32%;
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
