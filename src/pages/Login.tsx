@@ -26,6 +26,7 @@ import {
   PenLine,
   Sparkles,
 } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const roleOptions: {
   id: Role;
@@ -77,11 +78,9 @@ export default function Login() {
         <div className="pointer-events-none absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-primary/10 blur-3xl animate-[pulse_9s_ease-in-out_infinite]" />
 
         {/* Logo */}
-        <div className="relative flex items-center gap-2.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-soft-sm">
-            <GraduationCap className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <div className="text-[15px] text-foreground">Lumen LMS</div>
+        <div className="relative flex items-center gap-3">
+          <img src={logo} alt="Saras Class Sphere" className="h-10 w-auto" />
+          <div className="text-[15px] text-muted-foreground">Class Sphere</div>
         </div>
 
         {/* Premium education animation */}
@@ -90,7 +89,7 @@ export default function Login() {
         </div>
 
         <div className="relative text-xs text-muted-foreground">
-          © 2026 Lumen Education
+          © 2026 Saras Class Sphere
         </div>
       </div>
 
@@ -98,11 +97,8 @@ export default function Login() {
       <div className="flex items-center justify-center p-6 sm:p-12 bg-card">
         <div className="w-full max-w-md animate-[fadeInUp_0.6s_ease-out]">
           {/* Logo (mobile) */}
-          <div className="lg:hidden flex items-center justify-center gap-2.5 mb-8">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary">
-              <GraduationCap className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <div className="text-[15px] text-foreground">Lumen LMS</div>
+          <div className="lg:hidden flex items-center justify-center mb-8">
+            <img src={logo} alt="Saras Class Sphere" className="h-10 w-auto" />
           </div>
 
           {/* Header */}
