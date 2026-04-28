@@ -37,7 +37,11 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="rounded-xl">
+          <Button
+            variant="outline"
+            className="rounded-xl bg-background hover:bg-background"
+            onClick={() => navigate("/review-qp")}
+          >
             <FileSearch className="h-4 w-4 mr-2" />
             Review QP
           </Button>
