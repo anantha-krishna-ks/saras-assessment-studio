@@ -41,38 +41,44 @@ export function RoleSwitcher() {
           aria-haspopup="listbox"
           aria-expanded={open}
           className={cn(
-            "group inline-flex items-center gap-2 h-10 pl-1.5 pr-3 rounded-full transition-all duration-200",
-            "bg-card hover:-translate-y-px",
-            "ring-1",
-            open
-              ? "ring-primary/40 shadow-soft-sm"
-              : "ring-border/70 shadow-soft-xs hover:ring-primary/30"
+            "group inline-flex items-center gap-2.5 h-10 pl-1 pr-1 rounded-full transition-all duration-200",
+            "bg-primary-soft hover:bg-primary-soft/80",
+            "ring-1 ring-primary/15 hover:ring-primary/30",
+            open && "ring-primary/50 shadow-soft-sm"
           )}
         >
+          {/* Solid primary icon chip */}
           <span
             className={cn(
-              "flex h-7 w-7 items-center justify-center rounded-full transition-colors",
-              "bg-primary-soft text-primary"
+              "flex h-8 w-8 items-center justify-center rounded-full",
+              "bg-primary text-primary-foreground shadow-soft-xs"
             )}
           >
-            <CurrentIcon className="h-3.5 w-3.5" />
+            <CurrentIcon className="h-4 w-4" />
           </span>
-          <span className="flex flex-col items-start leading-none -space-y-0.5">
-            <span className="text-[10.5px] uppercase tracking-wide text-muted-foreground">
+
+          {/* Stacked label */}
+          <span className="flex flex-col items-start leading-none gap-0.5 pr-0.5">
+            <span className="text-[10px] font-medium uppercase tracking-[0.08em] text-primary/70">
               Role
             </span>
-            <span className="text-sm font-medium text-foreground">{role}</span>
+            <span className="text-[13px] font-medium text-primary">
+              {role}
+            </span>
           </span>
+
+          {/* Chevron capsule — high contrast against pill */}
           <span
             className={cn(
-              "ml-0.5 flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground transition-all",
-              "group-hover:bg-secondary/70",
-              open && "bg-primary-soft text-primary"
+              "flex h-8 w-8 items-center justify-center rounded-full transition-all",
+              "bg-card text-primary ring-1 ring-primary/20",
+              "group-hover:ring-primary/40",
+              open && "bg-primary text-primary-foreground ring-primary"
             )}
           >
             <ChevronDown
               className={cn(
-                "h-3.5 w-3.5 transition-transform duration-200",
+                "h-4 w-4 transition-transform duration-200",
                 open && "rotate-180"
               )}
             />
