@@ -22,46 +22,47 @@ export function Header() {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-30 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto grid h-18 max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-6 py-3">
-        {/* Left: Logo */}
-        <div className="flex items-center">
-          <NavLink to="/dashboard" className="flex items-center gap-2.5 group">
-            <img
-              src={logo}
-              alt="Saras Class Sphere"
-              className="h-9 w-auto transition-transform group-hover:scale-[1.02]"
-            />
+    <header className="sticky top-0 z-30 border-b border-border bg-card/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6">
+        {/* Logo */}
+        <div className="flex items-center gap-8">
+          <NavLink to="/dashboard" className="flex items-center gap-3">
+            <img src={logo} alt="Saras Class Sphere" className="h-9 w-auto" />
+            <div className="leading-tight hidden sm:block">
+              <div className="text-[15px] font-medium text-foreground">Class Sphere</div>
+              <div className="text-xs text-muted-foreground">Assessment Studio</div>
+            </div>
           </NavLink>
+
+          {/* Nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>
+              Dashboard
+            </NavItem>
+            <NavItem to="/create" icon={<FilePlus2 className="h-4 w-4" />}>
+              Create Assessment
+            </NavItem>
+          </nav>
         </div>
 
-        {/* Center: Pill nav */}
-        <nav className="hidden md:flex items-center gap-1 rounded-full border border-border bg-card/80 p-1 shadow-soft-xs backdrop-blur">
-          <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>
-            Dashboard
-          </NavItem>
-          <NavItem to="/create" icon={<FilePlus2 className="h-4 w-4" />}>
-            Create Assessment
-          </NavItem>
-        </nav>
-
-        {/* Right: Role + Profile */}
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center gap-3">
+          {/* Pill-shaped role switcher with dropdown */}
           <div className="hidden sm:block">
             <RoleSwitcher />
           </div>
 
+          {/* Profile */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 rounded-full border border-border bg-card p-1 pr-3 hover:bg-secondary transition-colors shadow-soft-xs">
+              <button className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-secondary transition-colors">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary-soft text-primary text-sm">
                     {user.initials}
                   </AvatarFallback>
                 </Avatar>
-                <div className="hidden lg:block text-left leading-tight">
+                <div className="hidden md:block text-left leading-tight">
                   <div className="text-sm text-foreground">{user.name}</div>
-                  <div className="text-xs text-muted-foreground">{role}</div>
+                  <div className="text-sm text-muted-foreground">{role}</div>
                 </div>
               </button>
             </DropdownMenuTrigger>
@@ -95,18 +96,7 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-
-        {/* Mobile pill nav */}
-        <nav className="col-span-3 md:hidden flex items-center justify-center gap-1 rounded-full border border-border bg-card p-1">
-          <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>
-            Dashboard
-          </NavItem>
-          <NavItem to="/create" icon={<FilePlus2 className="h-4 w-4" />}>
-            Create
-          </NavItem>
-        </nav>
       </div>
-      <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
     </header>
   );
 }
@@ -125,9 +115,9 @@ function NavItem({
       to={to}
       className={({ isActive }) =>
         cn(
-          "relative flex items-center gap-2 px-4 h-9 rounded-full text-sm transition-all duration-200",
+          "flex items-center gap-2 px-3 h-9 rounded-lg text-sm transition-colors",
           isActive
-            ? "bg-primary text-primary-foreground shadow-soft-sm"
+            ? "bg-primary-soft text-primary"
             : "text-muted-foreground hover:text-foreground hover:bg-secondary"
         )
       }
