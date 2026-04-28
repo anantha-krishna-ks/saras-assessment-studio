@@ -22,9 +22,10 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
+  BookOpen,
+  PenLine,
   Sparkles,
 } from "lucide-react";
-import loginIllustration from "@/assets/login-illustration.png";
 
 const roleOptions: {
   id: Role;
@@ -69,49 +70,26 @@ export default function Login() {
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-background overflow-hidden">
-      {/* Left brand / illustration panel */}
-      <div className="relative hidden lg:flex flex-col justify-between p-12 bg-primary-soft border-r border-border overflow-hidden">
+      {/* Left brand / animation panel */}
+      <div className="relative hidden lg:flex flex-col justify-between p-10 bg-primary-soft border-r border-border overflow-hidden">
         {/* ambient blurred shapes */}
-        <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl animate-[pulse_6s_ease-in-out_infinite]" />
-        <div className="pointer-events-none absolute -bottom-32 -right-20 h-96 w-96 rounded-full bg-primary/10 blur-3xl animate-[pulse_8s_ease-in-out_infinite]" />
+        <div className="pointer-events-none absolute -top-32 -left-32 h-80 w-80 rounded-full bg-primary/15 blur-3xl animate-[pulse_7s_ease-in-out_infinite]" />
+        <div className="pointer-events-none absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-primary/10 blur-3xl animate-[pulse_9s_ease-in-out_infinite]" />
 
+        {/* Logo */}
         <div className="relative flex items-center gap-2.5">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-soft-sm">
             <GraduationCap className="h-5 w-5 text-primary-foreground" />
           </div>
-          <div>
-            <div className="text-[15px] text-foreground">Lumen LMS</div>
-            <div className="text-sm text-muted-foreground">Assessment Studio</div>
-          </div>
+          <div className="text-[15px] text-foreground">Lumen LMS</div>
         </div>
 
-        <div className="relative flex flex-col items-center text-center max-w-md mx-auto">
-          <div className="relative">
-            <div className="absolute inset-0 rounded-3xl bg-primary/10 blur-2xl" />
-            <img
-              src={loginIllustration}
-              alt="Educator working on assessments"
-              width={1024}
-              height={1024}
-              className="relative w-[380px] h-[380px] object-contain animate-[float_6s_ease-in-out_infinite]"
-            />
-          </div>
-          <h1 className="mt-2 text-[30px] leading-tight text-foreground">
-            A calmer way to manage assessments.
-          </h1>
-          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            Create, review and schedule question papers across grades and
-            subjects — all in one elegant workspace built for educators.
-          </p>
-
-          <div className="mt-8 grid grid-cols-3 gap-6">
-            <Stat value="120+" label="Assessments" />
-            <Stat value="24" label="Reviewers" />
-            <Stat value="98%" label="On-time" />
-          </div>
+        {/* Premium education animation */}
+        <div className="relative flex items-center justify-center">
+          <EducationAnimation />
         </div>
 
-        <div className="relative text-sm text-muted-foreground">
+        <div className="relative text-xs text-muted-foreground">
           © 2026 Lumen Education
         </div>
       </div>
@@ -128,16 +106,12 @@ export default function Login() {
           </div>
 
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-soft text-primary text-xs mb-4">
-              <Sparkles className="h-3 w-3" />
-              Welcome to Lumen LMS
-            </div>
-            <h2 className="text-[30px] text-foreground leading-tight">
-              Welcome Back
+          <div className="mb-8">
+            <h2 className="text-[28px] text-foreground leading-tight">
+              Welcome back
             </h2>
-            <p className="text-sm text-muted-foreground mt-2">
-              Please sign in to your account
+            <p className="text-sm text-muted-foreground mt-1.5">
+              Sign in to continue
             </p>
           </div>
 
@@ -284,11 +258,101 @@ export default function Login() {
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+function EducationAnimation() {
   return (
-    <div>
-      <div className="text-[22px] text-foreground">{value}</div>
-      <div className="text-xs text-muted-foreground mt-0.5">{label}</div>
+    <div className="relative w-[420px] h-[420px] flex items-center justify-center">
+      {/* Concentric orbit rings */}
+      <div className="absolute inset-0 rounded-full border border-primary/15 animate-[spin_28s_linear_infinite]" />
+      <div className="absolute inset-8 rounded-full border border-primary/10 animate-[spin_22s_linear_infinite_reverse]" />
+      <div className="absolute inset-16 rounded-full border border-primary/10 animate-[spin_18s_linear_infinite]" />
+
+      {/* Orbiting icons */}
+      <Orbit radius={188} duration={28}>
+        <FloatingIcon>
+          <BookOpen className="h-5 w-5 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+      <Orbit radius={188} duration={28} startAngle={120}>
+        <FloatingIcon>
+          <PenLine className="h-5 w-5 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+      <Orbit radius={188} duration={28} startAngle={240}>
+        <FloatingIcon>
+          <Sparkles className="h-5 w-5 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+
+      <Orbit radius={132} duration={22} reverse>
+        <FloatingIcon size="sm">
+          <ShieldCheck className="h-4 w-4 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+      <Orbit radius={132} duration={22} reverse startAngle={180}>
+        <FloatingIcon size="sm">
+          <Users className="h-4 w-4 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+
+      {/* Central medallion */}
+      <div className="relative flex items-center justify-center">
+        <div className="absolute h-40 w-40 rounded-full bg-primary/10 blur-2xl animate-[pulse_4s_ease-in-out_infinite]" />
+        <div className="absolute h-28 w-28 rounded-full bg-primary/20 blur-xl" />
+        <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-card shadow-soft-md border border-border animate-[float_5s_ease-in-out_infinite]">
+          <GraduationCap className="h-11 w-11 text-primary" strokeWidth={1.75} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Orbit({
+  radius,
+  duration,
+  reverse,
+  startAngle = 0,
+  children,
+}: {
+  radius: number;
+  duration: number;
+  reverse?: boolean;
+  startAngle?: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className="absolute inset-0 flex items-center justify-center"
+      style={{
+        animation: `spin ${duration}s linear infinite${reverse ? " reverse" : ""}`,
+        transform: `rotate(${startAngle}deg)`,
+      }}
+    >
+      <div className="absolute" style={{ transform: `translateX(${radius}px)` }}>
+        <div
+          style={{
+            animation: `spin ${duration}s linear infinite${reverse ? "" : " reverse"}`,
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FloatingIcon({
+  children,
+  size = "md",
+}: {
+  children: React.ReactNode;
+  size?: "sm" | "md";
+}) {
+  const dim = size === "sm" ? "h-9 w-9" : "h-11 w-11";
+  return (
+    <div
+      className={`${dim} flex items-center justify-center rounded-2xl bg-card border border-border shadow-soft-sm`}
+    >
+      {children}
     </div>
   );
 }
