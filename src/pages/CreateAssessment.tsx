@@ -4,9 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Info, Send } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
 import { toast } from "sonner";
 
 const types = ["PA1", "PA2", "Mid-term", "Final Exam", "Unit Test 1", "Unit Test 2", "Unit Test 3"];
@@ -21,19 +20,10 @@ const chapterOptions = [
   "Chapter 6 — Triangles",
 ];
 
-const defaultInstructions = `General Instructions:
-i. This question paper contains five sections A, B, C, D, and E. Each section is compulsory.
-ii. Section A has 10 MCQs of 1 mark each.
-iii. Section B has 3 Very Short Answer (VSA)-type questions of 2 marks each.
-iv. Section C has 2 Short Answer (SA) – type questions of 3 marks each.
-v. Section D has 2 Long Answer (LA) – type questions of 5 marks each.
-vi. Section E has 2 Case study – type questions of 4 marks each.`;
-
 export default function CreateAssessment() {
   const navigate = useNavigate();
   const [hours, setHours] = useState<number | "">(1);
   const [minutes, setMinutes] = useState<number | "">(30);
-  const [instructions, setInstructions] = useState(defaultInstructions);
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault();
