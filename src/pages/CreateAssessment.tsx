@@ -36,8 +36,11 @@ export default function CreateAssessment() {
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    toast.success("Assessment saved as draft");
-    setTimeout(() => navigate("/dashboard"), 600);
+    toast.success("Assessment created successfully", {
+      description:
+        "The question paper has been assigned to the selected teacher. They’ll be notified to begin preparation.",
+    });
+    navigate("/dashboard");
   }
 
   return (
