@@ -242,35 +242,59 @@ function PastelStat({
 }) {
   const t = toneMap[tone];
   const pct = Math.max(4, Math.min(100, progress));
+  const slug = label.replace(/\s+/g, "-").toLowerCase();
   return (
     <Card
+      role="group"
+      aria-labelledby={`stat-${slug}-label`}
+      aria-describedby={`stat-${slug}-caption`}
       className={cn(
-        "relative overflow-hidden p-5 rounded-3xl border border-border/60 shadow-soft-xs",
+        "relative overflow-hidden p-5 rounded-3xl border border-border/70 shadow-soft-xs",
         t.bg
       )}
     >
-      <div className="flex items-center justify-between">
-        <div className={cn("inline-flex items-center gap-1.5 text-sm", t.ink)}>
-          <span
-            className={cn(
-              "flex h-6 w-6 items-center justify-center rounded-full bg-white/70",
-              t.ink
-            )}
-          >
-            {icon}
-          </span>
+      <div className="flex items-center gap-2">
+        <span
+          aria-hidden="true"
+          className={cn(
+            "flex h-7 w-7 items-center justify-center rounded-full bg-white/85",
+            t.ink
+          )}
+        >
+          {icon}
+        </span>
+        <h3
+          id={`stat-${slug}-label`}
+          className={cn("text-[15px] font-medium tracking-tight", t.ink)}
+        >
           {label}
+        </h3>
+      </div>
+
+      <div className="mt-5 flex items-baseline gap-2">
+        <div
+          className={cn("text-[44px] leading-none font-medium tracking-tight", t.ink)}
+          aria-label={`${label}: ${value}`}
+        >
+          {value}
+        </div>
+        <div className={cn("text-sm opacity-75", t.ink)} aria-hidden="true">
+          / {label === "Completed" ? "100%" : "total"}
         </div>
       </div>
 
-      <div className="mt-4 flex items-baseline gap-2">
-        <div className={cn("text-[40px] leading-none tracking-tight", t.ink)}>{value}</div>
-        <div className={cn("text-sm opacity-70", t.ink)}>/ {label === "Completed" ? "100%" : "total"}</div>
-      </div>
+      <p id={`stat-${slug}-caption`} className={cn("mt-1.5 text-sm opacity-90", t.ink)}>
+        {caption}
+      </p>
 
-      <p className={cn("mt-1 text-sm opacity-80", t.ink)}>{caption}</p>
-
-      <div className={cn("mt-4 h-2 w-full rounded-full overflow-hidden", t.barTrack)}>
+      <div
+        className={cn("mt-4 h-2 w-full rounded-full overflow-hidden", t.barTrack)}
+        role="progressbar"
+        aria-valuenow={Math.round(pct)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`${label} progress`}
+      >
         <div
           className={cn("h-full rounded-full transition-all", t.bar)}
           style={{ width: `${pct}%` }}
