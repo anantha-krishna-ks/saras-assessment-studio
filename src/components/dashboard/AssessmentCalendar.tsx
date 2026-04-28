@@ -229,7 +229,6 @@ export function AssessmentCalendar({ assessments }: Props) {
             </div>
           );
         })}
-        })}
       </div>
 
       {/* Legend */}
