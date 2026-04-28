@@ -30,28 +30,53 @@ export function RoleSwitcher() {
     setRole(r);
   };
 
+  const current = roleOptions.find((o) => o.id === role) ?? roleOptions[0];
+  const CurrentIcon = current.icon;
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <button
           aria-label="Switch role"
+          aria-haspopup="listbox"
+          aria-expanded={open}
           className={cn(
-            "group flex items-center gap-2.5 h-10 pl-1 pr-3 rounded-full border transition-all",
-            "bg-card hover:bg-secondary/60",
-            open ? "border-primary/30 shadow-soft-sm" : "border-border shadow-soft-xs"
+            "group inline-flex items-center gap-2 h-10 pl-1.5 pr-3 rounded-full transition-all duration-200",
+            "bg-card hover:-translate-y-px",
+            "ring-1",
+            open
+              ? "ring-primary/40 shadow-soft-sm"
+              : "ring-border/70 shadow-soft-xs hover:ring-primary/30"
           )}
         >
-          <span className="flex h-8 items-center gap-1.5 px-2.5 rounded-full bg-primary-soft text-primary">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            <span className="text-sm leading-none">Role</span>
-          </span>
-          <span className="text-sm text-foreground leading-none">{role}</span>
-          <ChevronDown
+          <span
             className={cn(
-              "h-4 w-4 text-muted-foreground transition-transform duration-200",
-              open && "rotate-180"
+              "flex h-7 w-7 items-center justify-center rounded-full transition-colors",
+              "bg-primary-soft text-primary"
             )}
-          />
+          >
+            <CurrentIcon className="h-3.5 w-3.5" />
+          </span>
+          <span className="flex flex-col items-start leading-none -space-y-0.5">
+            <span className="text-[10.5px] uppercase tracking-wide text-muted-foreground">
+              Role
+            </span>
+            <span className="text-sm font-medium text-foreground">{role}</span>
+          </span>
+          <span
+            className={cn(
+              "ml-0.5 flex h-5 w-5 items-center justify-center rounded-full text-muted-foreground transition-all",
+              "group-hover:bg-secondary/70",
+              open && "bg-primary-soft text-primary"
+            )}
+          >
+            <ChevronDown
+              className={cn(
+                "h-3.5 w-3.5 transition-transform duration-200",
+                open && "rotate-180"
+              )}
+            />
+          </span>
         </button>
       </PopoverTrigger>
 
