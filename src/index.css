@@ -109,7 +109,11 @@
 
   body {
     @apply bg-background text-foreground;
+    font-size: 14px;
   }
+
+  /* Enforce a 14px minimum font size across the app */
+  html { font-size: 14px; }
 
   /* Cap font weight to 500 across the app per design spec */
   h1, h2, h3, h4, h5, h6, .font-medium, strong, b {

@@ -42,7 +42,7 @@ export function AssessmentCard({ a }: { a: Assessment }) {
             <FileText className="h-4 w-4 text-primary" />
           </div>
           <div className="min-w-0">
-            <div className="text-[11px] uppercase tracking-wide text-muted-foreground">
+            <div className="text-sm uppercase tracking-wide text-muted-foreground">
               {a.type} · {a.grade}
             </div>
             <h3 className="text-[14px] text-foreground truncate">{a.title}</h3>
@@ -71,10 +71,10 @@ export function AssessmentCard({ a }: { a: Assessment }) {
       </div>
 
       <div className="mt-4 flex items-center gap-2">
-        <span className={cn("inline-flex items-center text-[11px] px-2 h-5 rounded-full", statusStyles[a.status])}>
+        <span className={cn("inline-flex items-center text-sm px-2 h-5 rounded-full", statusStyles[a.status])}>
           {a.status}
         </span>
-        <span className="text-[11px] text-muted-foreground">{a.subject}</span>
+        <span className="text-sm text-muted-foreground">{a.subject}</span>
       </div>
 
       <div className="mt-4 grid grid-cols-3 gap-3 pt-4 border-t border-border">
@@ -83,7 +83,7 @@ export function AssessmentCard({ a }: { a: Assessment }) {
         <Stat label="Marks" value={a.totalMarks.toString()} />
       </div>
 
-      <div className="mt-4 flex items-center justify-between text-[11px] text-muted-foreground">
+      <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
         <div className="flex items-center gap-1.5">
           <CalendarIcon className="h-3 w-3" />
           <span>Due {formatDate(a.dueAt)}</span>
@@ -97,7 +97,7 @@ export function AssessmentCard({ a }: { a: Assessment }) {
 function Stat({ label, value, icon }: { label: string; value: string; icon?: React.ReactNode }) {
   return (
     <div>
-      <div className="flex items-center gap-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+      <div className="flex items-center gap-1 text-sm uppercase tracking-wide text-muted-foreground">
         {icon}
         {label}
       </div>

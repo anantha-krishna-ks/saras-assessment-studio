@@ -33,7 +33,7 @@ export default function CreateAssessment() {
           variant="ghost"
           size="sm"
           onClick={() => navigate("/dashboard")}
-          className="text-[13px] text-muted-foreground -ml-2"
+          className="text-sm text-muted-foreground -ml-2"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to Dashboard
@@ -41,7 +41,7 @@ export default function CreateAssessment() {
         <div className="mt-2 flex items-end justify-between gap-4 flex-wrap">
           <div>
             <h1 className="text-[26px] text-foreground">Create Assessment</h1>
-            <p className="text-[13px] text-muted-foreground mt-1">Set up a new question paper.</p>
+            <p className="text-sm text-muted-foreground mt-1">Set up a new question paper.</p>
           </div>
           <div className="flex gap-2">
             <Button type="button" variant="outline" className="rounded-xl">
@@ -57,12 +57,12 @@ export default function CreateAssessment() {
       <Card className="p-6 rounded-2xl border border-border shadow-soft-xs space-y-5">
         <div>
           <h2 className="text-[15px] text-foreground">Basic details</h2>
-          <p className="text-[12px] text-muted-foreground">Title, type, subject and grade.</p>
+          <p className="text-sm text-muted-foreground">Title, type, subject and grade.</p>
         </div>
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label className="text-[12px]">Assessment title</Label>
+            <Label className="text-sm">Assessment title</Label>
             <Input required placeholder="e.g. Periodic Assessment 1 — Mathematics" className="h-10 rounded-xl" />
           </div>
 
@@ -74,18 +74,18 @@ export default function CreateAssessment() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className="text-[12px]">Scheduled date</Label>
+              <Label className="text-sm">Scheduled date</Label>
               <Input required type="date" className="h-10 rounded-xl" />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-[12px]">Review deadline</Label>
+              <Label className="text-sm">Review deadline</Label>
               <Input required type="date" className="h-10 rounded-xl" />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-1.5">
-              <Label className="text-[12px]">No. of questions</Label>
+              <Label className="text-sm">No. of questions</Label>
               <Input
                 type="number"
                 min={1}
@@ -95,7 +95,7 @@ export default function CreateAssessment() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-[12px]">Total marks</Label>
+              <Label className="text-sm">Total marks</Label>
               <Input
                 type="number"
                 min={1}
@@ -105,7 +105,7 @@ export default function CreateAssessment() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-[12px]">Duration (minutes)</Label>
+              <Label className="text-sm">Duration (minutes)</Label>
               <Input
                 type="number"
                 min={1}
@@ -117,7 +117,7 @@ export default function CreateAssessment() {
           </div>
 
           <div className="space-y-1.5">
-            <Label className="text-[12px]">Instructions (optional)</Label>
+            <Label className="text-sm">Instructions (optional)</Label>
             <Textarea
               rows={4}
               placeholder="Add any instructions for reviewers or students..."
@@ -133,7 +133,7 @@ export default function CreateAssessment() {
 function FieldSelect({ label, placeholder, options }: { label: string; placeholder: string; options: string[] }) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-[12px]">{label}</Label>
+      <Label className="text-sm">{label}</Label>
       <Select>
         <SelectTrigger className="h-10 rounded-xl">
           <SelectValue placeholder={placeholder} />
