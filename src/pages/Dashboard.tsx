@@ -36,14 +36,10 @@ export default function Dashboard() {
       {/* Greeting */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
-            {role} Workspace
-          </div>
-          <h1 className="text-[32px] leading-tight text-foreground mt-2 tracking-tight">
+          <h1 className="text-[32px] leading-tight text-foreground tracking-tight">
             {greeting}, {user.name.split(" ")[0]}
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1.5">
             Here's what needs your attention today.
           </p>
         </div>
