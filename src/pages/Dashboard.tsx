@@ -30,6 +30,33 @@ export default function Dashboard() {
   const total = assessments.length;
   const completionPct = Math.round((completed / Math.max(total, 1)) * 100);
 
+  const statusCounts: Record<AssessmentStatus | "All", number> = useMemo(
+    () => ({
+      All: assessments.length,
+      "Not yet started": assessments.filter((a) => a.status === "Not yet started").length,
+      Draft: drafts,
+      "In Review": review,
+      Completed: completed,
+    }),
+    [drafts, review, completed]
+  );
+
+  const filteredAssessments = useMemo(
+    () =>
+      statusFilter === "All"
+        ? assessments
+        : assessments.filter((a) => a.status === statusFilter),
+    [statusFilter]
+  );
+
+  const filterOptions: (AssessmentStatus | "All")[] = [
+    "All",
+    "Not yet started",
+    "Draft",
+    "In Review",
+    "Completed",
+  ];
+
   const greeting = `Good ${
     new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"
   }`;
