@@ -35,7 +35,7 @@ export default function Login() {
           </div>
           <div>
             <div className="text-[15px] text-foreground">Lumen LMS</div>
-            <div className="text-[11px] text-muted-foreground">Assessment Studio</div>
+            <div className="text-sm text-muted-foreground">Assessment Studio</div>
           </div>
         </div>
 
@@ -54,7 +54,7 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="text-[11px] text-muted-foreground">© 2026 Lumen Education</div>
+        <div className="text-sm text-muted-foreground">© 2026 Lumen Education</div>
       </div>
 
       {/* Right login form */}
@@ -68,12 +68,12 @@ export default function Login() {
           </div>
 
           <h2 className="text-[22px] text-foreground">Welcome back</h2>
-          <p className="text-[13px] text-muted-foreground mt-1">Sign in to continue to your workspace.</p>
+          <p className="text-sm text-muted-foreground mt-1">Sign in to continue to your workspace.</p>
 
           <form onSubmit={handleSubmit} className="mt-7 space-y-5">
             {/* Role selector */}
             <div className="space-y-2">
-              <Label className="text-[12px]">Sign in as</Label>
+              <Label className="text-sm">Sign in as</Label>
               <div className="grid grid-cols-1 gap-2">
                 {roleOptions.map((r) => (
                   <button
@@ -96,8 +96,8 @@ export default function Login() {
                       {r.icon}
                     </div>
                     <div className="flex-1">
-                      <div className="text-[13px] text-foreground">{r.label}</div>
-                      <div className="text-[11px] text-muted-foreground">{r.description}</div>
+                      <div className="text-sm text-foreground">{r.label}</div>
+                      <div className="text-sm text-muted-foreground">{r.description}</div>
                     </div>
                     <div
                       className={cn(
@@ -111,7 +111,7 @@ export default function Login() {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-[12px]">Email</Label>
+              <Label htmlFor="email" className="text-sm">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -124,8 +124,8 @@ export default function Login() {
 
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <Label htmlFor="password" className="text-[12px]">Password</Label>
-                <button type="button" className="text-[11px] text-primary hover:underline">
+                <Label htmlFor="password" className="text-sm">Password</Label>
+                <button type="button" className="text-sm text-primary hover:underline">
                   Forgot?
                 </button>
               </div>
@@ -143,7 +143,7 @@ export default function Login() {
               Sign in as {role}
             </Button>
 
-            <p className="text-center text-[12px] text-muted-foreground">
+            <p className="text-center text-sm text-muted-foreground">
               Need access? <a className="text-primary hover:underline" href="#">Contact your administrator</a>
             </p>
           </form>
@@ -157,7 +157,7 @@ function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
       <div className="text-[22px] text-foreground">{value}</div>
-      <div className="text-[11px] text-muted-foreground">{label}</div>
+      <div className="text-sm text-muted-foreground">{label}</div>
     </div>
   );
 }

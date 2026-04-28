@@ -30,7 +30,7 @@ export function Header() {
             </div>
             <div className="leading-tight">
               <div className="text-[15px] font-medium text-foreground">Lumen LMS</div>
-              <div className="text-[11px] text-muted-foreground">Assessment Studio</div>
+              <div className="text-sm text-muted-foreground">Assessment Studio</div>
             </div>
           </div>
 
@@ -59,7 +59,7 @@ export function Header() {
                 aria-selected={role === r}
                 onClick={() => setRole(r)}
                 className={cn(
-                  "px-3.5 h-8 rounded-full text-[13px] transition-colors",
+                  "px-3.5 h-8 rounded-full text-sm transition-colors",
                   role === r
                     ? "bg-card text-foreground shadow-soft-xs"
                     : "text-muted-foreground hover:text-foreground"
@@ -75,31 +75,31 @@ export function Header() {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-secondary transition-colors">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary-soft text-primary text-[12px]">
+                  <AvatarFallback className="bg-primary-soft text-primary text-sm">
                     {user.initials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden md:block text-left leading-tight">
-                  <div className="text-[13px] text-foreground">{user.name}</div>
-                  <div className="text-[11px] text-muted-foreground">{role}</div>
+                  <div className="text-sm text-foreground">{user.name}</div>
+                  <div className="text-sm text-muted-foreground">{role}</div>
                 </div>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel className="font-normal">
-                <div className="text-[13px]">{user.name}</div>
-                <div className="text-[11px] text-muted-foreground">{user.email}</div>
+                <div className="text-sm">{user.name}</div>
+                <div className="text-sm text-muted-foreground">{user.email}</div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="px-2 py-1.5 sm:hidden">
-                <div className="text-[11px] text-muted-foreground mb-1.5">Switch role</div>
+                <div className="text-sm text-muted-foreground mb-1.5">Switch role</div>
                 <div className="flex gap-1">
                   {roles.map((r) => (
                     <Button
                       key={r}
                       size="sm"
                       variant={role === r ? "default" : "outline"}
-                      className="h-7 text-[12px] flex-1"
+                      className="h-7 text-sm flex-1"
                       onClick={() => setRole(r)}
                     >
                       {r}
@@ -134,7 +134,7 @@ function NavItem({
       to={to}
       className={({ isActive }) =>
         cn(
-          "flex items-center gap-2 px-3 h-9 rounded-lg text-[13px] transition-colors",
+          "flex items-center gap-2 px-3 h-9 rounded-lg text-sm transition-colors",
           isActive
             ? "bg-primary-soft text-primary"
             : "text-muted-foreground hover:text-foreground hover:bg-secondary"

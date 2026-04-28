@@ -30,9 +30,9 @@ export default function Dashboard() {
       {/* Greeting */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-[12px] text-muted-foreground">{role} Workspace</div>
+          <div className="text-sm text-muted-foreground">{role} Workspace</div>
           <h1 className="text-[28px] text-foreground mt-1">{greeting}, {user.name.split(" ")[0]}</h1>
-          <p className="text-[13px] text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Here's what needs your attention today.
           </p>
         </div>
@@ -68,7 +68,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-[15px] text-foreground">Review Queue</h2>
-              <p className="text-[12px] text-muted-foreground">Question papers awaiting your review</p>
+              <p className="text-sm text-muted-foreground">Question papers awaiting your review</p>
             </div>
           </div>
           <div className="space-y-3">
@@ -84,12 +84,12 @@ export default function Dashboard() {
                     <FileSearch className="h-4 w-4 text-primary" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[13px] text-foreground truncate">{a.title}</div>
-                    <div className="text-[11px] text-muted-foreground mt-0.5">
+                    <div className="text-sm text-foreground truncate">{a.title}</div>
+                    <div className="text-sm text-muted-foreground mt-0.5">
                       {a.subject} · Due {new Date(a.dueAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                     </div>
                   </div>
-                  <Button size="sm" variant="ghost" className="text-[12px] h-7 text-primary hover:text-primary hover:bg-primary-soft">
+                  <Button size="sm" variant="ghost" className="text-sm h-7 text-primary hover:text-primary hover:bg-primary-soft">
                     Review
                   </Button>
                 </div>
@@ -103,9 +103,9 @@ export default function Dashboard() {
         <div className="flex items-end justify-between mb-4">
           <div>
             <h2 className="text-[18px] text-foreground">Your Assessments</h2>
-            <p className="text-[13px] text-muted-foreground">PA1, PA2, Mid-term, Final Exam, Unit Tests</p>
+            <p className="text-sm text-muted-foreground">PA1, PA2, Mid-term, Final Exam, Unit Tests</p>
           </div>
-          <Button variant="ghost" size="sm" className="text-[13px]">View all</Button>
+          <Button variant="ghost" size="sm" className="text-sm">View all</Button>
         </div>
 
         {assessments.length === 0 ? (
@@ -143,7 +143,7 @@ function StatCard({
   return (
     <Card className="p-5 rounded-2xl border border-border shadow-soft-xs">
       <div className="flex items-center justify-between">
-        <span className="text-[12px] text-muted-foreground">{label}</span>
+        <span className="text-sm text-muted-foreground">{label}</span>
         <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${toneClass}`}>
           {icon}
         </div>
@@ -160,7 +160,7 @@ function EmptyState({ onCreate }: { onCreate: () => void }) {
         <Inbox className="h-5 w-5 text-muted-foreground" />
       </div>
       <h3 className="mt-4 text-[15px] text-foreground">No assessments yet</h3>
-      <p className="mt-1 text-[13px] text-muted-foreground">Create your first assessment to get started.</p>
+      <p className="mt-1 text-sm text-muted-foreground">Create your first assessment to get started.</p>
       <Button className="mt-5 rounded-xl bg-primary hover:bg-primary-hover" onClick={onCreate}>
         <Plus className="h-4 w-4 mr-2" /> Create Assessment
       </Button>

@@ -57,7 +57,7 @@ export function AssessmentCalendar({ assessments }: Props) {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-[15px] text-foreground">Assessment Calendar</h2>
-          <p className="text-[12px] text-muted-foreground">Scheduled assessments & QP review deadlines</p>
+          <p className="text-sm text-muted-foreground">Scheduled assessments & QP review deadlines</p>
         </div>
         <div className="flex items-center gap-1">
           <Button
@@ -68,7 +68,7 @@ export function AssessmentCalendar({ assessments }: Props) {
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <div className="text-[13px] text-foreground min-w-[130px] text-center">{monthLabel}</div>
+          <div className="text-sm text-foreground min-w-[130px] text-center">{monthLabel}</div>
           <Button
             variant="ghost"
             size="icon"
@@ -82,7 +82,7 @@ export function AssessmentCalendar({ assessments }: Props) {
 
       <div className="grid grid-cols-7 gap-px text-center mb-1">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-          <div key={d} className="text-[10px] uppercase tracking-wide text-muted-foreground py-2">
+          <div key={d} className="text-sm uppercase tracking-wide text-muted-foreground py-2">
             {d}
           </div>
         ))}
@@ -103,7 +103,7 @@ export function AssessmentCalendar({ assessments }: Props) {
             >
               <div
                 className={cn(
-                  "text-[11px] self-end",
+                  "text-sm self-end",
                   isToday ? "text-primary font-medium" : "text-muted-foreground"
                 )}
               >
@@ -115,7 +115,7 @@ export function AssessmentCalendar({ assessments }: Props) {
                     key={idx}
                     title={`${e.a.title} — ${e.type === "review" ? "Review QP due" : "Scheduled"}`}
                     className={cn(
-                      "flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] truncate",
+                      "flex items-center gap-1 px-1.5 py-0.5 rounded text-sm truncate",
                       e.type === "review"
                         ? "bg-warning/10 text-warning"
                         : "bg-primary-soft text-primary"
@@ -126,7 +126,7 @@ export function AssessmentCalendar({ assessments }: Props) {
                   </div>
                 ))}
                 {events.length > 2 && (
-                  <span className="text-[10px] text-muted-foreground px-1.5">+{events.length - 2}</span>
+                  <span className="text-sm text-muted-foreground px-1.5">+{events.length - 2}</span>
                 )}
               </div>
             </div>
@@ -148,7 +148,7 @@ function Legend({ dot, label }: { dot: string; label: string }) {
   return (
     <div className="flex items-center gap-1.5">
       <span className={cn("h-2 w-2 rounded-full", dot)} />
-      <span className="text-[11px] text-muted-foreground">{label}</span>
+      <span className="text-sm text-muted-foreground">{label}</span>
     </div>
   );
 }
