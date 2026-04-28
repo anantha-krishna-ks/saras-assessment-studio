@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRole, Role } from "@/context/RoleContext";
+import { toast } from "sonner";
 import {
   GraduationCap,
   ShieldCheck,
@@ -66,7 +67,10 @@ export default function Login() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    navigate("/dashboard");
+    toast.success(`Welcome back, ${email.split("@")[0]}!`, {
+      description: `Signed in as ${activeRole.label}. Redirecting to your dashboard…`,
+    });
+    setTimeout(() => navigate("/dashboard"), 700);
   }
 
   return (
