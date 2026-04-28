@@ -45,13 +45,6 @@ export function Header() {
             Create Assessment
           </NavItem>
         </nav>
-        <style>{`
-          @keyframes ios-pill-in {
-            0% { transform: scale(0.92); opacity: 0; }
-            60% { transform: scale(1.02); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-          }
-        `}</style>
 
         <div className="flex items-center gap-3 justify-self-end">
           {/* Pill-shaped role switcher with dropdown */}
@@ -135,44 +128,15 @@ function NavItem({
       to={to}
       className={({ isActive }) =>
         cn(
-          "relative flex items-center gap-2 px-4 h-9 rounded-full text-sm overflow-hidden",
-          "transition-[color,transform] duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
-          "active:scale-[0.96]",
+          "flex items-center gap-2 px-4 h-9 rounded-full text-sm transition-all",
           isActive
-            ? "text-primary"
-            : "text-muted-foreground hover:text-foreground"
+            ? "bg-card text-primary shadow-soft-sm ring-1 ring-border/70"
+            : "text-muted-foreground hover:text-foreground hover:bg-card/60"
         )
       }
     >
-      {({ isActive }) => (
-        <>
-          {/* iOS-style sliding pill background */}
-          <span
-            aria-hidden="true"
-            className={cn(
-              "absolute inset-0 rounded-full ring-1 ring-border/70 bg-card shadow-soft-sm",
-              "transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
-              isActive
-                ? "opacity-100 scale-100"
-                : "opacity-0 scale-90"
-            )}
-            style={isActive ? { animation: "ios-pill-in 450ms cubic-bezier(0.34,1.56,0.64,1)" } : undefined}
-          />
-          {/* subtle hover wash for inactive */}
-          {!isActive && (
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 rounded-full bg-card/0 hover:bg-card/60 transition-colors duration-300"
-            />
-          )}
-          <span className="relative z-10 flex items-center gap-2">
-            <span className="transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
-              {icon}
-            </span>
-            {children}
-          </span>
-        </>
-      )}
+      {icon}
+      {children}
     </NavLink>
   );
 }
