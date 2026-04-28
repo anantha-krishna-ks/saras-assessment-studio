@@ -20,6 +20,12 @@ export default {
         normal: '400',
         medium: '500',
       },
+      // Enforce 14px minimum across all text utilities
+      fontSize: {
+        xs: ['0.875rem', { lineHeight: '1.25rem' }],   // 14px
+        sm: ['0.875rem', { lineHeight: '1.25rem' }],   // 14px
+        base: ['1rem', { lineHeight: '1.5rem' }],       // 16px
+      },
       colors: {
         success: {
           DEFAULT: "hsl(var(--success))",
