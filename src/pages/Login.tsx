@@ -22,9 +22,10 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
+  BookOpen,
+  PenLine,
   Sparkles,
 } from "lucide-react";
-import loginIllustration from "@/assets/login-illustration.png";
 
 const roleOptions: {
   id: Role;
