@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 export default function Dashboard() {
   const { role, user } = useRole();
   const navigate = useNavigate();
+  const [statusFilter, setStatusFilter] = useState<AssessmentStatus | "All">("All");
 
   const drafts = assessments.filter((a) => a.status === "Draft").length;
   const review = assessments.filter((a) => a.status === "In Review").length;
