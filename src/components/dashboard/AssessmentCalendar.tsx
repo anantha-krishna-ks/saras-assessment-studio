@@ -1,31 +1,41 @@
 import { useMemo, useState } from "react";
 import { Assessment } from "@/data/assessments";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CalendarCheck2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-const typeColor: Record<string, string> = {
-  PA1: "bg-primary",
-  PA2: "bg-primary",
-  "Mid-term": "bg-warning",
-  "Final Exam": "bg-destructive",
-  "Unit Test 1": "bg-success",
-  "Unit Test 2": "bg-success",
-  "Unit Test 3": "bg-success",
-};
 
 interface Props {
   assessments: Assessment[];
 }
 
+type EventKind = "scheduled" | "review";
+
+const kindStyles: Record<
+  EventKind,
+  { highlight: string; ring: string; legendDot: string }
+> = {
+  scheduled: {
+    highlight:
+      "bg-[hsl(var(--pastel-sky))] text-[hsl(var(--pastel-sky-ink))]",
+    ring: "ring-[hsl(var(--pastel-sky-ink))]/30",
+    legendDot: "bg-[hsl(var(--pastel-sky-ink))]",
+  },
+  review: {
+    highlight:
+      "bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))]",
+    ring: "ring-[hsl(var(--pastel-peach-ink))]/30",
+    legendDot: "bg-[hsl(var(--pastel-peach-ink))]",
+  },
+};
+
 export function AssessmentCalendar({ assessments }: Props) {
   const [cursor, setCursor] = useState(() => new Date());
 
-  const { weeks, monthLabel, eventsByDay } = useMemo(() => {
+  const { weeks, monthLabel, eventsByDay, totalEvents } = useMemo(() => {
     const year = cursor.getFullYear();
     const month = cursor.getMonth();
     const first = new Date(year, month, 1);
-    const startOffset = first.getDay(); // 0=Sun
+    const startOffset = first.getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     const cells: (Date | null)[] = [];
@@ -36,97 +46,174 @@ export function AssessmentCalendar({ assessments }: Props) {
     const weeks: (Date | null)[][] = [];
     for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
 
-    const eventsByDay: Record<string, { type: "scheduled" | "review"; a: Assessment }[]> = {};
+    const eventsByDay: Record<string, { type: EventKind; a: Assessment }[]> = {};
     for (const a of assessments) {
       const sched = new Date(a.scheduledAt);
       const due = new Date(a.dueAt);
-      const sk = sched.toDateString();
-      const dk = due.toDateString();
-      (eventsByDay[sk] ||= []).push({ type: "scheduled", a });
-      (eventsByDay[dk] ||= []).push({ type: "review", a });
+      (eventsByDay[sched.toDateString()] ||= []).push({ type: "scheduled", a });
+      (eventsByDay[due.toDateString()] ||= []).push({ type: "review", a });
     }
 
-    const monthLabel = first.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-    return { weeks, monthLabel, eventsByDay };
+    const monthLabel = first.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+
+    let totalEvents = 0;
+    for (const k of Object.keys(eventsByDay)) {
+      const d = new Date(k);
+      if (d.getMonth() === month && d.getFullYear() === year) {
+        totalEvents += eventsByDay[k].length;
+      }
+    }
+
+    return { weeks, monthLabel, eventsByDay, totalEvents };
   }, [cursor, assessments]);
 
   const today = new Date();
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h2 className="text-[15px] text-foreground">Assessment Calendar</h2>
-          <p className="text-sm text-muted-foreground">Scheduled assessments & QP review deadlines</p>
+    <div
+      className="h-full flex flex-col"
+      role="region"
+      aria-label="Assessment calendar"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-soft text-primary">
+            <CalendarCheck2 className="h-4 w-4" aria-hidden="true" />
+          </span>
+          <div>
+            <h2 className="text-[15px] font-medium tracking-tight text-foreground">
+              Assessment Calendar
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {totalEvents} event{totalEvents === 1 ? "" : "s"} this month
+            </p>
+          </div>
         </div>
-        <div className="flex items-center gap-1">
+
+        <div className="flex items-center gap-1 rounded-full bg-secondary/60 p-1">
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8"
-            onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}
+            aria-label="Previous month"
+            className="h-7 w-7 rounded-full hover:bg-card"
+            onClick={() =>
+              setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))
+            }
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <div className="text-sm text-foreground min-w-[130px] text-center">{monthLabel}</div>
+          <div
+            className="text-sm font-medium text-foreground min-w-[120px] text-center px-2"
+            aria-live="polite"
+          >
+            {monthLabel}
+          </div>
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8"
-            onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}
+            aria-label="Next month"
+            className="h-7 w-7 rounded-full hover:bg-card"
+            onClick={() =>
+              setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))
+            }
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-px text-center mb-1">
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-          <div key={d} className="text-sm uppercase tracking-wide text-muted-foreground py-2">
+      {/* Weekday header */}
+      <div
+        className="grid grid-cols-7 mb-2"
+        role="row"
+      >
+        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
+          <div
+            key={d}
+            role="columnheader"
+            className="text-sm text-muted-foreground text-center py-1.5"
+          >
             {d}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1.5 flex-1">
+      {/* Days grid — minimal, like reference */}
+      <div className="grid grid-cols-7 gap-y-2 flex-1">
         {weeks.flat().map((day, i) => {
-          if (!day) return <div key={i} className="rounded-lg bg-secondary/40 min-h-[64px]" />;
+          if (!day) return <div key={i} aria-hidden="true" />;
+
+          // Reorder Sun-first source to Mon-first display: shift Sun to end visually
           const events = eventsByDay[day.toDateString()] || [];
           const isToday = day.toDateString() === today.toDateString();
+          const primaryKind: EventKind | null =
+            events.find((e) => e.type === "review")?.type ??
+            events[0]?.type ??
+            null;
+
+          const tooltip = events
+            .map(
+              (e) =>
+                `${e.a.title} — ${
+                  e.type === "review" ? "Review QP due" : "Scheduled"
+                }`
+            )
+            .join("\n");
+
           return (
             <div
               key={i}
-              className={cn(
-                "rounded-lg border p-1.5 min-h-[64px] flex flex-col gap-1 transition-colors",
-                isToday ? "border-primary bg-primary-soft/40" : "border-border bg-card hover:bg-secondary/50"
-              )}
+              role="gridcell"
+              className="flex items-center justify-center"
             >
               <div
+                title={tooltip || undefined}
+                aria-label={
+                  events.length
+                    ? `${day.toDateString()} — ${events.length} event${
+                        events.length === 1 ? "" : "s"
+                      }`
+                    : day.toDateString()
+                }
                 className={cn(
-                  "text-sm self-end",
-                  isToday ? "text-primary font-medium" : "text-muted-foreground"
+                  "relative h-10 w-10 flex items-center justify-center rounded-full text-sm transition-all",
+                  // base hover
+                  !isToday && !primaryKind && "text-foreground hover:bg-secondary",
+                  // event highlight
+                  primaryKind && !isToday && [
+                    kindStyles[primaryKind].highlight,
+                    "font-medium ring-1",
+                    kindStyles[primaryKind].ring,
+                  ],
+                  // today
+                  isToday && "bg-primary text-primary-foreground font-medium shadow-soft-sm",
                 )}
               >
                 {day.getDate()}
-              </div>
-              <div className="flex flex-col gap-0.5">
-                {events.slice(0, 2).map((e, idx) => (
-                  <div
-                    key={idx}
-                    title={`${e.a.title} — ${e.type === "review" ? "Review QP due" : "Scheduled"}`}
-                    className={cn(
-                      "flex items-center gap-1 px-1.5 py-0.5 rounded text-sm truncate",
-                      e.type === "review"
-                        ? "bg-warning/10 text-warning"
-                        : "bg-primary-soft text-primary"
-                    )}
+                {/* multi-event indicator */}
+                {events.length > 1 && !isToday && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5"
                   >
-                    <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", typeColor[e.a.type] || "bg-primary")} />
-                    <span className="truncate">{e.a.type}</span>
-                  </div>
-                ))}
-                {events.length > 2 && (
-                  <span className="text-sm text-muted-foreground px-1.5">+{events.length - 2}</span>
+                    {Array.from({ length: Math.min(events.length, 3) }).map(
+                      (_, idx) => (
+                        <span
+                          key={idx}
+                          className={cn(
+                            "h-1 w-1 rounded-full",
+                            kindStyles[
+                              events[idx]?.type ?? "scheduled"
+                            ].legendDot
+                          )}
+                        />
+                      )
+                    )}
+                  </span>
                 )}
               </div>
             </div>
@@ -134,20 +221,40 @@ export function AssessmentCalendar({ assessments }: Props) {
         })}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-border">
-        <Legend dot="bg-primary" label="Scheduled" />
-        <Legend dot="bg-warning" label="Review QP due" />
-        <Legend dot="bg-success" label="Unit Test" />
-        <Legend dot="bg-destructive" label="Final Exam" />
+      {/* Legend */}
+      <div className="flex flex-wrap items-center gap-4 mt-5 pt-4 border-t border-border/70">
+        <Legend
+          swatch="bg-[hsl(var(--pastel-sky))] ring-[hsl(var(--pastel-sky-ink))]/30"
+          label="Scheduled"
+        />
+        <Legend
+          swatch="bg-[hsl(var(--pastel-peach))] ring-[hsl(var(--pastel-peach-ink))]/30"
+          label="Review QP due"
+        />
+        <Legend swatch="bg-primary" label="Today" solid />
       </div>
     </div>
   );
 }
 
-function Legend({ dot, label }: { dot: string; label: string }) {
+function Legend({
+  swatch,
+  label,
+  solid,
+}: {
+  swatch: string;
+  label: string;
+  solid?: boolean;
+}) {
   return (
-    <div className="flex items-center gap-1.5">
-      <span className={cn("h-2 w-2 rounded-full", dot)} />
+    <div className="flex items-center gap-2">
+      <span
+        aria-hidden="true"
+        className={cn(
+          "h-3.5 w-3.5 rounded-full",
+          solid ? swatch : `${swatch} ring-1`
+        )}
+      />
       <span className="text-sm text-muted-foreground">{label}</span>
     </div>
   );
