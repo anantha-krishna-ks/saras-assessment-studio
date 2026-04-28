@@ -41,7 +41,7 @@ export function RoleSwitcher() {
           aria-haspopup="listbox"
           aria-expanded={open}
           className={cn(
-            "group inline-flex items-center gap-2 h-10 pl-1 pr-1 rounded-full transition-all duration-200",
+            "group inline-flex items-center gap-2.5 h-10 pl-1 pr-1 rounded-full transition-all duration-200",
             "bg-primary-soft hover:bg-primary-soft/80",
             "ring-1 ring-primary/15 hover:ring-primary/30",
             open && "ring-primary/50 shadow-soft-sm"
@@ -57,11 +57,8 @@ export function RoleSwitcher() {
             <CurrentIcon className="h-4 w-4" />
           </span>
 
-          {/* Divider */}
-          <span aria-hidden="true" className="h-5 w-px bg-primary/15" />
-
           {/* Stacked label */}
-          <span className="flex flex-col items-start leading-none gap-0.5 px-1">
+          <span className="flex flex-col items-start leading-none gap-0.5 pr-0.5">
             <span className="text-[10px] font-medium uppercase tracking-[0.08em] text-primary/70">
               Role
             </span>
@@ -69,9 +66,6 @@ export function RoleSwitcher() {
               {role}
             </span>
           </span>
-
-          {/* Divider */}
-          <span aria-hidden="true" className="h-5 w-px bg-primary/15" />
 
           {/* Chevron capsule — high contrast against pill */}
           <span
