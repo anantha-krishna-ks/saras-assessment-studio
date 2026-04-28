@@ -1,5 +1,7 @@
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRole } from "@/context/RoleContext";
+import type { AssessmentStatus } from "@/data/assessments";
 import { assessments } from "@/data/assessments";
 import { AssessmentCard } from "@/components/dashboard/AssessmentCard";
 import { AssessmentCalendar } from "@/components/dashboard/AssessmentCalendar";
@@ -20,12 +22,40 @@ import { cn } from "@/lib/utils";
 export default function Dashboard() {
   const { role, user } = useRole();
   const navigate = useNavigate();
+  const [statusFilter, setStatusFilter] = useState<AssessmentStatus | "All">("All");
 
   const drafts = assessments.filter((a) => a.status === "Draft").length;
   const review = assessments.filter((a) => a.status === "In Review").length;
   const completed = assessments.filter((a) => a.status === "Completed").length;
   const total = assessments.length;
   const completionPct = Math.round((completed / Math.max(total, 1)) * 100);
+
+  const statusCounts: Record<AssessmentStatus | "All", number> = useMemo(
+    () => ({
+      All: assessments.length,
+      "Not yet started": assessments.filter((a) => a.status === "Not yet started").length,
+      Draft: drafts,
+      "In Review": review,
+      Completed: completed,
+    }),
+    [drafts, review, completed]
+  );
+
+  const filteredAssessments = useMemo(
+    () =>
+      statusFilter === "All"
+        ? assessments
+        : assessments.filter((a) => a.status === statusFilter),
+    [statusFilter]
+  );
+
+  const filterOptions: (AssessmentStatus | "All")[] = [
+    "All",
+    "Not yet started",
+    "Draft",
+    "In Review",
+    "Completed",
+  ];
 
   const greeting = `Good ${
     new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"
@@ -160,7 +190,7 @@ export default function Dashboard() {
 
       {/* Assessments grid */}
       <div>
-        <div className="flex items-end justify-between mb-4">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
           <div>
             <h2 className="text-[18px] text-foreground tracking-tight">Your Assessments</h2>
             <p className="text-sm text-muted-foreground">
@@ -172,11 +202,61 @@ export default function Dashboard() {
           </Button>
         </div>
 
+        {/* Status filter pills */}
+        <div
+          role="tablist"
+          aria-label="Filter assessments by status"
+          className="flex flex-wrap items-center gap-2 mb-5"
+        >
+          {filterOptions.map((opt) => {
+            const active = statusFilter === opt;
+            const count = statusCounts[opt];
+            return (
+              <button
+                key={opt}
+                role="tab"
+                aria-selected={active}
+                onClick={() => setStatusFilter(opt)}
+                className={cn(
+                  "inline-flex items-center gap-2 h-9 px-3.5 rounded-full text-sm transition-all ring-1",
+                  active
+                    ? "bg-primary text-primary-foreground ring-primary shadow-soft-xs"
+                    : "bg-card text-foreground ring-border/70 hover:ring-primary/40 hover:bg-primary-soft/40"
+                )}
+              >
+                <span className="font-medium">{opt}</span>
+                <span
+                  className={cn(
+                    "inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-medium tabular-nums",
+                    active
+                      ? "bg-primary-foreground/20 text-primary-foreground"
+                      : "bg-secondary text-muted-foreground"
+                  )}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         {assessments.length === 0 ? (
           <EmptyState onCreate={() => navigate("/create")} />
+        ) : filteredAssessments.length === 0 ? (
+          <Card className="p-10 rounded-3xl border border-dashed border-border text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary">
+              <Inbox className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <h3 className="mt-4 text-[15px] text-foreground">
+              No assessments in "{statusFilter}"
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Try a different status filter to see more.
+            </p>
+          </Card>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {assessments.map((a) => (
+            {filteredAssessments.map((a) => (
               <AssessmentCard key={a.id} a={a} />
             ))}
           </div>
