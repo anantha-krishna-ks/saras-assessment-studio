@@ -49,6 +49,18 @@
     --info: 211 100% 44%;
     --info-foreground: 0 0% 100%;
 
+    /* Pastel accents (dashboard inspiration) */
+    --pastel-lavender: 256 100% 94%;
+    --pastel-lavender-ink: 256 55% 38%;
+    --pastel-mint: 158 70% 92%;
+    --pastel-mint-ink: 160 55% 30%;
+    --pastel-peach: 18 100% 94%;
+    --pastel-peach-ink: 18 60% 40%;
+    --pastel-sky: 205 100% 93%;
+    --pastel-sky-ink: 211 70% 38%;
+    --pastel-rose: 340 100% 95%;
+    --pastel-rose-ink: 340 55% 42%;
+
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 211 100% 44%;
