@@ -22,30 +22,31 @@ export function Header() {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-card/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6">
+    <header className="sticky top-0 z-30 border-b border-border/70 bg-card/80 backdrop-blur-md">
+      <div className="relative mx-auto grid h-16 max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-6">
         {/* Logo */}
-        <div className="flex items-center gap-8">
-          <NavLink to="/dashboard" className="flex items-center gap-3">
-            <img src={logo} alt="Saras Class Sphere" className="h-9 w-auto" />
-            <div className="leading-tight hidden sm:block">
-              <div className="text-[15px] font-medium text-foreground">Class Sphere</div>
-              <div className="text-xs text-muted-foreground">Assessment Studio</div>
-            </div>
-          </NavLink>
+        <NavLink to="/dashboard" className="flex items-center gap-3 justify-self-start">
+          <img src={logo} alt="Saras Class Sphere" className="h-9 w-auto" />
+          <div className="leading-tight hidden sm:block">
+            <div className="text-[15px] font-medium text-foreground">Class Sphere</div>
+            <div className="text-xs text-muted-foreground">Assessment Studio</div>
+          </div>
+        </NavLink>
 
-          {/* Nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>
-              Dashboard
-            </NavItem>
-            <NavItem to="/create" icon={<FilePlus2 className="h-4 w-4" />}>
-              Create Assessment
-            </NavItem>
-          </nav>
-        </div>
+        {/* Centered pill nav */}
+        <nav
+          aria-label="Primary"
+          className="hidden md:flex items-center gap-1 justify-self-center rounded-full border border-border/70 bg-secondary/50 backdrop-blur p-1 shadow-soft-xs"
+        >
+          <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>
+            Dashboard
+          </NavItem>
+          <NavItem to="/create" icon={<FilePlus2 className="h-4 w-4" />}>
+            Create Assessment
+          </NavItem>
+        </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-self-end">
           {/* Pill-shaped role switcher with dropdown */}
           <div className="hidden sm:block">
             <RoleSwitcher />
@@ -96,6 +97,19 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+
+        {/* Mobile nav (below md) — also pill-style */}
+        <nav
+          aria-label="Primary mobile"
+          className="md:hidden col-span-3 flex items-center justify-center gap-1 -mt-1 pb-2"
+        >
+          <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>
+            Dashboard
+          </NavItem>
+          <NavItem to="/create" icon={<FilePlus2 className="h-4 w-4" />}>
+            Create
+          </NavItem>
+        </nav>
       </div>
     </header>
   );
@@ -115,10 +129,10 @@ function NavItem({
       to={to}
       className={({ isActive }) =>
         cn(
-          "flex items-center gap-2 px-3 h-9 rounded-lg text-sm transition-colors",
+          "flex items-center gap-2 px-4 h-9 rounded-full text-sm transition-all",
           isActive
-            ? "bg-primary-soft text-primary"
-            : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+            ? "bg-card text-primary shadow-soft-sm ring-1 ring-border/70"
+            : "text-muted-foreground hover:text-foreground hover:bg-card/60"
         )
       }
     >
