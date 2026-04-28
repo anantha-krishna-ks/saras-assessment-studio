@@ -31,23 +31,36 @@ export default function ReviewQP() {
   const navigate = useNavigate();
   const qp = sampleQP;
 
-  const [comments, setComments] = useState<Record<string, string>>({});
+  type CommentEntry = { text: string; createdAt: string };
+  const [comments, setComments] = useState<Record<string, CommentEntry>>({});
   const [openCommentFor, setOpenCommentFor] = useState<string | null>(null);
   const [draftComment, setDraftComment] = useState("");
   const [revertOpen, setRevertOpen] = useState(false);
   const [revertNote, setRevertNote] = useState("");
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
-  const commentCount = Object.values(comments).filter((c) => c.trim().length > 0).length;
+  const commentCount = Object.values(comments).filter((c) => c.text.trim().length > 0).length;
+
+  const formatTimestamp = (iso: string) =>
+    new Date(iso).toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   const openComment = (qid: string) => {
-    setDraftComment(comments[qid] ?? "");
+    setDraftComment(comments[qid]?.text ?? "");
     setOpenCommentFor(qid);
   };
 
   const saveComment = () => {
     if (!openCommentFor) return;
-    setComments((prev) => ({ ...prev, [openCommentFor]: draftComment.trim() }));
+    setComments((prev) => ({
+      ...prev,
+      [openCommentFor]: { text: draftComment.trim(), createdAt: new Date().toISOString() },
+    }));
     setOpenCommentFor(null);
     setDraftComment("");
     toast.success("Comment saved", { description: "Your feedback has been attached to this question." });
