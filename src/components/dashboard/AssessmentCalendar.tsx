@@ -131,7 +131,7 @@ export function AssessmentCalendar({ assessments }: Props) {
         className="grid grid-cols-7 mb-2"
         role="row"
       >
-        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
           <div
             key={d}
             role="columnheader"
