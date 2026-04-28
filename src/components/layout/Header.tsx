@@ -45,6 +45,13 @@ export function Header() {
             Create Assessment
           </NavItem>
         </nav>
+        <style>{`
+          @keyframes ios-pill-in {
+            0% { transform: scale(0.92); opacity: 0; }
+            60% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+          }
+        `}</style>
 
         <div className="flex items-center gap-3 justify-self-end">
           {/* Pill-shaped role switcher with dropdown */}
