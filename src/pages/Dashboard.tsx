@@ -319,11 +319,6 @@ function PastelStat({
               aria-hidden="true"
               className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-white/35"
             />
-            {/* shimmer sweep */}
-            <span
-              aria-hidden="true"
-              className="absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent blur-[2px] animate-shimmer"
-            />
             {/* glow tip */}
             <span
               aria-hidden="true"
