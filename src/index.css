@@ -107,13 +107,11 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Keep html at default 16px so all rem-based spacing utilities stay correct.
+     14px minimum text is enforced via body + Tailwind fontSize overrides. */
   body {
-    @apply bg-background text-foreground;
-    font-size: 14px;
+    @apply bg-background text-foreground text-sm;
   }
-
-  /* Enforce a 14px minimum font size across the app */
-  html { font-size: 14px; }
 
   /* Cap font weight to 500 across the app per design spec */
   h1, h2, h3, h4, h5, h6, .font-medium, strong, b {
