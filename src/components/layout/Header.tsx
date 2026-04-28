@@ -63,7 +63,6 @@ export function Header() {
                 </Avatar>
                 <div className="hidden md:block text-left leading-tight">
                   <div className="text-sm text-foreground">{user.name}</div>
-                  <div className="text-sm text-muted-foreground">{role}</div>
                 </div>
               </button>
             </DropdownMenuTrigger>
