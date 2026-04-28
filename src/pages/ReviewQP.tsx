@@ -362,7 +362,7 @@ export default function ReviewQP() {
             <Button variant="ghost" onClick={() => setRevertOpen(false)}>
               Cancel
             </Button>
-            <Button className="bg-primary hover:bg-primary-hover" onClick={handleRevert}>
+            <Button onClick={handleRevert}>
               <RotateCcw className="h-4 w-4 mr-2" />
               Send back for revision
             </Button>
