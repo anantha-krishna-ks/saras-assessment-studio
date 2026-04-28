@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { RoleSwitcher } from "./RoleSwitcher";
 
 const roles: Role[] = ["HOD", "Teacher", "Admin"];
 
@@ -46,28 +47,9 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Role switcher segmented control */}
-          <div
-            role="tablist"
-            aria-label="Switch role"
-            className="hidden sm:flex items-center rounded-full bg-secondary p-1"
-          >
-            {roles.map((r) => (
-              <button
-                key={r}
-                role="tab"
-                aria-selected={role === r}
-                onClick={() => setRole(r)}
-                className={cn(
-                  "px-3.5 h-8 rounded-full text-sm transition-colors",
-                  role === r
-                    ? "bg-card text-foreground shadow-soft-xs"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {r}
-              </button>
-            ))}
+          {/* Pill-shaped role switcher with dropdown */}
+          <div className="hidden sm:block">
+            <RoleSwitcher />
           </div>
 
           {/* Profile */}
