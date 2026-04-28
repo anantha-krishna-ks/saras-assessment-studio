@@ -31,23 +31,36 @@ export default function ReviewQP() {
   const navigate = useNavigate();
   const qp = sampleQP;
 
-  const [comments, setComments] = useState<Record<string, string>>({});
+  type CommentEntry = { text: string; createdAt: string };
+  const [comments, setComments] = useState<Record<string, CommentEntry>>({});
   const [openCommentFor, setOpenCommentFor] = useState<string | null>(null);
   const [draftComment, setDraftComment] = useState("");
   const [revertOpen, setRevertOpen] = useState(false);
   const [revertNote, setRevertNote] = useState("");
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
-  const commentCount = Object.values(comments).filter((c) => c.trim().length > 0).length;
+  const commentCount = Object.values(comments).filter((c) => c.text.trim().length > 0).length;
+
+  const formatTimestamp = (iso: string) =>
+    new Date(iso).toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   const openComment = (qid: string) => {
-    setDraftComment(comments[qid] ?? "");
+    setDraftComment(comments[qid]?.text ?? "");
     setOpenCommentFor(qid);
   };
 
   const saveComment = () => {
     if (!openCommentFor) return;
-    setComments((prev) => ({ ...prev, [openCommentFor]: draftComment.trim() }));
+    setComments((prev) => ({
+      ...prev,
+      [openCommentFor]: { text: draftComment.trim(), createdAt: new Date().toISOString() },
+    }));
     setOpenCommentFor(null);
     setDraftComment("");
     toast.success("Comment saved", { description: "Your feedback has been attached to this question." });
@@ -180,7 +193,8 @@ export default function ReviewQP() {
             <Card className="rounded-2xl border border-border shadow-soft-xs divide-y divide-border overflow-hidden">
               {section.questions.map((q) => {
                 const qid = `${section.name}-${q.number}`;
-                const hasComment = comments[qid]?.trim().length > 0;
+                const comment = comments[qid];
+                const hasComment = (comment?.text.trim().length ?? 0) > 0;
                 return (
                   <div
                     key={qid}
@@ -225,13 +239,27 @@ export default function ReviewQP() {
                           </div>
                         )}
 
-                        {hasComment && (
+                        <div className="mt-3 p-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5">
+                          <div className="text-sm uppercase tracking-wide text-emerald-700 dark:text-emerald-400 mb-1">
+                            Correct Answer
+                          </div>
+                          <p className="text-sm text-foreground/90 whitespace-pre-wrap">
+                            {q.answer}
+                          </p>
+                        </div>
+
+                        {hasComment && comment && (
                           <div className="mt-3 p-3 rounded-lg border border-primary/20 bg-background">
-                            <div className="text-sm uppercase tracking-wide text-primary mb-1">
-                              HOD Comment
+                            <div className="flex items-center justify-between gap-3 mb-1">
+                              <div className="text-sm uppercase tracking-wide text-primary">
+                                HOD Comment
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {formatTimestamp(comment.createdAt)}
+                              </div>
                             </div>
                             <p className="text-sm text-foreground/90 whitespace-pre-wrap">
-                              {comments[qid]}
+                              {comment.text}
                             </p>
                           </div>
                         )}
