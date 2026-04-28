@@ -93,7 +93,12 @@ export default function Dashboard() {
                       {a.subject} · Due {new Date(a.dueAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                     </div>
                   </div>
-                  <Button size="sm" variant="ghost" className="text-sm h-7 text-primary hover:text-primary hover:bg-primary-soft">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-sm h-7 text-primary hover:text-primary hover:bg-primary-soft"
+                    onClick={() => navigate(`/review-qp/${a.id}`)}
+                  >
                     Review
                   </Button>
                 </div>
