@@ -60,11 +60,8 @@ export default function CreateAssessment() {
             <p className="text-sm text-muted-foreground mt-1">Set up a new question paper.</p>
           </div>
           <div className="flex gap-2">
-            <Button type="button" variant="outline" className="rounded-xl">
-              <Save className="h-4 w-4 mr-2" /> Save Draft
-            </Button>
             <Button type="submit" className="rounded-xl bg-primary hover:bg-primary-hover">
-              Publish for Review
+              <Send className="h-4 w-4 mr-2" /> Assign Assessment
             </Button>
           </div>
         </div>
