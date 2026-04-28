@@ -20,6 +20,7 @@ export interface QPDocument {
   totalMarks: number;
   duration: string;
   teacher: string;
+  createdOn: string;
   generalInstructions: string[];
   sections: QPSection[];
 }
@@ -32,6 +33,7 @@ export const sampleQP: QPDocument = {
   totalMarks: 40,
   duration: "1 hour 30 minutes",
   teacher: "Mr. Rajesh Kumar",
+  createdOn: "24 Apr 2026",
   generalInstructions: [
     "All questions are compulsory.",
     "The question paper consists of 4 sections — A, B, C, and D.",
