@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Send } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Send, ChevronDown, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const types = ["PA1", "PA2", "Mid-term", "Final Exam", "Unit Test 1", "Unit Test 2", "Unit Test 3"];
@@ -33,6 +37,13 @@ export default function CreateAssessment() {
   const navigate = useNavigate();
   const [hours, setHours] = useState<number | "">(1);
   const [minutes, setMinutes] = useState<number | "">(30);
+  const [selectedChapters, setSelectedChapters] = useState<string[]>([]);
+
+  const toggleChapter = (chapter: string) => {
+    setSelectedChapters((prev) =>
+      prev.includes(chapter) ? prev.filter((c) => c !== chapter) : [...prev, chapter]
+    );
+  };
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -75,7 +86,71 @@ export default function CreateAssessment() {
           <FieldSelect label="Class" required placeholder="Select class" options={classes} />
           <FieldSelect label="Subject" required placeholder="Select subject" options={subjects} />
 
-          <FieldSelect label="Chapters" required placeholder="Select chapters" options={chapterOptions} />
+          <Field label="Chapters" required>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className={cn(
+                    "w-full min-h-11 rounded-xl border border-input bg-background px-3 py-2 text-left text-sm",
+                    "flex items-center justify-between gap-2 hover:bg-accent/30 transition-colors",
+                    "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  )}
+                >
+                  {selectedChapters.length === 0 ? (
+                    <span className="text-muted-foreground">Select chapters</span>
+                  ) : (
+                    <div className="flex flex-wrap gap-1.5 flex-1">
+                      {selectedChapters.map((c) => (
+                        <Badge
+                          key={c}
+                          variant="secondary"
+                          className="rounded-md font-normal pl-2 pr-1 py-0.5 gap-1"
+                        >
+                          {c}
+                          <span
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleChapter(c);
+                            }}
+                            className="rounded-sm hover:bg-muted-foreground/20 p-0.5"
+                          >
+                            <X className="h-3 w-3" />
+                          </span>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                  <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="p-1 rounded-xl"
+                align="start"
+                style={{ width: "var(--radix-popover-trigger-width)" }}
+              >
+                <div className="max-h-64 overflow-y-auto">
+                  {chapterOptions.map((chapter) => {
+                    const checked = selectedChapters.includes(chapter);
+                    return (
+                      <label
+                        key={chapter}
+                        className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-accent cursor-pointer text-sm"
+                      >
+                        <Checkbox
+                          checked={checked}
+                          onCheckedChange={() => toggleChapter(chapter)}
+                        />
+                        <span className="text-foreground">{chapter}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </PopoverContent>
+            </Popover>
+          </Field>
 
           <Field label="Total Marks" required>
             <Input
