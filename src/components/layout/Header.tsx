@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { GraduationCap, LayoutDashboard, FilePlus2, LogOut } from "lucide-react";
+import { LayoutDashboard, FilePlus2, LogOut } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { useRole, Role } from "@/context/RoleContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,15 +26,13 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6">
         {/* Logo */}
         <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary">
-              <GraduationCap className="h-5 w-5 text-primary-foreground" strokeWidth={2} />
+          <NavLink to="/dashboard" className="flex items-center gap-3">
+            <img src={logo} alt="Saras Class Sphere" className="h-9 w-auto" />
+            <div className="leading-tight hidden sm:block">
+              <div className="text-[15px] font-medium text-foreground">Class Sphere</div>
+              <div className="text-xs text-muted-foreground">Assessment Studio</div>
             </div>
-            <div className="leading-tight">
-              <div className="text-[15px] font-medium text-foreground">Lumen LMS</div>
-              <div className="text-sm text-muted-foreground">Assessment Studio</div>
-            </div>
-          </div>
+          </NavLink>
 
           {/* Nav */}
           <nav className="hidden md:flex items-center gap-1">
