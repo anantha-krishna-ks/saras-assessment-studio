@@ -258,11 +258,101 @@ export default function Login() {
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+function EducationAnimation() {
   return (
-    <div>
-      <div className="text-[22px] text-foreground">{value}</div>
-      <div className="text-xs text-muted-foreground mt-0.5">{label}</div>
+    <div className="relative w-[420px] h-[420px] flex items-center justify-center">
+      {/* Concentric orbit rings */}
+      <div className="absolute inset-0 rounded-full border border-primary/15 animate-[spin_28s_linear_infinite]" />
+      <div className="absolute inset-8 rounded-full border border-primary/10 animate-[spin_22s_linear_infinite_reverse]" />
+      <div className="absolute inset-16 rounded-full border border-primary/10 animate-[spin_18s_linear_infinite]" />
+
+      {/* Orbiting icons */}
+      <Orbit radius={188} duration={28}>
+        <FloatingIcon>
+          <BookOpen className="h-5 w-5 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+      <Orbit radius={188} duration={28} startAngle={120}>
+        <FloatingIcon>
+          <PenLine className="h-5 w-5 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+      <Orbit radius={188} duration={28} startAngle={240}>
+        <FloatingIcon>
+          <Sparkles className="h-5 w-5 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+
+      <Orbit radius={132} duration={22} reverse>
+        <FloatingIcon size="sm">
+          <ShieldCheck className="h-4 w-4 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+      <Orbit radius={132} duration={22} reverse startAngle={180}>
+        <FloatingIcon size="sm">
+          <Users className="h-4 w-4 text-primary" />
+        </FloatingIcon>
+      </Orbit>
+
+      {/* Central medallion */}
+      <div className="relative flex items-center justify-center">
+        <div className="absolute h-40 w-40 rounded-full bg-primary/10 blur-2xl animate-[pulse_4s_ease-in-out_infinite]" />
+        <div className="absolute h-28 w-28 rounded-full bg-primary/20 blur-xl" />
+        <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-card shadow-soft-md border border-border animate-[float_5s_ease-in-out_infinite]">
+          <GraduationCap className="h-11 w-11 text-primary" strokeWidth={1.75} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Orbit({
+  radius,
+  duration,
+  reverse,
+  startAngle = 0,
+  children,
+}: {
+  radius: number;
+  duration: number;
+  reverse?: boolean;
+  startAngle?: number;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className="absolute inset-0 flex items-center justify-center"
+      style={{
+        animation: `spin ${duration}s linear infinite${reverse ? " reverse" : ""}`,
+        transform: `rotate(${startAngle}deg)`,
+      }}
+    >
+      <div className="absolute" style={{ transform: `translateX(${radius}px)` }}>
+        <div
+          style={{
+            animation: `spin ${duration}s linear infinite${reverse ? "" : " reverse"}`,
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FloatingIcon({
+  children,
+  size = "md",
+}: {
+  children: React.ReactNode;
+  size?: "sm" | "md";
+}) {
+  const dim = size === "sm" ? "h-9 w-9" : "h-11 w-11";
+  return (
+    <div
+      className={`${dim} flex items-center justify-center rounded-2xl bg-card border border-border shadow-soft-sm`}
+    >
+      {children}
     </div>
   );
 }
