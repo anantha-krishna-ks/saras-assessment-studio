@@ -104,7 +104,7 @@ export function InboxPanel({ showRequests = true }: Props) {
                 className={cn(
                   "relative flex items-center justify-center gap-2 h-10 rounded-xl text-[13px] font-medium transition-all",
                   active
-                    ? "bg-card text-foreground shadow-soft-xs"
+                    ? "bg-primary text-primary-foreground shadow-soft-xs"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -112,9 +112,7 @@ export function InboxPanel({ showRequests = true }: Props) {
                   className={cn(
                     "flex h-6 w-6 items-center justify-center rounded-lg",
                     active
-                      ? isAlert
-                        ? "bg-primary-soft text-primary"
-                        : "bg-secondary text-foreground"
+                      ? "bg-primary-foreground/15 text-primary-foreground"
                       : "text-muted-foreground"
                   )}
                 >
@@ -125,10 +123,10 @@ export function InboxPanel({ showRequests = true }: Props) {
                   <span
                     className={cn(
                       "ml-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
-                      isAlert
-                        ? "bg-primary text-primary-foreground"
-                        : active
-                          ? "bg-secondary text-foreground"
+                      active
+                        ? "bg-primary-foreground/20 text-primary-foreground"
+                        : isAlert
+                          ? "bg-primary text-primary-foreground"
                           : "bg-card text-muted-foreground border border-border/60"
                     )}
                   >
