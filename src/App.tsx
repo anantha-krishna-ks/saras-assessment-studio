@@ -8,6 +8,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import Index from "./pages/Index.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import CreateAssessment from "./pages/CreateAssessment.tsx";
+import CreateAssessmentV2 from "./pages/CreateAssessmentV2.tsx";
 import ReviewQP from "./pages/ReviewQP.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -25,6 +26,7 @@ const App = () => (
             <Route element={<AppShell />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/create" element={<CreateAssessment />} />
+              <Route path="/create-v2" element={<CreateAssessmentV2 />} />
               <Route path="/review-qp" element={<ReviewQP />} />
               <Route path="/review-qp/:id" element={<ReviewQP />} />
             </Route>
