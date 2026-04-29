@@ -143,6 +143,68 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Teacher scope filters */}
+      {isTeacher && (
+        <Card className="p-4 rounded-3xl border border-border/70 bg-card shadow-soft-xs">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground pr-1">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-soft text-primary">
+                <GraduationCap className="h-4 w-4" />
+              </span>
+              <span className="font-medium text-foreground">Scope</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Grade</span>
+              <Select value={gradeFilter} onValueChange={setGradeFilter}>
+                <SelectTrigger className="h-9 w-[160px] text-sm">
+                  <SelectValue placeholder="Select grade" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All">All grades</SelectItem>
+                  {grades.map((g) => (
+                    <SelectItem key={g} value={g}>
+                      {g}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Subject</span>
+              <Select value={subjectFilter} onValueChange={setSubjectFilter}>
+                <SelectTrigger className="h-9 w-[180px] text-sm">
+                  <SelectValue placeholder="Select subject" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All">All subjects</SelectItem>
+                  {subjects.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      <span className="inline-flex items-center gap-2">
+                        <BookOpen className="h-3.5 w-3.5 text-muted-foreground" />
+                        {s}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {(gradeFilter !== "All" || subjectFilter !== "All") && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 ml-auto text-xs"
+                onClick={() => {
+                  setGradeFilter("All");
+                  setSubjectFilter("All");
+                }}
+              >
+                Clear filters
+              </Button>
+            )}
+          </div>
+        </Card>
+      )}
+
       {/* Hero pastel stat tiles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <PastelStat
