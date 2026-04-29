@@ -73,14 +73,16 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
     ? [
         {
           key: "upcoming" as TabKey,
-          label: "Upcoming Assessment",
+          label: "Upcoming",
+          fullLabel: "Upcoming Assessments",
           icon: <CalendarClock className="h-4 w-4" />,
           count: upcomingCount,
           show: true,
         },
         {
           key: "rework" as TabKey,
-          label: "Rework on Assessment",
+          label: "Rework",
+          fullLabel: "Rework on Assessments",
           icon: <RotateCcw className="h-4 w-4" />,
           count: reworkCount,
           show: true,
@@ -90,6 +92,7 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
         {
           key: "queue" as TabKey,
           label: "Review Queue",
+          fullLabel: "Review Queue",
           icon: <FileSearch className="h-4 w-4" />,
           count: queueCount,
           show: true,
@@ -97,6 +100,7 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
         {
           key: "requests" as TabKey,
           label: "Requests",
+          fullLabel: "Requests",
           icon: <UserCog className="h-4 w-4" />,
           count: pendingCount,
           show: showRequests,
