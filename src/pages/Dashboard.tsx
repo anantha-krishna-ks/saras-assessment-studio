@@ -139,63 +139,7 @@ export default function Dashboard() {
           <AssessmentCalendar assessments={assessments} />
         </Card>
 
-        <div className="space-y-4">
-          <Card className="p-6 rounded-3xl border border-border/70 bg-card shadow-soft-xs">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h2 className="text-[15px] text-foreground">Review Queue</h2>
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  Papers awaiting your review
-                </p>
-              </div>
-              <span className="inline-flex items-center justify-center h-7 min-w-7 px-2 rounded-full bg-primary-soft text-primary text-sm">
-                {review + drafts}
-              </span>
-            </div>
-            <div className="space-y-2.5">
-              {assessments
-                .filter((a) => a.status === "In Review" || a.status === "Draft")
-                .slice(0, 4)
-                .map((a, i) => (
-                  <button
-                    key={a.id}
-                    onClick={() => navigate(`/review-qp/${a.id}`)}
-                    className="group w-full text-left flex items-center gap-3 p-3 rounded-2xl bg-secondary/40 hover:bg-secondary transition-colors"
-                  >
-                    <div
-                      className={cn(
-                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm",
-                        i % 2 === 0
-                          ? "bg-[hsl(var(--pastel-lavender))] text-[hsl(var(--pastel-lavender-ink))]"
-                          : "bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))]"
-                      )}
-                    >
-                      {a.subject[0]}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="text-sm text-foreground truncate">{a.title}</div>
-                      <div className="text-sm text-muted-foreground mt-0.5 truncate">
-                        {a.subject} ·{" "}
-                        {new Date(a.dueAt).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </div>
-                    </div>
-                    <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-                  </button>
-                ))}
-              {review + drafts === 0 && (
-                <div className="text-sm text-muted-foreground text-center py-8">
-                  You're all caught up ✨
-                </div>
-              )}
-            </div>
-          </Card>
-
-          {role === "HOD" && <RequestsPanel />}
-        </div>
-      </div>
+        <InboxPanel showRequests={role === "HOD"} />
 
       {/* Assessments grid */}
       <div>
