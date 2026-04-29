@@ -2,20 +2,27 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRole } from "@/context/RoleContext";
 import type { AssessmentStatus } from "@/data/assessments";
-import { assessments } from "@/data/assessments";
+import { assessments as allAssessments } from "@/data/assessments";
 import { AssessmentCard } from "@/components/dashboard/AssessmentCard";
 import { AssessmentCalendar } from "@/components/dashboard/AssessmentCalendar";
 import { InboxPanel } from "@/components/dashboard/InboxPanel";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  ArrowUpRight,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   ClipboardCheck,
   FilePlus2,
   FileSearch,
+  GraduationCap,
   Inbox,
   Plus,
-  Sparkles,
+  BookOpen,
   TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
