@@ -148,49 +148,50 @@ export default function Dashboard() {
       {/* Teacher scope filters */}
       {isTeacher && (
         <Card className="p-4 rounded-3xl border border-border/70 bg-card shadow-soft-xs">
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground pr-1">
-              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-soft text-primary">
-                <GraduationCap className="h-4 w-4" />
-              </span>
-              <span className="font-medium text-foreground">Scope</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">Grade</span>
-              <Select value={gradeFilter} onValueChange={setGradeFilter}>
-                <SelectTrigger className="h-9 w-[160px] text-sm">
-                  <SelectValue placeholder="Select grade" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All grades</SelectItem>
-                  {grades.map((g) => (
-                    <SelectItem key={g} value={g}>
-                      {g}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">Subject</span>
-              <Select value={subjectFilter} onValueChange={setSubjectFilter}>
-                <SelectTrigger className="h-9 w-[180px] text-sm">
-                  <SelectValue placeholder="Select subject" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All">All subjects</SelectItem>
-                  {subjects.map((s) => (
-                    <SelectItem key={s} value={s}>
-                      <span className="inline-flex items-center gap-2">
-                        <BookOpen className="h-3.5 w-3.5 text-muted-foreground" />
-                        {s}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-center gap-2 ml-auto">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            {/* Filters group */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground pr-1">
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-soft text-primary">
+                  <GraduationCap className="h-4 w-4" />
+                </span>
+                <span className="font-medium text-foreground">Scope</span>
+              </div>
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-xs text-muted-foreground shrink-0">Grade</span>
+                <Select value={gradeFilter} onValueChange={setGradeFilter}>
+                  <SelectTrigger className="h-9 w-[140px] sm:w-[160px] text-sm">
+                    <SelectValue placeholder="Select grade" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="All">All grades</SelectItem>
+                    {grades.map((g) => (
+                      <SelectItem key={g} value={g}>
+                        {g}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-xs text-muted-foreground shrink-0">Subject</span>
+                <Select value={subjectFilter} onValueChange={setSubjectFilter}>
+                  <SelectTrigger className="h-9 w-[150px] sm:w-[180px] text-sm">
+                    <SelectValue placeholder="Select subject" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="All">All subjects</SelectItem>
+                    {subjects.map((s) => (
+                      <SelectItem key={s} value={s}>
+                        <span className="inline-flex items-center gap-2">
+                          <BookOpen className="h-3.5 w-3.5 text-muted-foreground" />
+                          {s}
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               {(gradeFilter !== "All" || subjectFilter !== "All") && (
                 <Button
                   variant="ghost"
@@ -204,19 +205,26 @@ export default function Dashboard() {
                   Clear filters
                 </Button>
               )}
+            </div>
+
+            {/* Actions group */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 lg:shrink-0">
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 gap-1.5"
+                className="h-9 gap-1.5 justify-center"
                 onClick={() => navigate("/question-repository")}
               >
                 <BookOpen className="h-4 w-4" />
                 Question Repository
               </Button>
-              <span aria-hidden="true" className="h-6 w-px bg-border/80 mx-1" />
+              <span
+                aria-hidden="true"
+                className="hidden sm:block h-6 w-px bg-border/80"
+              />
               <Button
                 size="sm"
-                className="h-9 gap-1.5"
+                className="h-9 gap-1.5 justify-center"
                 onClick={() => navigate("/create-v2")}
               >
                 <FilePlus2 className="h-4 w-4" />
