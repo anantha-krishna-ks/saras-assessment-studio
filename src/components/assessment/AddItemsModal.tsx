@@ -201,9 +201,6 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
               onChange={(e) => setAnswerText(e.target.value)} className="min-h-[100px] resize-y text-sm" />
           </div>
         )}
-        {type === "Fill in the Blank" && (
-          <Input placeholder="Correct answer" value={correctAnswer} onChange={(e) => setCorrectAnswer(e.target.value)} className="h-9 text-sm" />
-        )}
       </div>
     );
   };
