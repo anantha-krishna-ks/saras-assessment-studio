@@ -73,14 +73,16 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
     ? [
         {
           key: "upcoming" as TabKey,
-          label: "Upcoming Assessment",
+          label: "Upcoming",
+          fullLabel: "Upcoming Assessments",
           icon: <CalendarClock className="h-4 w-4" />,
           count: upcomingCount,
           show: true,
         },
         {
           key: "rework" as TabKey,
-          label: "Rework on Assessment",
+          label: "Rework",
+          fullLabel: "Rework on Assessments",
           icon: <RotateCcw className="h-4 w-4" />,
           count: reworkCount,
           show: true,
@@ -90,6 +92,7 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
         {
           key: "queue" as TabKey,
           label: "Review Queue",
+          fullLabel: "Review Queue",
           icon: <FileSearch className="h-4 w-4" />,
           count: queueCount,
           show: true,
@@ -97,6 +100,7 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
         {
           key: "requests" as TabKey,
           label: "Requests",
+          fullLabel: "Requests",
           icon: <UserCog className="h-4 w-4" />,
           count: pendingCount,
           show: showRequests,
@@ -116,12 +120,12 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
         </div>
       </div>
 
-      {/* Underline-style tabs — scales gracefully with long labels */}
-      <div className="px-5 pb-1 border-b border-border/60">
+      {/* Segmented pills — equal width, scale to any label length */}
+      <div className="px-4 pb-3">
         <div
           role="tablist"
           aria-label="Action Center sections"
-          className="flex items-stretch gap-6"
+          className="flex gap-1 p-1 rounded-2xl bg-secondary/60 border border-border/60"
         >
           {tabs.map((t) => {
             const active = tab === t.key;
@@ -132,45 +136,40 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
                 role="tab"
                 aria-selected={active}
                 onClick={() => setTab(t.key)}
+                title={t.fullLabel}
                 className={cn(
-                  "relative flex items-center gap-2 pb-3 pt-1 text-[13px] font-medium transition-colors whitespace-nowrap",
+                  "relative flex-1 min-w-0 flex items-center justify-center gap-1.5 h-9 px-2 rounded-xl text-[13px] font-medium transition-all",
                   active
-                    ? "text-foreground"
+                    ? "bg-card text-foreground shadow-soft-xs"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 <span
                   className={cn(
-                    "flex h-4 w-4 items-center justify-center transition-colors",
+                    "shrink-0 flex items-center justify-center",
                     active ? "text-primary" : "text-muted-foreground"
                   )}
                 >
                   {t.icon}
                 </span>
-                <span>{t.label}</span>
+                <span className="truncate">{t.label}</span>
                 {t.count > 0 && (
                   <span
                     className={cn(
-                      "inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
+                      "shrink-0 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
                       active
                         ? "bg-primary text-primary-foreground"
                         : isAlert
-                          ? "bg-primary/10 text-primary"
-                          : "bg-secondary text-muted-foreground"
+                          ? "bg-primary/15 text-primary"
+                          : "bg-card text-muted-foreground border border-border/60"
                     )}
                   >
                     {t.count}
                   </span>
                 )}
                 {isAlert && !active && (
-                  <span className="absolute top-0.5 -right-1 h-1.5 w-1.5 rounded-full bg-primary" />
+                  <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-primary" />
                 )}
-                <span
-                  className={cn(
-                    "absolute left-0 right-0 -bottom-px h-0.5 rounded-full transition-all",
-                    active ? "bg-primary opacity-100" : "opacity-0"
-                  )}
-                />
               </button>
             );
           })}
