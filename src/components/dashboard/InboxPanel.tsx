@@ -196,10 +196,6 @@ export function InboxPanel({ showRequests = true }: Props) {
           </div>
         ) : (
           <div>
-            <p className="text-[12px] text-muted-foreground px-1 mb-2 flex items-center gap-1.5">
-              <UserCog className="h-3 w-3" />
-              Teacher reassignment approvals
-            </p>
             <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1 -mr-1">
               {pending.length === 0 ? (
                 <EmptyBlock label="No pending requests." />
