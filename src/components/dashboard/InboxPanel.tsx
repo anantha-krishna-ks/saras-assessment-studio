@@ -18,15 +18,12 @@ import {
   type ReassignmentRequest,
 } from "@/data/requests";
 
-type Tab = "queue" | "requests";
-
 interface Props {
   showRequests?: boolean;
 }
 
 export function InboxPanel({ showRequests = true }: Props) {
   const navigate = useNavigate();
-  const [tab, setTab] = useState<Tab>("queue");
   const [requests, setRequests] = useState<ReassignmentRequest[]>(seed);
 
   const queueItems = allAssessments
@@ -54,109 +51,139 @@ export function InboxPanel({ showRequests = true }: Props) {
     }
   };
 
-  const tabs: { key: Tab; label: string; count: number }[] = [
-    { key: "queue", label: "Review Queue", count: queueCount },
-  ];
-  if (showRequests) {
-    tabs.push({ key: "requests", label: "Requests", count: pendingCount });
-  }
-
-  const activeMeta =
-    tab === "queue"
-      ? {
-          icon: <FileSearch className="h-4 w-4" />,
-          title: "Review Queue",
-          subtitle: "Papers awaiting your review",
-          tone: "bg-primary-soft text-primary",
-        }
-      : {
-          icon: <UserCog className="h-4 w-4" />,
-          title: "Requests",
-          subtitle: "Teacher reassignment approvals",
-          tone: "bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))]",
-        };
-
   return (
     <Card className="rounded-3xl border border-border/70 bg-card shadow-soft-xs overflow-hidden flex flex-col">
-      {/* Header: contextual title + underline tabs */}
-      <div className="px-5 pt-5 pb-3 flex items-center justify-between gap-4">
+      <div className="px-5 pt-5 pb-4 flex items-center justify-between gap-4 border-b border-border/60">
         <div className="flex items-center gap-3 min-w-0">
-          <span
-            className={cn(
-              "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors",
-              activeMeta.tone
-            )}
-          >
-            {activeMeta.icon}
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
+            <Inbox className="h-4 w-4" />
           </span>
           <div className="min-w-0">
             <h2 className="text-[15px] text-foreground font-medium leading-tight truncate">
-              {activeMeta.title}
+              Action Center
             </h2>
             <p className="text-[12px] text-muted-foreground mt-0.5 truncate">
-              {activeMeta.subtitle}
+              Reviews and teacher handover decisions
             </p>
           </div>
         </div>
-
-        {tabs.length > 1 && (
-          <div
-            role="tablist"
-            aria-label="Inbox sections"
-            className="relative flex items-center gap-1 shrink-0"
-          >
-            {tabs.map((t) => {
-              const active = tab === t.key;
-              return (
-                <button
-                  key={t.key}
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setTab(t.key)}
-                  className={cn(
-                    "relative inline-flex items-center gap-1.5 h-8 px-2.5 text-[13px] transition-colors",
-                    active
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  <span className="font-medium">{t.label}</span>
-                  {t.count > 0 && (
-                    <span
-                      className={cn(
-                        "inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-medium tabular-nums transition-colors",
-                        active
-                          ? t.key === "requests"
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-primary-soft text-primary"
-                          : "bg-secondary text-muted-foreground"
-                      )}
-                    >
-                      {t.count}
-                    </span>
-                  )}
-                  <span
-                    aria-hidden="true"
-                    className={cn(
-                      "absolute left-2 right-2 -bottom-[7px] h-[2px] rounded-full transition-all",
-                      active ? "bg-primary opacity-100" : "opacity-0"
-                    )}
-                  />
-                </button>
-              );
-            })}
-          </div>
+        {showRequests && pendingCount > 0 && (
+          <span className="inline-flex h-7 items-center rounded-full bg-primary text-primary-foreground px-2.5 text-[12px] font-medium tabular-nums">
+            {pendingCount} pending
+          </span>
         )}
       </div>
 
-      {/* Subtle divider under header */}
-      <div className="mx-5 h-px bg-border/60" />
+      <div className="p-4 space-y-4 flex-1">
+        {showRequests && (
+          <section
+            aria-labelledby="requests-heading"
+            className={cn(
+              "rounded-2xl border p-3.5",
+              pendingCount > 0
+                ? "border-primary/25 bg-primary-soft/70"
+                : "border-border/70 bg-secondary/35"
+            )}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3 min-w-0">
+                <span
+                  className={cn(
+                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
+                    pendingCount > 0
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary text-muted-foreground"
+                  )}
+                >
+                  <UserCog className="h-4 w-4" />
+                </span>
+                <div className="min-w-0">
+                  <h3 id="requests-heading" className="text-sm text-foreground font-medium leading-tight">
+                    Teacher Requests
+                  </h3>
+                  <p className="mt-1 text-[12px] text-muted-foreground leading-snug">
+                    {pendingCount > 0
+                      ? "Approve or decline reassignment requests before review ownership changes."
+                      : "No handover approvals pending."}
+                  </p>
+                </div>
+              </div>
+              {pendingCount > 0 && (
+                <span className="shrink-0 rounded-full bg-card px-2.5 py-1 text-[12px] text-primary font-medium tabular-nums shadow-soft-xs">
+                  {pendingCount}
+                </span>
+              )}
+            </div>
 
-      {/* Body — fixed height, internal scroll keeps layout stable */}
-      <div className="p-4 pt-3 flex-1">
-        {tab === "queue" ? (
-          <div>
-            <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1 -mr-1">
+            {pendingCount > 0 && (
+              <div className="mt-3 space-y-2 max-h-[220px] overflow-y-auto pr-1 -mr-1">
+                {pending.map((r) => (
+                  <div key={r.id} className="rounded-2xl bg-card border border-border/70 p-3 shadow-soft-xs">
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))] text-[12px] font-medium">
+                        {r.requestingTeacherInitials}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm text-foreground leading-snug">
+                          <span className="font-medium">{r.requestingTeacher}</span>{" "}
+                          <span className="text-muted-foreground">for</span>{" "}
+                          <span className="font-medium">{r.originalTeacher}</span>
+                        </div>
+                        <div className="mt-1 text-[12px] text-muted-foreground truncate">
+                          {r.assessmentTitle}
+                        </div>
+                        <p className="mt-1.5 text-[12px] text-muted-foreground italic leading-snug">
+                          “{r.reason}”
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 px-3 border-destructive/20 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => handleDecision(r.id, "Rejected")}
+                      >
+                        <X className="h-3.5 w-3.5" />
+                        Decline
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="h-8 px-3"
+                        onClick={() => handleDecision(r.id, "Accepted")}
+                      >
+                        <Check className="h-3.5 w-3.5" />
+                        Approve
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        <section aria-labelledby="review-queue-heading">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-secondary text-muted-foreground">
+                <FileSearch className="h-4 w-4" />
+              </span>
+              <div className="min-w-0">
+                <h3 id="review-queue-heading" className="text-sm text-foreground font-medium leading-tight">
+                  Review Queue
+                </h3>
+                <p className="text-[12px] text-muted-foreground mt-0.5 truncate">
+                  Papers awaiting your review
+                </p>
+              </div>
+            </div>
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-secondary px-2 text-[11px] text-muted-foreground font-medium tabular-nums">
+              {queueCount}
+            </span>
+          </div>
+
+          <div className="space-y-2 max-h-[260px] overflow-y-auto pr-1 -mr-1">
               {queueItems.length === 0 ? (
                 <EmptyBlock label="You're all caught up ✨" />
               ) : (
@@ -192,65 +219,8 @@ export function InboxPanel({ showRequests = true }: Props) {
                   </button>
                 ))
               )}
-            </div>
           </div>
-        ) : (
-          <div>
-            <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1 -mr-1">
-              {pending.length === 0 ? (
-                <EmptyBlock label="No pending requests." />
-              ) : (
-                pending.map((r) => (
-                  <div key={r.id} className="rounded-2xl bg-secondary/40 p-3">
-                    <div className="flex items-start gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--pastel-lavender))] text-[hsl(var(--pastel-lavender-ink))] text-[12px] font-medium">
-                        {r.requestingTeacherInitials}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-sm text-foreground leading-snug">
-                          <span className="font-medium">
-                            {r.requestingTeacher}
-                          </span>{" "}
-                          <span className="text-muted-foreground">
-                            wants to take over from
-                          </span>{" "}
-                          <span className="font-medium">
-                            {r.originalTeacher}
-                          </span>
-                        </div>
-                        <div className="mt-1 text-[12px] text-muted-foreground truncate">
-                          {r.assessmentTitle}
-                        </div>
-                        <p className="mt-1.5 text-[12px] text-muted-foreground italic">
-                          "{r.reason}"
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-3 flex items-center justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 px-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                        onClick={() => handleDecision(r.id, "Rejected")}
-                      >
-                        <X className="h-3.5 w-3.5 mr-1" />
-                        Decline
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="h-8 px-3"
-                        onClick={() => handleDecision(r.id, "Accepted")}
-                      >
-                        <Check className="h-3.5 w-3.5 mr-1" />
-                        Approve
-                      </Button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        )}
+        </section>
       </div>
     </Card>
   );
