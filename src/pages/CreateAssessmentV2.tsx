@@ -132,9 +132,20 @@ export default function CreateAssessmentV2() {
           <Textarea
             id="instructions"
             value={instructions}
-            onChange={(e) => setInstructions(e.target.value)}
+            onChange={(e) => {
+              setInstructions(e.target.value);
+              const el = e.currentTarget;
+              el.style.height = "auto";
+              el.style.height = `${el.scrollHeight}px`;
+            }}
+            ref={(el) => {
+              if (el) {
+                el.style.height = "auto";
+                el.style.height = `${el.scrollHeight}px`;
+              }
+            }}
             placeholder="Enter any instructions for students..."
-            className="bg-background min-h-[100px] resize-y"
+            className="bg-background resize-none overflow-hidden"
             maxLength={2000}
           />
           <div className="flex items-start gap-2 rounded-lg bg-primary/5 border border-primary/15 px-3 py-2.5">
