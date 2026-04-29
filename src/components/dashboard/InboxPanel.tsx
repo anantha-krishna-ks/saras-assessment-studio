@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import {
   ArrowUpRight,
   Check,
+  FileSearch,
   Inbox,
   UserCog,
   X,
