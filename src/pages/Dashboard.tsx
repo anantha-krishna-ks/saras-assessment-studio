@@ -31,15 +31,18 @@ export default function Dashboard() {
   const total = assessments.length;
   const completionPct = Math.round((completed / Math.max(total, 1)) * 100);
 
+  const reverted = assessments.filter((a) => a.status === "Reverted").length;
+
   const statusCounts: Record<AssessmentStatus | "All", number> = useMemo(
     () => ({
       All: assessments.length,
       "Not yet started": assessments.filter((a) => a.status === "Not yet started").length,
       Draft: drafts,
       "Not yet received": review,
+      Reverted: reverted,
       Accepted: completed,
     }),
-    [drafts, review, completed]
+    [drafts, review, completed, reverted]
   );
 
   const filteredAssessments = useMemo(
@@ -55,6 +58,7 @@ export default function Dashboard() {
     "Not yet started",
     "Draft",
     "Not yet received",
+    "Reverted",
     "Accepted",
   ];
 
