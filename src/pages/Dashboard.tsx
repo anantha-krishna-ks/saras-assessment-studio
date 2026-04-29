@@ -30,7 +30,32 @@ import { cn } from "@/lib/utils";
 export default function Dashboard() {
   const { role, user } = useRole();
   const navigate = useNavigate();
+  const isTeacher = role === "Teacher";
+
   const [statusFilter, setStatusFilter] = useState<AssessmentStatus | "All">("All");
+  const [gradeFilter, setGradeFilter] = useState<string>("All");
+  const [subjectFilter, setSubjectFilter] = useState<string>("All");
+
+  const grades = useMemo(
+    () => Array.from(new Set(allAssessments.map((a) => a.grade))).sort(),
+    []
+  );
+  const subjects = useMemo(
+    () => Array.from(new Set(allAssessments.map((a) => a.subject))).sort(),
+    []
+  );
+
+  // Scope assessments by grade/subject (only applied for Teacher view)
+  const scopedAssessments = useMemo(() => {
+    if (!isTeacher) return allAssessments;
+    return allAssessments.filter(
+      (a) =>
+        (gradeFilter === "All" || a.grade === gradeFilter) &&
+        (subjectFilter === "All" || a.subject === subjectFilter)
+    );
+  }, [isTeacher, gradeFilter, subjectFilter]);
+
+  const assessments = scopedAssessments;
 
   const drafts = assessments.filter((a) => a.status === "Draft").length;
   const review = assessments.filter((a) => a.status === "Not yet received").length;
@@ -49,7 +74,7 @@ export default function Dashboard() {
       Reverted: reverted,
       Accepted: completed,
     }),
-    [drafts, review, completed, reverted]
+    [assessments, drafts, review, completed, reverted]
   );
 
   const filteredAssessments = useMemo(
@@ -57,7 +82,7 @@ export default function Dashboard() {
       statusFilter === "All"
         ? assessments
         : assessments.filter((a) => a.status === statusFilter),
-    [statusFilter]
+    [assessments, statusFilter]
   );
 
   const filterOptions: (AssessmentStatus | "All")[] = [
@@ -68,6 +93,16 @@ export default function Dashboard() {
     "Reverted",
     "Accepted",
   ];
+
+  const inboxFilter = useMemo(
+    () =>
+      isTeacher
+        ? (a: (typeof allAssessments)[number]) =>
+            (gradeFilter === "All" || a.grade === gradeFilter) &&
+            (subjectFilter === "All" || a.subject === subjectFilter)
+        : undefined,
+    [isTeacher, gradeFilter, subjectFilter]
+  );
 
   const greeting = `Good ${
     new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"
