@@ -116,13 +116,12 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
         </div>
       </div>
 
-      {/* Prominent segmented tabs */}
-      <div className="px-4 pb-3">
+      {/* Underline-style tabs — scales gracefully with long labels */}
+      <div className="px-5 pb-1 border-b border-border/60">
         <div
           role="tablist"
           aria-label="Action Center sections"
-          className="grid gap-1.5 p-1.5 rounded-2xl bg-secondary/60 border border-border/60"
-          style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
+          className="flex items-stretch gap-6"
         >
           {tabs.map((t) => {
             const active = tab === t.key;
@@ -134,18 +133,16 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
                 aria-selected={active}
                 onClick={() => setTab(t.key)}
                 className={cn(
-                  "relative flex items-center justify-center gap-2 h-10 rounded-xl text-[13px] font-medium transition-all",
+                  "relative flex items-center gap-2 pb-3 pt-1 text-[13px] font-medium transition-colors whitespace-nowrap",
                   active
-                    ? "bg-primary text-primary-foreground shadow-soft-xs"
+                    ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 <span
                   className={cn(
-                    "flex h-6 w-6 items-center justify-center rounded-lg",
-                    active
-                      ? "bg-primary-foreground/15 text-primary-foreground"
-                      : "text-muted-foreground"
+                    "flex h-4 w-4 items-center justify-center transition-colors",
+                    active ? "text-primary" : "text-muted-foreground"
                   )}
                 >
                   {t.icon}
@@ -154,20 +151,26 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
                 {t.count > 0 && (
                   <span
                     className={cn(
-                      "ml-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
+                      "inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
                       active
-                        ? "bg-primary-foreground/20 text-primary-foreground"
+                        ? "bg-primary text-primary-foreground"
                         : isAlert
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-card text-muted-foreground border border-border/60"
+                          ? "bg-primary/10 text-primary"
+                          : "bg-secondary text-muted-foreground"
                     )}
                   >
                     {t.count}
                   </span>
                 )}
                 {isAlert && !active && (
-                  <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary" />
+                  <span className="absolute top-0.5 -right-1 h-1.5 w-1.5 rounded-full bg-primary" />
                 )}
+                <span
+                  className={cn(
+                    "absolute left-0 right-0 -bottom-px h-0.5 rounded-full transition-all",
+                    active ? "bg-primary opacity-100" : "opacity-0"
+                  )}
+                />
               </button>
             );
           })}
