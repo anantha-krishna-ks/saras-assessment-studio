@@ -1,36 +1,23 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, FileText, Layers, Info, Plus, Trash2, GripVertical, MoreHorizontal, Pencil, Copy } from "lucide-react";
+import { ChevronLeft, Layers, Info, Plus, Trash2, GripVertical, MoreHorizontal, Pencil, Copy, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, X, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-const TEST_TYPES = ["PA1", "PA2", "Mid-Term Exam", "Final Exam", "Unit Test"];
-const CLASSES = ["Class 1","Class 2","Class 3","Class 4","Class 5","Class 6","Class 7","Class 8","Class 9","Class 10","Class 11","Class 12"];
-const SUBJECTS = ["Mathematics", "Science", "English", "Social Studies", "Hindi", "Computer Science"];
-const CHAPTERS = [
-  "Chapter 1: Number Systems","Chapter 2: Polynomials","Chapter 3: Coordinate Geometry","Chapter 4: Linear Equations",
-  "Chapter 5: Triangles","Chapter 6: Quadrilaterals","Chapter 7: Areas","Chapter 8: Circles","Chapter 9: Constructions","Chapter 10: Statistics",
-];
 const ITEM_TYPES = ["Short Answer","Multiple Choice","True / False","Matching","Fill in the Blank","Assertion Reasoning"] as const;
 type ItemType = typeof ITEM_TYPES[number];
 const SECTION_LABELS = ["A","B","C","D","E","F","G","H"];
-const INSTRUCTIONS_REQUIRED_TYPES = ["Final Exam", "Mid-Term Exam"];
 
 interface SectionItem { id: string; question: string; score: number; type: ItemType; }
 interface Section { id: string; label: string; description: string; items: SectionItem[]; }
@@ -38,53 +25,6 @@ interface Section { id: string; label: string; description: string; items: Secti
 const newId = () => crypto.randomUUID();
 const createSection = (label: string): Section => ({ id: newId(), label, description: "", items: [] });
 const createItem = (type: ItemType): SectionItem => ({ id: newId(), question: "", score: 1, type });
-
-/* ── Lightweight inline multi-select (chapters) ── */
-function MultiSelectChapters({ selected, onChange }: { selected: string[]; onChange: (v: string[]) => void }) {
-  const [open, setOpen] = useState(false);
-  const toggle = (c: string) =>
-    onChange(selected.includes(c) ? selected.filter((s) => s !== c) : [...selected, c]);
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          className="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-        >
-          <div className="flex flex-wrap gap-1 flex-1 text-left">
-            {selected.length === 0 && <span className="text-muted-foreground">Select chapters</span>}
-            {selected.map((c) => (
-              <Badge key={c} variant="secondary" className="text-xs px-2 py-0.5 gap-1">
-                {c}
-                <span
-                  role="button"
-                  onClick={(e) => { e.stopPropagation(); toggle(c); }}
-                  className="cursor-pointer hover:text-destructive"
-                >
-                  <X className="h-3 w-3" />
-                </span>
-              </Badge>
-            ))}
-          </div>
-          <ChevronDown className="h-4 w-4 opacity-50 shrink-0 ml-2" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="p-1 rounded-xl" align="start" style={{ width: "var(--radix-popover-trigger-width)" }}>
-        <div className="max-h-64 overflow-y-auto">
-          {CHAPTERS.map((c) => {
-            const checked = selected.includes(c);
-            return (
-              <label key={c} className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-accent cursor-pointer text-sm">
-                <Checkbox checked={checked} onCheckedChange={() => toggle(c)} />
-                <span>{c}</span>
-              </label>
-            );
-          })}
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
-}
 
 /* ── Add Items dropdown ── */
 function AddItemsDropdown({ onAdd }: { onAdd: (type: ItemType) => void }) {
@@ -404,42 +344,17 @@ function SectionsPanel({ sections, onChange }: { sections: Section[]; onChange: 
 /* ── Page ── */
 export default function CreateAssessmentV2() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("type");
   const [attempted, setAttempted] = useState(false);
-
-  const [typeOfTest, setTypeOfTest] = useState("");
-  const [selectedClass, setSelectedClass] = useState("");
-  const [subject, setSubject] = useState("");
-  const [chapters, setChapters] = useState<string[]>([]);
-  const [totalMarks, setTotalMarks] = useState("");
-  const [durationHr, setDurationHr] = useState("");
-  const [durationMin, setDurationMin] = useState("");
   const [instructions, setInstructions] = useState(
     "General Instructions:\ni. This question paper contains five sections A, B, C, D, and E. Each section is compulsory.\nii. Section A has 10 MCQs of 1 mark each.\niii. Section B has 3 Very Short Answer (VSA)-type questions of 2 marks each."
   );
   const [sections, setSections] = useState<Section[]>([createSection("A")]);
 
-  const isInstructionsRequired = INSTRUCTIONS_REQUIRED_TYPES.includes(typeOfTest);
-  const hasDuration = !!(durationHr || durationMin);
-
-  const errors = attempted ? {
-    typeOfTest: !typeOfTest ? "Please select a test type" : "",
-    selectedClass: !selectedClass ? "Please select a class" : "",
-    subject: !subject ? "Please select a subject" : "",
-    chapters: chapters.length === 0 ? "Please select at least one chapter" : "",
-    totalMarks: !totalMarks ? "Please enter total marks" : "",
-    duration: !hasDuration ? "Please enter duration" : "",
-    instructions: isInstructionsRequired && !instructions.trim() ? "Instructions are mandatory for Final and Mid-Term Exams" : "",
-  } : { typeOfTest: "", selectedClass: "", subject: "", chapters: "", totalMarks: "", duration: "", instructions: "" };
-
-  const handleNext = useCallback(() => {
-    setAttempted(true);
-    if (!typeOfTest || !selectedClass || !subject || chapters.length === 0 || !totalMarks || !hasDuration) return;
-    if (isInstructionsRequired && !instructions.trim()) return;
-    setActiveTab("sections");
-  }, [typeOfTest, selectedClass, subject, chapters, totalMarks, hasDuration, isInstructionsRequired, instructions]);
+  const instructionsError = attempted && !instructions.trim() ? "Please add instructions" : "";
 
   const handleSubmit = () => {
+    setAttempted(true);
+    if (!instructions.trim()) return;
     toast.success("Assessment created successfully");
     navigate("/dashboard");
   };
@@ -459,160 +374,46 @@ export default function CreateAssessmentV2() {
         </Button>
         <div>
           <h1 className="text-xl font-semibold text-foreground">Create Assessment</h1>
-          <p className="text-sm text-muted-foreground">Set up a new assessment for your students</p>
+          <p className="text-sm text-muted-foreground">Build the sections and questions for your assessment</p>
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* Sections content */}
       <div className="bg-card border border-border rounded-xl overflow-hidden">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full justify-start rounded-none border-b border-border bg-muted/30 p-0 h-auto">
-            <TabsTrigger
-              value="type"
-              className="flex items-center gap-2 rounded-none border-b-2 border-transparent px-6 py-3 text-sm font-medium data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-card data-[state=active]:shadow-none"
-            >
-              <FileText className="w-4 h-4" /> Type of Assessment
-            </TabsTrigger>
-            <TabsTrigger
-              value="sections"
-              className="flex items-center gap-2 rounded-none border-b-2 border-transparent px-6 py-3 text-sm font-medium data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-card data-[state=active]:shadow-none"
-            >
-              <Layers className="w-4 h-4" /> Sections
-            </TabsTrigger>
-          </TabsList>
+        <div className="flex items-center gap-2 border-b border-border bg-muted/30 px-6 py-3">
+          <Layers className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium text-foreground">Sections</span>
+        </div>
 
-          {/* Type tab */}
-          <TabsContent value="type" className="p-6 mt-0 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Type of Test <span className="text-destructive">*</span></Label>
-                <Select value={typeOfTest} onValueChange={setTypeOfTest}>
-                  <SelectTrigger className={cn("bg-background", errors.typeOfTest && "border-destructive ring-1 ring-destructive/30")}>
-                    <SelectValue placeholder="Select type of test" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {TEST_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-                {errors.typeOfTest && <p className="text-xs text-destructive">{errors.typeOfTest}</p>}
-              </div>
-
-              <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Class <span className="text-destructive">*</span></Label>
-                <Select value={selectedClass} onValueChange={setSelectedClass}>
-                  <SelectTrigger className={cn("bg-background", errors.selectedClass && "border-destructive ring-1 ring-destructive/30")}>
-                    <SelectValue placeholder="Select class" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {CLASSES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-                {errors.selectedClass && <p className="text-xs text-destructive">{errors.selectedClass}</p>}
-              </div>
-
-              <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Subject <span className="text-destructive">*</span></Label>
-                <Select value={subject} onValueChange={setSubject}>
-                  <SelectTrigger className={cn("bg-background", errors.subject && "border-destructive ring-1 ring-destructive/30")}>
-                    <SelectValue placeholder="Select subject" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SUBJECTS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-                {errors.subject && <p className="text-xs text-destructive">{errors.subject}</p>}
-              </div>
+        <div className="p-6 space-y-6">
+          <div className="space-y-1.5">
+            <Label className="text-sm font-medium">Instructions</Label>
+            <Textarea
+              value={instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+              placeholder="Enter any instructions for students..."
+              className={cn("bg-background min-h-[100px] resize-y", instructionsError && "border-destructive ring-1 ring-destructive/30")}
+              maxLength={2000}
+            />
+            <div className="flex items-start gap-2 rounded-lg bg-primary/5 border border-primary/15 px-3 py-2.5">
+              <Info className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                These instructions will appear at the beginning of the question paper.
+              </p>
             </div>
+            {instructionsError && <p className="text-xs text-destructive">{instructionsError}</p>}
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Chapters <span className="text-destructive">*</span></Label>
-                <MultiSelectChapters selected={chapters} onChange={setChapters} />
-                {errors.chapters && <p className="text-xs text-destructive">{errors.chapters}</p>}
-              </div>
+          <div className="border-t border-border -mx-6" />
 
-              <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Total Marks <span className="text-destructive">*</span></Label>
-                <Input
-                  type="number"
-                  value={totalMarks}
-                  onChange={(e) => setTotalMarks(e.target.value)}
-                  placeholder="Enter total marks"
-                  min={0}
-                  max={999}
-                  className={cn("bg-background", errors.totalMarks && "border-destructive ring-1 ring-destructive/30")}
-                />
-                {errors.totalMarks && <p className="text-xs text-destructive">{errors.totalMarks}</p>}
-              </div>
+          <SectionsPanel sections={sections} onChange={setSections} />
 
-              <div className="space-y-1.5">
-                <Label className="text-sm font-medium">Duration <span className="text-destructive">*</span></Label>
-                <div className="flex items-center gap-2">
-                  <Input
-                    type="number"
-                    value={durationHr}
-                    onChange={(e) => setDurationHr(e.target.value)}
-                    placeholder="0"
-                    min={0}
-                    max={10}
-                    className={cn("bg-background", errors.duration && "border-destructive ring-1 ring-destructive/30")}
-                  />
-                  <span className="text-sm text-muted-foreground shrink-0">hr</span>
-                  <Input
-                    type="number"
-                    value={durationMin}
-                    onChange={(e) => setDurationMin(e.target.value)}
-                    placeholder="0"
-                    min={0}
-                    max={59}
-                    className={cn("bg-background", errors.duration && "border-destructive ring-1 ring-destructive/30")}
-                  />
-                  <span className="text-sm text-muted-foreground shrink-0">min</span>
-                </div>
-                {errors.duration && <p className="text-xs text-destructive">{errors.duration}</p>}
-              </div>
-            </div>
-
-            <div className="flex justify-end pt-2">
-              <Button onClick={handleNext} className="px-8">Next</Button>
-            </div>
-          </TabsContent>
-
-          {/* Sections tab */}
-          <TabsContent value="sections" className="p-6 mt-0 space-y-6">
-            <div className="space-y-1.5">
-              <Label className="text-sm font-medium">
-                Instructions {isInstructionsRequired
-                  ? <span className="text-destructive">*</span>
-                  : <span className="text-muted-foreground text-xs">(optional)</span>}
-              </Label>
-              <Textarea
-                value={instructions}
-                onChange={(e) => setInstructions(e.target.value)}
-                placeholder="Enter any instructions for students..."
-                className={cn("bg-background min-h-[100px] resize-y", errors.instructions && "border-destructive ring-1 ring-destructive/30")}
-                maxLength={2000}
-              />
-              <div className="flex items-start gap-2 rounded-lg bg-primary/5 border border-primary/15 px-3 py-2.5">
-                <Info className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  These instructions will appear at the beginning of the question paper.
-                </p>
-              </div>
-              {errors.instructions && <p className="text-xs text-destructive">{errors.instructions}</p>}
-            </div>
-
-            <div className="border-t border-border -mx-6" />
-
-            <SectionsPanel sections={sections} onChange={setSections} />
-
-            <div className="flex justify-between pt-2">
-              <Button variant="outline" onClick={() => setActiveTab("type")}>Back</Button>
-              <Button onClick={handleSubmit} className="px-8">Create Assessment</Button>
-            </div>
-          </TabsContent>
-        </Tabs>
+          <div className="flex justify-end pt-2">
+            <Button onClick={handleSubmit} className="px-8">Create Assessment</Button>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+
