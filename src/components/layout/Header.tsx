@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FilePlus2, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useRole, Role } from "@/context/RoleContext";
 import { Button } from "@/components/ui/button";
