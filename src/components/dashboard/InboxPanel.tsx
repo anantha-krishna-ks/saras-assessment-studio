@@ -22,9 +22,12 @@ interface Props {
   showRequests?: boolean;
 }
 
+type TabKey = "queue" | "requests";
+
 export function InboxPanel({ showRequests = true }: Props) {
   const navigate = useNavigate();
   const [requests, setRequests] = useState<ReassignmentRequest[]>(seed);
+  const [tab, setTab] = useState<TabKey>("queue");
 
   const queueItems = allAssessments
     .filter((a) => a.status === "In Review" || a.status === "Draft")
@@ -51,176 +54,195 @@ export function InboxPanel({ showRequests = true }: Props) {
     }
   };
 
+  const tabs: {
+    key: TabKey;
+    label: string;
+    icon: JSX.Element;
+    count: number;
+    show: boolean;
+  }[] = [
+    {
+      key: "queue",
+      label: "Review Queue",
+      icon: <FileSearch className="h-4 w-4" />,
+      count: queueCount,
+      show: true,
+    },
+    {
+      key: "requests",
+      label: "Requests",
+      icon: <UserCog className="h-4 w-4" />,
+      count: pendingCount,
+      show: showRequests,
+    },
+  ].filter((t) => t.show);
+
   return (
     <Card className="rounded-3xl border border-border/70 bg-card shadow-soft-xs overflow-hidden flex flex-col">
-      <div className="px-5 pt-5 pb-4 flex items-center justify-between gap-4 border-b border-border/60">
+      <div className="px-5 pt-5 pb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
             <Inbox className="h-4 w-4" />
           </span>
-          <div className="min-w-0">
-            <h2 className="text-[15px] text-foreground font-medium leading-tight truncate">
-              Action Center
-            </h2>
-            <p className="text-[12px] text-muted-foreground mt-0.5 truncate">
-              Reviews and teacher handover decisions
-            </p>
-          </div>
+          <h2 className="text-[15px] text-foreground font-medium leading-tight truncate">
+            Action Center
+          </h2>
         </div>
-        {showRequests && pendingCount > 0 && (
-          <span className="inline-flex h-7 items-center rounded-full bg-primary text-primary-foreground px-2.5 text-[12px] font-medium tabular-nums">
-            {pendingCount} pending
-          </span>
-        )}
       </div>
 
-      <div className="p-4 space-y-4 flex-1">
-        {showRequests && (
-          <section
-            aria-labelledby="requests-heading"
-            className={cn(
-              "rounded-2xl border p-3.5",
-              pendingCount > 0
-                ? "border-primary/25 bg-primary-soft/70"
-                : "border-border/70 bg-secondary/35"
-            )}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-3 min-w-0">
+      {/* Prominent segmented tabs */}
+      <div className="px-4 pb-3">
+        <div
+          role="tablist"
+          aria-label="Action Center sections"
+          className="grid gap-1.5 p-1.5 rounded-2xl bg-secondary/60 border border-border/60"
+          style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
+        >
+          {tabs.map((t) => {
+            const active = tab === t.key;
+            const isAlert = t.key === "requests" && t.count > 0;
+            return (
+              <button
+                key={t.key}
+                role="tab"
+                aria-selected={active}
+                onClick={() => setTab(t.key)}
+                className={cn(
+                  "relative flex items-center justify-center gap-2 h-10 rounded-xl text-[13px] font-medium transition-all",
+                  active
+                    ? "bg-card text-foreground shadow-soft-xs"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
                 <span
                   className={cn(
-                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
-                    pendingCount > 0
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-secondary text-muted-foreground"
+                    "flex h-6 w-6 items-center justify-center rounded-lg",
+                    active
+                      ? isAlert
+                        ? "bg-primary-soft text-primary"
+                        : "bg-secondary text-foreground"
+                      : "text-muted-foreground"
                   )}
                 >
-                  <UserCog className="h-4 w-4" />
+                  {t.icon}
                 </span>
-                <div className="min-w-0">
-                  <h3 id="requests-heading" className="text-sm text-foreground font-medium leading-tight">
-                    Teacher Requests
-                  </h3>
-                  <p className="mt-1 text-[12px] text-muted-foreground leading-snug">
-                    {pendingCount > 0
-                      ? "Approve or decline reassignment requests before review ownership changes."
-                      : "No handover approvals pending."}
-                  </p>
-                </div>
-              </div>
-              {pendingCount > 0 && (
-                <span className="shrink-0 rounded-full bg-card px-2.5 py-1 text-[12px] text-primary font-medium tabular-nums shadow-soft-xs">
-                  {pendingCount}
-                </span>
-              )}
-            </div>
+                <span>{t.label}</span>
+                {t.count > 0 && (
+                  <span
+                    className={cn(
+                      "ml-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
+                      isAlert
+                        ? "bg-primary text-primary-foreground"
+                        : active
+                          ? "bg-secondary text-foreground"
+                          : "bg-card text-muted-foreground border border-border/60"
+                    )}
+                  >
+                    {t.count}
+                  </span>
+                )}
+                {isAlert && !active && (
+                  <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-            {pendingCount > 0 && (
-              <div className="mt-3 space-y-2 max-h-[220px] overflow-y-auto pr-1 -mr-1">
-                {pending.map((r) => (
-                  <div key={r.id} className="rounded-2xl bg-card border border-border/70 p-3 shadow-soft-xs">
-                    <div className="flex items-start gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))] text-[12px] font-medium">
-                        {r.requestingTeacherInitials}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-sm text-foreground leading-snug">
-                          <span className="font-medium">{r.requestingTeacher}</span>{" "}
-                          <span className="text-muted-foreground">for</span>{" "}
-                          <span className="font-medium">{r.originalTeacher}</span>
-                        </div>
-                        <div className="mt-1 text-[12px] text-muted-foreground truncate">
-                          {r.assessmentTitle}
-                        </div>
-                        <p className="mt-1.5 text-[12px] text-muted-foreground italic leading-snug">
-                          “{r.reason}”
-                        </p>
-                      </div>
+      <div className="px-4 pb-4 flex-1">
+        {tab === "queue" && (
+          <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1 -mr-1">
+            {queueItems.length === 0 ? (
+              <EmptyBlock label="You're all caught up ✨" />
+            ) : (
+              queueItems.map((a, i) => (
+                <button
+                  key={a.id}
+                  onClick={() => navigate(`/review-qp/${a.id}`)}
+                  className="group w-full text-left flex items-center gap-3 p-3 rounded-2xl bg-secondary/40 hover:bg-secondary transition-colors"
+                >
+                  <div
+                    className={cn(
+                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm",
+                      i % 2 === 0
+                        ? "bg-[hsl(var(--pastel-lavender))] text-[hsl(var(--pastel-lavender-ink))]"
+                        : "bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))]"
+                    )}
+                  >
+                    {a.subject[0]}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm text-foreground truncate">
+                      {a.title}
                     </div>
-                    <div className="mt-3 grid grid-cols-2 gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 px-3 border-destructive/20 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                        onClick={() => handleDecision(r.id, "Rejected")}
-                      >
-                        <X className="h-3.5 w-3.5" />
-                        Decline
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="h-8 px-3"
-                        onClick={() => handleDecision(r.id, "Accepted")}
-                      >
-                        <Check className="h-3.5 w-3.5" />
-                        Approve
-                      </Button>
+                    <div className="text-sm text-muted-foreground mt-0.5 truncate">
+                      {a.subject} ·{" "}
+                      {new Date(a.dueAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
                     </div>
                   </div>
-                ))}
-              </div>
+                  <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </button>
+              ))
             )}
-          </section>
+          </div>
         )}
 
-        <section aria-labelledby="review-queue-heading">
-          <div className="flex items-center justify-between gap-3 mb-3">
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-secondary text-muted-foreground">
-                <FileSearch className="h-4 w-4" />
-              </span>
-              <div className="min-w-0">
-                <h3 id="review-queue-heading" className="text-sm text-foreground font-medium leading-tight">
-                  Review Queue
-                </h3>
-                <p className="text-[12px] text-muted-foreground mt-0.5 truncate">
-                  Papers awaiting your review
-                </p>
-              </div>
-            </div>
-            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-secondary px-2 text-[11px] text-muted-foreground font-medium tabular-nums">
-              {queueCount}
-            </span>
-          </div>
-
-          <div className="space-y-2 max-h-[260px] overflow-y-auto pr-1 -mr-1">
-              {queueItems.length === 0 ? (
-                <EmptyBlock label="You're all caught up ✨" />
-              ) : (
-                queueItems.map((a, i) => (
-                  <button
-                    key={a.id}
-                    onClick={() => navigate(`/review-qp/${a.id}`)}
-                    className="group w-full text-left flex items-center gap-3 p-3 rounded-2xl bg-secondary/40 hover:bg-secondary transition-colors"
-                  >
-                    <div
-                      className={cn(
-                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm",
-                        i % 2 === 0
-                          ? "bg-[hsl(var(--pastel-lavender))] text-[hsl(var(--pastel-lavender-ink))]"
-                          : "bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))]"
-                      )}
-                    >
-                      {a.subject[0]}
+        {tab === "requests" && (
+          <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1 -mr-1">
+            {pending.length === 0 ? (
+              <EmptyBlock label="No handover approvals pending" />
+            ) : (
+              pending.map((r) => (
+                <div
+                  key={r.id}
+                  className="rounded-2xl bg-secondary/40 border border-border/60 p-3"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))] text-[12px] font-medium">
+                      {r.requestingTeacherInitials}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="text-sm text-foreground truncate">
-                        {a.title}
+                      <div className="text-sm text-foreground leading-snug">
+                        <span className="font-medium">{r.requestingTeacher}</span>{" "}
+                        <span className="text-muted-foreground">to cover for</span>{" "}
+                        <span className="font-medium">{r.originalTeacher}</span>
                       </div>
-                      <div className="text-sm text-muted-foreground mt-0.5 truncate">
-                        {a.subject} ·{" "}
-                        {new Date(a.dueAt).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })}
+                      <div className="mt-1 text-[12px] text-muted-foreground truncate">
+                        {r.assessmentTitle}
                       </div>
+                      <p className="mt-1.5 text-[12px] text-muted-foreground italic leading-snug">
+                        “{r.reason}”
+                      </p>
                     </div>
-                    <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-                  </button>
-                ))
-              )}
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 px-3 border-destructive/20 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                      onClick={() => handleDecision(r.id, "Rejected")}
+                    >
+                      <X className="h-3.5 w-3.5" />
+                      Decline
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="h-8 px-3"
+                      onClick={() => handleDecision(r.id, "Accepted")}
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                      Approve
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
-        </section>
+        )}
       </div>
     </Card>
   );
