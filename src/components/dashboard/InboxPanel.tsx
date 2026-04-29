@@ -284,7 +284,19 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
               (tab === "upcoming" ? upcomingItems : reworkItems).map((a, i) => (
                 <button
                   key={a.id}
-                  onClick={() => navigate(`/review-qp/${a.id}`)}
+                  onClick={() =>
+                    tab === "upcoming"
+                      ? navigate(`/create-v2`, {
+                          state: {
+                            assessmentId: a.id,
+                            title: a.title,
+                            grade: a.grade,
+                            subject: a.subject,
+                            scheduledAt: a.scheduledAt,
+                          },
+                        })
+                      : navigate(`/review-qp/${a.id}`)
+                  }
                   className="group w-full text-left flex items-center gap-3 p-3 rounded-2xl bg-secondary/40 hover:bg-secondary transition-colors"
                 >
                   <div
