@@ -140,14 +140,14 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
                 className={cn(
                   "relative flex-1 min-w-0 flex items-center justify-center gap-1.5 h-9 px-2 rounded-xl text-[13px] font-medium transition-all",
                   active
-                    ? "bg-card text-foreground shadow-soft-xs"
+                    ? "bg-primary text-primary-foreground shadow-soft-xs"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 <span
                   className={cn(
                     "shrink-0 flex items-center justify-center",
-                    active ? "text-primary" : "text-muted-foreground"
+                    active ? "text-primary-foreground" : "text-muted-foreground"
                   )}
                 >
                   {t.icon}
@@ -158,7 +158,7 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
                     className={cn(
                       "shrink-0 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
                       active
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-primary-foreground/20 text-primary-foreground"
                         : isAlert
                           ? "bg-primary/15 text-primary"
                           : "bg-card text-muted-foreground border border-border/60"
