@@ -188,19 +188,38 @@ export default function Dashboard() {
                 </SelectContent>
               </Select>
             </div>
-            {(gradeFilter !== "All" || subjectFilter !== "All") && (
+            <div className="flex items-center gap-2 ml-auto">
+              {(gradeFilter !== "All" || subjectFilter !== "All") && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-9 text-xs"
+                  onClick={() => {
+                    setGradeFilter("All");
+                    setSubjectFilter("All");
+                  }}
+                >
+                  Clear filters
+                </Button>
+              )}
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
-                className="h-8 ml-auto text-xs"
-                onClick={() => {
-                  setGradeFilter("All");
-                  setSubjectFilter("All");
-                }}
+                className="h-9 gap-1.5"
+                onClick={() => navigate("/question-repository")}
               >
-                Clear filters
+                <BookOpen className="h-4 w-4" />
+                Question Repository
               </Button>
-            )}
+              <Button
+                size="sm"
+                className="h-9 gap-1.5"
+                onClick={() => navigate("/create-v2")}
+              >
+                <FilePlus2 className="h-4 w-4" />
+                Create Question Paper
+              </Button>
+            </div>
           </div>
         </Card>
       )}
