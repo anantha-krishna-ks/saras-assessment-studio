@@ -247,7 +247,11 @@ export default function Dashboard() {
           <AssessmentCalendar assessments={assessments} />
         </Card>
 
-        <InboxPanel showRequests={role === "HOD"} />
+        <InboxPanel
+          showRequests={role === "HOD"}
+          teacherView={isTeacher}
+          filterAssessments={inboxFilter}
+        />
       </div>
 
       {/* Assessments grid */}
