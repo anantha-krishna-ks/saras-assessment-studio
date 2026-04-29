@@ -228,40 +228,73 @@ export default function Dashboard() {
       )}
 
       {/* Hero pastel stat tiles */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <PastelStat
-          tone="lavender"
-          icon={<ClipboardCheck className="h-3.5 w-3.5" />}
-          label="Total Assessments"
-          value={total}
-          caption="across all subjects"
-          progress={100}
-        />
-        <PastelStat
-          tone="peach"
-          icon={<FilePlus2 className="h-3.5 w-3.5" />}
-          label="Drafts"
-          value={drafts}
-          caption="waiting for finalisation"
-          progress={(drafts / Math.max(total, 1)) * 100}
-        />
-        <PastelStat
-          tone="sky"
-          icon={<FileSearch className="h-3.5 w-3.5" />}
-          label="Not yet received"
-          value={review}
-          caption="needs your sign-off"
-          progress={(review / Math.max(total, 1)) * 100}
-        />
-        <PastelStat
-          tone="mint"
-          icon={<TrendingUp className="h-3.5 w-3.5" />}
-          label="Accepted"
-          value={completed}
-          caption={`${completionPct}% completion rate`}
-          progress={completionPct}
-        />
-      </div>
+      {isTeacher ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <PastelStat
+            tone="mint"
+            icon={<TrendingUp className="h-3.5 w-3.5" />}
+            label="Assessments Submitted"
+            value={completed + review}
+            caption={`${completed} accepted • ${review} in review`}
+            progress={((completed + review) / Math.max(total, 1)) * 100}
+          />
+          <PastelStat
+            tone="peach"
+            icon={<FilePlus2 className="h-3.5 w-3.5" />}
+            label="Assessments Rework"
+            value={drafts + reverted}
+            caption={`${reverted} reverted • ${drafts} drafts`}
+            progress={((drafts + reverted) / Math.max(total, 1)) * 100}
+          />
+          <PastelStat
+            tone="lavender"
+            icon={<ClipboardCheck className="h-3.5 w-3.5" />}
+            label="Assessments Yet to Create"
+            value={assessments.filter((a) => a.status === "Not yet started").length}
+            caption="not yet started"
+            progress={
+              (assessments.filter((a) => a.status === "Not yet started").length /
+                Math.max(total, 1)) *
+              100
+            }
+          />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <PastelStat
+            tone="lavender"
+            icon={<ClipboardCheck className="h-3.5 w-3.5" />}
+            label="Total Assessments"
+            value={total}
+            caption="across all subjects"
+            progress={100}
+          />
+          <PastelStat
+            tone="peach"
+            icon={<FilePlus2 className="h-3.5 w-3.5" />}
+            label="Drafts"
+            value={drafts}
+            caption="waiting for finalisation"
+            progress={(drafts / Math.max(total, 1)) * 100}
+          />
+          <PastelStat
+            tone="sky"
+            icon={<FileSearch className="h-3.5 w-3.5" />}
+            label="Not yet received"
+            value={review}
+            caption="needs your sign-off"
+            progress={(review / Math.max(total, 1)) * 100}
+          />
+          <PastelStat
+            tone="mint"
+            icon={<TrendingUp className="h-3.5 w-3.5" />}
+            label="Accepted"
+            value={completed}
+            caption={`${completionPct}% completion rate`}
+            progress={completionPct}
+          />
+        </div>
+      )}
 
       {/* Bento: calendar + review queue */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
