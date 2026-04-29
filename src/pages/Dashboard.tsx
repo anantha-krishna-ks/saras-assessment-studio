@@ -140,8 +140,10 @@ export default function Dashboard() {
         </Card>
 
         <InboxPanel showRequests={role === "HOD"} />
+      </div>
 
       {/* Assessments grid */}
+
       <div>
         <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
           <div>
