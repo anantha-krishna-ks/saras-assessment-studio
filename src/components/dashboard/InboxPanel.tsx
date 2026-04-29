@@ -156,9 +156,6 @@ export function InboxPanel({ showRequests = true }: Props) {
       <div className="p-4 pt-3 flex-1">
         {tab === "queue" ? (
           <div>
-            <p className="text-[12px] text-muted-foreground px-1 mb-2">
-              Papers awaiting your review
-            </p>
             <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1 -mr-1">
               {queueItems.length === 0 ? (
                 <EmptyBlock label="You're all caught up ✨" />
