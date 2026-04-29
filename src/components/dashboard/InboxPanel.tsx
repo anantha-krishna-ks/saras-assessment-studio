@@ -69,22 +69,39 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
     }
   };
 
-  const tabs = [
-    {
-      key: "queue" as TabKey,
-      label: "Review Queue",
-      icon: <FileSearch className="h-4 w-4" />,
-      count: queueCount,
-      show: true,
-    },
-    {
-      key: "requests" as TabKey,
-      label: "Requests",
-      icon: <UserCog className="h-4 w-4" />,
-      count: pendingCount,
-      show: showRequests,
-    },
-  ].filter((t) => t.show);
+  const tabs = teacherView
+    ? [
+        {
+          key: "upcoming" as TabKey,
+          label: "Upcoming Assessment",
+          icon: <CalendarClock className="h-4 w-4" />,
+          count: upcomingCount,
+          show: true,
+        },
+        {
+          key: "rework" as TabKey,
+          label: "Rework on Assessment",
+          icon: <RotateCcw className="h-4 w-4" />,
+          count: reworkCount,
+          show: true,
+        },
+      ]
+    : [
+        {
+          key: "queue" as TabKey,
+          label: "Review Queue",
+          icon: <FileSearch className="h-4 w-4" />,
+          count: queueCount,
+          show: true,
+        },
+        {
+          key: "requests" as TabKey,
+          label: "Requests",
+          icon: <UserCog className="h-4 w-4" />,
+          count: pendingCount,
+          show: showRequests,
+        },
+      ].filter((t) => t.show);
 
   return (
     <Card className="rounded-3xl border border-border/70 bg-card shadow-soft-xs overflow-hidden flex flex-col">
