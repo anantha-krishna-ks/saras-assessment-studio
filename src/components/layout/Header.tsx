@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FilePlus2, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useRole, Role } from "@/context/RoleContext";
 import { Button } from "@/components/ui/button";
@@ -33,18 +33,8 @@ export function Header() {
           </div>
         </NavLink>
 
-        {/* Centered pill nav */}
-        <nav
-          aria-label="Primary"
-          className="hidden md:flex items-center gap-1 justify-self-center rounded-full border border-border/70 bg-secondary/50 backdrop-blur p-1 shadow-soft-xs"
-        >
-          <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>
-            Dashboard
-          </NavItem>
-          <NavItem to="/create" icon={<FilePlus2 className="h-4 w-4" />}>
-            Create Assessment
-          </NavItem>
-        </nav>
+        <div aria-hidden="true" />
+
 
         <div className="flex items-center gap-3 justify-self-end">
           {/* Pill-shaped role switcher with dropdown */}
@@ -97,46 +87,7 @@ export function Header() {
           </DropdownMenu>
         </div>
 
-        {/* Mobile nav (below md) — also pill-style */}
-        <nav
-          aria-label="Primary mobile"
-          className="md:hidden col-span-3 flex items-center justify-center gap-1 -mt-1 pb-2"
-        >
-          <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>
-            Dashboard
-          </NavItem>
-          <NavItem to="/create" icon={<FilePlus2 className="h-4 w-4" />}>
-            Create
-          </NavItem>
-        </nav>
       </div>
     </header>
-  );
-}
-
-function NavItem({
-  to,
-  icon,
-  children,
-}: {
-  to: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        cn(
-          "flex items-center gap-2 px-4 h-9 rounded-full text-sm transition-all",
-          isActive
-            ? "bg-card text-primary shadow-soft-sm ring-1 ring-border/70"
-            : "text-muted-foreground hover:text-foreground hover:bg-card/60"
-        )
-      }
-    >
-      {icon}
-      {children}
-    </NavLink>
   );
 }
