@@ -5,6 +5,7 @@ import type { AssessmentStatus } from "@/data/assessments";
 import { assessments } from "@/data/assessments";
 import { AssessmentCard } from "@/components/dashboard/AssessmentCard";
 import { AssessmentCalendar } from "@/components/dashboard/AssessmentCalendar";
+import { RequestsPanel } from "@/components/dashboard/RequestsPanel";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
