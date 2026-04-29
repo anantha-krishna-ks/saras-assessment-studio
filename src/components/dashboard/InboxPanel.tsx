@@ -267,6 +267,51 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
             )}
           </div>
         )}
+
+        {(tab === "upcoming" || tab === "rework") && (
+          <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1 -mr-1">
+            {(tab === "upcoming" ? upcomingItems : reworkItems).length === 0 ? (
+              <EmptyBlock
+                label={
+                  tab === "upcoming"
+                    ? "No upcoming assessments"
+                    : "Nothing to rework right now ✨"
+                }
+              />
+            ) : (
+              (tab === "upcoming" ? upcomingItems : reworkItems).map((a, i) => (
+                <button
+                  key={a.id}
+                  onClick={() => navigate(`/review-qp/${a.id}`)}
+                  className="group w-full text-left flex items-center gap-3 p-3 rounded-2xl bg-secondary/40 hover:bg-secondary transition-colors"
+                >
+                  <div
+                    className={cn(
+                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm",
+                      tab === "rework"
+                        ? "bg-[hsl(var(--pastel-rose))] text-[hsl(var(--pastel-rose-ink))]"
+                        : i % 2 === 0
+                          ? "bg-[hsl(var(--pastel-sky))] text-[hsl(var(--pastel-sky-ink))]"
+                          : "bg-[hsl(var(--pastel-mint))] text-[hsl(var(--pastel-mint-ink))]"
+                    )}
+                  >
+                    {a.subject[0]}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm text-foreground truncate">{a.title}</div>
+                    <div className="text-sm text-muted-foreground mt-0.5 truncate">
+                      {a.grade} · {a.subject} ·{" "}
+                      {new Date(
+                        tab === "upcoming" ? a.scheduledAt : a.dueAt
+                      ).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                    </div>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </button>
+              ))
+            )}
+          </div>
+        )}
       </div>
     </Card>
   );
