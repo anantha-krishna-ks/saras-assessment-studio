@@ -26,53 +26,6 @@ const newId = () => crypto.randomUUID();
 const createSection = (label: string): Section => ({ id: newId(), label, description: "", items: [] });
 const createItem = (type: ItemType): SectionItem => ({ id: newId(), question: "", score: 1, type });
 
-/* ── Lightweight inline multi-select (chapters) ── */
-function MultiSelectChapters({ selected, onChange }: { selected: string[]; onChange: (v: string[]) => void }) {
-  const [open, setOpen] = useState(false);
-  const toggle = (c: string) =>
-    onChange(selected.includes(c) ? selected.filter((s) => s !== c) : [...selected, c]);
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          className="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-        >
-          <div className="flex flex-wrap gap-1 flex-1 text-left">
-            {selected.length === 0 && <span className="text-muted-foreground">Select chapters</span>}
-            {selected.map((c) => (
-              <Badge key={c} variant="secondary" className="text-xs px-2 py-0.5 gap-1">
-                {c}
-                <span
-                  role="button"
-                  onClick={(e) => { e.stopPropagation(); toggle(c); }}
-                  className="cursor-pointer hover:text-destructive"
-                >
-                  <X className="h-3 w-3" />
-                </span>
-              </Badge>
-            ))}
-          </div>
-          <ChevronDown className="h-4 w-4 opacity-50 shrink-0 ml-2" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="p-1 rounded-xl" align="start" style={{ width: "var(--radix-popover-trigger-width)" }}>
-        <div className="max-h-64 overflow-y-auto">
-          {CHAPTERS.map((c) => {
-            const checked = selected.includes(c);
-            return (
-              <label key={c} className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-accent cursor-pointer text-sm">
-                <Checkbox checked={checked} onCheckedChange={() => toggle(c)} />
-                <span>{c}</span>
-              </label>
-            );
-          })}
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
 /* ── Add Items dropdown ── */
 function AddItemsDropdown({ onAdd }: { onAdd: (type: ItemType) => void }) {
   return (
