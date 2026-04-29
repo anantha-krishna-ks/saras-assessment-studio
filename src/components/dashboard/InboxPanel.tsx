@@ -54,7 +54,7 @@ export function InboxPanel({ showRequests = true }: Props) {
     }
   };
 
-  const tabs = ([
+  const tabs = [
     {
       key: "queue" as TabKey,
       label: "Review Queue",
@@ -63,7 +63,7 @@ export function InboxPanel({ showRequests = true }: Props) {
       show: true,
     },
     {
-      key: "requests",
+      key: "requests" as TabKey,
       label: "Requests",
       icon: <UserCog className="h-4 w-4" />,
       count: pendingCount,
