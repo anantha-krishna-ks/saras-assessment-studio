@@ -61,49 +61,96 @@ export function InboxPanel({ showRequests = true }: Props) {
     tabs.push({ key: "requests", label: "Requests", count: pendingCount });
   }
 
+  const activeMeta =
+    tab === "queue"
+      ? {
+          icon: <FileSearch className="h-4 w-4" />,
+          title: "Review Queue",
+          subtitle: "Papers awaiting your review",
+          tone: "bg-primary-soft text-primary",
+        }
+      : {
+          icon: <UserCog className="h-4 w-4" />,
+          title: "Requests",
+          subtitle: "Teacher reassignment approvals",
+          tone: "bg-[hsl(var(--pastel-peach))] text-[hsl(var(--pastel-peach-ink))]",
+        };
+
   return (
     <Card className="rounded-3xl border border-border/70 bg-card shadow-soft-xs overflow-hidden flex flex-col">
-      {/* Segmented tabs */}
-      <div
-        role="tablist"
-        aria-label="Inbox sections"
-        className="p-1.5 m-3 mb-0 rounded-2xl bg-secondary/60 inline-grid"
-        style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
-      >
-        {tabs.map((t) => {
-          const active = tab === t.key;
-          return (
-            <button
-              key={t.key}
-              role="tab"
-              aria-selected={active}
-              onClick={() => setTab(t.key)}
-              className={cn(
-                "relative inline-flex items-center justify-center gap-2 h-9 px-3 rounded-xl text-sm transition-all",
-                active
-                  ? "bg-card text-foreground shadow-soft-xs"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              <span className="font-medium">{t.label}</span>
-              {t.count > 0 && (
-                <span
+      {/* Header: contextual title + underline tabs */}
+      <div className="px-5 pt-5 pb-3 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3 min-w-0">
+          <span
+            className={cn(
+              "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors",
+              activeMeta.tone
+            )}
+          >
+            {activeMeta.icon}
+          </span>
+          <div className="min-w-0">
+            <h2 className="text-[15px] text-foreground font-medium leading-tight truncate">
+              {activeMeta.title}
+            </h2>
+            <p className="text-[12px] text-muted-foreground mt-0.5 truncate">
+              {activeMeta.subtitle}
+            </p>
+          </div>
+        </div>
+
+        {tabs.length > 1 && (
+          <div
+            role="tablist"
+            aria-label="Inbox sections"
+            className="relative flex items-center gap-1 shrink-0"
+          >
+            {tabs.map((t) => {
+              const active = tab === t.key;
+              return (
+                <button
+                  key={t.key}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setTab(t.key)}
                   className={cn(
-                    "inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-medium tabular-nums",
+                    "relative inline-flex items-center gap-1.5 h-8 px-2.5 text-[13px] transition-colors",
                     active
-                      ? t.key === "requests"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-primary-soft text-primary"
-                      : "bg-background text-muted-foreground"
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  {t.count}
-                </span>
-              )}
-            </button>
-          );
-        })}
+                  <span className="font-medium">{t.label}</span>
+                  {t.count > 0 && (
+                    <span
+                      className={cn(
+                        "inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-medium tabular-nums transition-colors",
+                        active
+                          ? t.key === "requests"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-primary-soft text-primary"
+                          : "bg-secondary text-muted-foreground"
+                      )}
+                    >
+                      {t.count}
+                    </span>
+                  )}
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "absolute left-2 right-2 -bottom-[7px] h-[2px] rounded-full transition-all",
+                      active ? "bg-primary opacity-100" : "opacity-0"
+                    )}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
+
+      {/* Subtle divider under header */}
+      <div className="mx-5 h-px bg-border/60" />
 
       {/* Body — fixed height, internal scroll keeps layout stable */}
       <div className="p-4 pt-3 flex-1">
