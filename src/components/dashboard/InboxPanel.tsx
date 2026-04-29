@@ -5,14 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   ArrowUpRight,
+  CalendarClock,
   Check,
   FileSearch,
   Inbox,
+  RotateCcw,
   UserCog,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { assessments as allAssessments } from "@/data/assessments";
+import { assessments as allAssessments, type Assessment } from "@/data/assessments";
 import {
   reassignmentRequests as seed,
   type ReassignmentRequest,
@@ -20,19 +22,32 @@ import {
 
 interface Props {
   showRequests?: boolean;
+  teacherView?: boolean;
+  filterAssessments?: (a: Assessment) => boolean;
 }
 
-type TabKey = "queue" | "requests";
+type TabKey = "queue" | "requests" | "upcoming" | "rework";
 
-export function InboxPanel({ showRequests = true }: Props) {
+export function InboxPanel({ showRequests = true, teacherView = false, filterAssessments }: Props) {
   const navigate = useNavigate();
   const [requests, setRequests] = useState<ReassignmentRequest[]>(seed);
-  const [tab, setTab] = useState<TabKey>("queue");
+  const [tab, setTab] = useState<TabKey>(teacherView ? "upcoming" : "queue");
 
-  const queueItems = allAssessments
+  const scoped = filterAssessments ? allAssessments.filter(filterAssessments) : allAssessments;
+
+  const queueItems = scoped
     .filter((a) => a.status === "Not yet received" || a.status === "Draft")
     .slice(0, 5);
   const queueCount = queueItems.length;
+
+  const upcomingItems = scoped
+    .filter((a) => a.status === "Not yet started")
+    .sort((a, b) => +new Date(a.scheduledAt) - +new Date(b.scheduledAt))
+    .slice(0, 5);
+  const upcomingCount = upcomingItems.length;
+
+  const reworkItems = scoped.filter((a) => a.status === "Reverted").slice(0, 5);
+  const reworkCount = reworkItems.length;
 
   const pending = requests.filter((r) => r.status === "Pending");
   const pendingCount = pending.length;
@@ -54,22 +69,39 @@ export function InboxPanel({ showRequests = true }: Props) {
     }
   };
 
-  const tabs = [
-    {
-      key: "queue" as TabKey,
-      label: "Review Queue",
-      icon: <FileSearch className="h-4 w-4" />,
-      count: queueCount,
-      show: true,
-    },
-    {
-      key: "requests" as TabKey,
-      label: "Requests",
-      icon: <UserCog className="h-4 w-4" />,
-      count: pendingCount,
-      show: showRequests,
-    },
-  ].filter((t) => t.show);
+  const tabs = teacherView
+    ? [
+        {
+          key: "upcoming" as TabKey,
+          label: "Upcoming Assessment",
+          icon: <CalendarClock className="h-4 w-4" />,
+          count: upcomingCount,
+          show: true,
+        },
+        {
+          key: "rework" as TabKey,
+          label: "Rework on Assessment",
+          icon: <RotateCcw className="h-4 w-4" />,
+          count: reworkCount,
+          show: true,
+        },
+      ]
+    : [
+        {
+          key: "queue" as TabKey,
+          label: "Review Queue",
+          icon: <FileSearch className="h-4 w-4" />,
+          count: queueCount,
+          show: true,
+        },
+        {
+          key: "requests" as TabKey,
+          label: "Requests",
+          icon: <UserCog className="h-4 w-4" />,
+          count: pendingCount,
+          show: showRequests,
+        },
+      ].filter((t) => t.show);
 
   return (
     <Card className="rounded-3xl border border-border/70 bg-card shadow-soft-xs overflow-hidden flex flex-col">
@@ -94,7 +126,7 @@ export function InboxPanel({ showRequests = true }: Props) {
         >
           {tabs.map((t) => {
             const active = tab === t.key;
-            const isAlert = t.key === "requests" && t.count > 0;
+            const isAlert = (t.key === "requests" || t.key === "rework") && t.count > 0;
             return (
               <button
                 key={t.key}
@@ -231,6 +263,51 @@ export function InboxPanel({ showRequests = true }: Props) {
                     </Button>
                   </div>
                 </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {(tab === "upcoming" || tab === "rework") && (
+          <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1 -mr-1">
+            {(tab === "upcoming" ? upcomingItems : reworkItems).length === 0 ? (
+              <EmptyBlock
+                label={
+                  tab === "upcoming"
+                    ? "No upcoming assessments"
+                    : "Nothing to rework right now ✨"
+                }
+              />
+            ) : (
+              (tab === "upcoming" ? upcomingItems : reworkItems).map((a, i) => (
+                <button
+                  key={a.id}
+                  onClick={() => navigate(`/review-qp/${a.id}`)}
+                  className="group w-full text-left flex items-center gap-3 p-3 rounded-2xl bg-secondary/40 hover:bg-secondary transition-colors"
+                >
+                  <div
+                    className={cn(
+                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm",
+                      tab === "rework"
+                        ? "bg-[hsl(var(--pastel-rose))] text-[hsl(var(--pastel-rose-ink))]"
+                        : i % 2 === 0
+                          ? "bg-[hsl(var(--pastel-sky))] text-[hsl(var(--pastel-sky-ink))]"
+                          : "bg-[hsl(var(--pastel-mint))] text-[hsl(var(--pastel-mint-ink))]"
+                    )}
+                  >
+                    {a.subject[0]}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm text-foreground truncate">{a.title}</div>
+                    <div className="text-sm text-muted-foreground mt-0.5 truncate">
+                      {a.grade} · {a.subject} ·{" "}
+                      {new Date(
+                        tab === "upcoming" ? a.scheduledAt : a.dueAt
+                      ).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                    </div>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </button>
               ))
             )}
           </div>

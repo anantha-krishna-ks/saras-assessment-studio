@@ -2,20 +2,27 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRole } from "@/context/RoleContext";
 import type { AssessmentStatus } from "@/data/assessments";
-import { assessments } from "@/data/assessments";
+import { assessments as allAssessments } from "@/data/assessments";
 import { AssessmentCard } from "@/components/dashboard/AssessmentCard";
 import { AssessmentCalendar } from "@/components/dashboard/AssessmentCalendar";
 import { InboxPanel } from "@/components/dashboard/InboxPanel";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  ArrowUpRight,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   ClipboardCheck,
   FilePlus2,
   FileSearch,
+  GraduationCap,
   Inbox,
   Plus,
-  Sparkles,
+  BookOpen,
   TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,7 +30,32 @@ import { cn } from "@/lib/utils";
 export default function Dashboard() {
   const { role, user } = useRole();
   const navigate = useNavigate();
+  const isTeacher = role === "Teacher";
+
   const [statusFilter, setStatusFilter] = useState<AssessmentStatus | "All">("All");
+  const [gradeFilter, setGradeFilter] = useState<string>("All");
+  const [subjectFilter, setSubjectFilter] = useState<string>("All");
+
+  const grades = useMemo(
+    () => Array.from(new Set(allAssessments.map((a) => a.grade))).sort(),
+    []
+  );
+  const subjects = useMemo(
+    () => Array.from(new Set(allAssessments.map((a) => a.subject))).sort(),
+    []
+  );
+
+  // Scope assessments by grade/subject (only applied for Teacher view)
+  const scopedAssessments = useMemo(() => {
+    if (!isTeacher) return allAssessments;
+    return allAssessments.filter(
+      (a) =>
+        (gradeFilter === "All" || a.grade === gradeFilter) &&
+        (subjectFilter === "All" || a.subject === subjectFilter)
+    );
+  }, [isTeacher, gradeFilter, subjectFilter]);
+
+  const assessments = scopedAssessments;
 
   const drafts = assessments.filter((a) => a.status === "Draft").length;
   const review = assessments.filter((a) => a.status === "Not yet received").length;
@@ -42,7 +74,7 @@ export default function Dashboard() {
       Reverted: reverted,
       Accepted: completed,
     }),
-    [drafts, review, completed, reverted]
+    [assessments, drafts, review, completed, reverted]
   );
 
   const filteredAssessments = useMemo(
@@ -50,7 +82,7 @@ export default function Dashboard() {
       statusFilter === "All"
         ? assessments
         : assessments.filter((a) => a.status === statusFilter),
-    [statusFilter]
+    [assessments, statusFilter]
   );
 
   const filterOptions: (AssessmentStatus | "All")[] = [
@@ -61,6 +93,16 @@ export default function Dashboard() {
     "Reverted",
     "Accepted",
   ];
+
+  const inboxFilter = useMemo(
+    () =>
+      isTeacher
+        ? (a: (typeof allAssessments)[number]) =>
+            (gradeFilter === "All" || a.grade === gradeFilter) &&
+            (subjectFilter === "All" || a.subject === subjectFilter)
+        : undefined,
+    [isTeacher, gradeFilter, subjectFilter]
+  );
 
   const greeting = `Good ${
     new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"
@@ -100,6 +142,68 @@ export default function Dashboard() {
           </Button>
         </div>
       </div>
+
+      {/* Teacher scope filters */}
+      {isTeacher && (
+        <Card className="p-4 rounded-3xl border border-border/70 bg-card shadow-soft-xs">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground pr-1">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-soft text-primary">
+                <GraduationCap className="h-4 w-4" />
+              </span>
+              <span className="font-medium text-foreground">Scope</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Grade</span>
+              <Select value={gradeFilter} onValueChange={setGradeFilter}>
+                <SelectTrigger className="h-9 w-[160px] text-sm">
+                  <SelectValue placeholder="Select grade" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All">All grades</SelectItem>
+                  {grades.map((g) => (
+                    <SelectItem key={g} value={g}>
+                      {g}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Subject</span>
+              <Select value={subjectFilter} onValueChange={setSubjectFilter}>
+                <SelectTrigger className="h-9 w-[180px] text-sm">
+                  <SelectValue placeholder="Select subject" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All">All subjects</SelectItem>
+                  {subjects.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      <span className="inline-flex items-center gap-2">
+                        <BookOpen className="h-3.5 w-3.5 text-muted-foreground" />
+                        {s}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {(gradeFilter !== "All" || subjectFilter !== "All") && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 ml-auto text-xs"
+                onClick={() => {
+                  setGradeFilter("All");
+                  setSubjectFilter("All");
+                }}
+              >
+                Clear filters
+              </Button>
+            )}
+          </div>
+        </Card>
+      )}
 
       {/* Hero pastel stat tiles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -143,7 +247,11 @@ export default function Dashboard() {
           <AssessmentCalendar assessments={assessments} />
         </Card>
 
-        <InboxPanel showRequests={role === "HOD"} />
+        <InboxPanel
+          showRequests={role === "HOD"}
+          teacherView={isTeacher}
+          filterAssessments={inboxFilter}
+        />
       </div>
 
       {/* Assessments grid */}
