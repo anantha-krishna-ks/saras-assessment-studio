@@ -54,15 +54,9 @@ export function InboxPanel({ showRequests = true }: Props) {
     }
   };
 
-  const tabs: {
-    key: TabKey;
-    label: string;
-    icon: JSX.Element;
-    count: number;
-    show: boolean;
-  }[] = [
+  const tabs = ([
     {
-      key: "queue",
+      key: "queue" as TabKey,
       label: "Review Queue",
       icon: <FileSearch className="h-4 w-4" />,
       count: queueCount,
