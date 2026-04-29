@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 const statusStyles: Record<AssessmentStatus, string> = {
   "Not yet started": "bg-secondary text-muted-foreground",
   Draft: "bg-warning/10 text-warning",
-  "In Review": "bg-primary-soft text-primary",
+  "Not yet received": "bg-primary-soft text-primary",
   Completed: "bg-success/10 text-success",
 };
 

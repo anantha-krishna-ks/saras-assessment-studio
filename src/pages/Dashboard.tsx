@@ -26,8 +26,8 @@ export default function Dashboard() {
   const [statusFilter, setStatusFilter] = useState<AssessmentStatus | "All">("All");
 
   const drafts = assessments.filter((a) => a.status === "Draft").length;
-  const review = assessments.filter((a) => a.status === "In Review").length;
-  const completed = assessments.filter((a) => a.status === "Completed").length;
+  const review = assessments.filter((a) => a.status === "Not yet received").length;
+  const completed = assessments.filter((a) => a.status === "Accepted").length;
   const total = assessments.length;
   const completionPct = Math.round((completed / Math.max(total, 1)) * 100);
 
@@ -36,8 +36,8 @@ export default function Dashboard() {
       All: assessments.length,
       "Not yet started": assessments.filter((a) => a.status === "Not yet started").length,
       Draft: drafts,
-      "In Review": review,
-      Completed: completed,
+      "Not yet received": review,
+      Accepted: completed,
     }),
     [drafts, review, completed]
   );
@@ -54,8 +54,8 @@ export default function Dashboard() {
     "All",
     "Not yet started",
     "Draft",
-    "In Review",
-    "Completed",
+    "Not yet received",
+    "Accepted",
   ];
 
   const greeting = `Good ${
@@ -118,7 +118,7 @@ export default function Dashboard() {
         <PastelStat
           tone="sky"
           icon={<FileSearch className="h-3.5 w-3.5" />}
-          label="In Review"
+          label="Not yet received"
           value={review}
           caption="needs your sign-off"
           progress={(review / Math.max(total, 1)) * 100}
@@ -126,7 +126,7 @@ export default function Dashboard() {
         <PastelStat
           tone="mint"
           icon={<TrendingUp className="h-3.5 w-3.5" />}
-          label="Completed"
+          label="Accepted"
           value={completed}
           caption={`${completionPct}% completion rate`}
           progress={completionPct}
@@ -310,7 +310,7 @@ function PastelStat({
           {value}
         </div>
         <div className={cn("text-sm opacity-75", t.ink)} aria-hidden="true">
-          / {label === "Completed" ? "100%" : "total"}
+          / {label === "Accepted" ? "100%" : "total"}
         </div>
       </div>
 
