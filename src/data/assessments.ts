@@ -1,4 +1,4 @@
-export type AssessmentStatus = "Not yet started" | "Draft" | "In Review" | "Completed";
+export type AssessmentStatus = "Not yet started" | "Draft" | "Not yet received" | "Reverted" | "Accepted";
 
 export interface Assessment {
   id: string;
@@ -23,7 +23,7 @@ export const assessments: Assessment[] = [
     type: "PA1",
     subject: "Mathematics",
     grade: "Grade 9",
-    status: "In Review",
+    status: "Not yet received",
     createdAt: "2026-04-02",
     scheduledAt: "2026-05-04",
     dueAt: "2026-05-01",
@@ -66,7 +66,7 @@ export const assessments: Assessment[] = [
     type: "PA2",
     subject: "Chemistry",
     grade: "Grade 10",
-    status: "Completed",
+    status: "Accepted",
     createdAt: "2026-02-10",
     scheduledAt: "2026-03-15",
     dueAt: "2026-03-12",
@@ -87,6 +87,21 @@ export const assessments: Assessment[] = [
     questions: 18,
     sections: 3,
     totalMarks: 30,
+  },
+  {
+    id: "a7",
+    title: "Unit Test 3 — History",
+    type: "Unit Test 3",
+    subject: "History",
+    grade: "Grade 9",
+    status: "Reverted",
+    createdAt: "2026-04-18",
+    scheduledAt: "2026-05-20",
+    dueAt: "2026-05-15",
+    questions: 20,
+    sections: 3,
+    totalMarks: 40,
+    reviewer: "Ms. Iyer",
   },
   {
     id: "a6",

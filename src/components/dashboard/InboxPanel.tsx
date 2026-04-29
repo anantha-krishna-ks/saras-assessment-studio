@@ -30,7 +30,7 @@ export function InboxPanel({ showRequests = true }: Props) {
   const [tab, setTab] = useState<TabKey>("queue");
 
   const queueItems = allAssessments
-    .filter((a) => a.status === "In Review" || a.status === "Draft")
+    .filter((a) => a.status === "Not yet received" || a.status === "Draft")
     .slice(0, 5);
   const queueCount = queueItems.length;
 

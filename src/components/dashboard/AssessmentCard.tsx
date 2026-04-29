@@ -22,8 +22,9 @@ import { cn } from "@/lib/utils";
 const statusStyles: Record<AssessmentStatus, string> = {
   "Not yet started": "bg-secondary text-muted-foreground",
   Draft: "bg-warning/10 text-warning",
-  "In Review": "bg-primary-soft text-primary",
-  Completed: "bg-success/10 text-success",
+  "Not yet received": "bg-primary-soft text-primary",
+  Reverted: "bg-destructive/10 text-destructive",
+  Accepted: "bg-success/10 text-success",
 };
 
 function formatDate(d: string) {
