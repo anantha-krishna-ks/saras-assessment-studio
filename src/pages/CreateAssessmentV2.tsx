@@ -1,36 +1,23 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, FileText, Layers, Info, Plus, Trash2, GripVertical, MoreHorizontal, Pencil, Copy } from "lucide-react";
+import { ChevronLeft, Layers, Info, Plus, Trash2, GripVertical, MoreHorizontal, Pencil, Copy, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, X, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-const TEST_TYPES = ["PA1", "PA2", "Mid-Term Exam", "Final Exam", "Unit Test"];
-const CLASSES = ["Class 1","Class 2","Class 3","Class 4","Class 5","Class 6","Class 7","Class 8","Class 9","Class 10","Class 11","Class 12"];
-const SUBJECTS = ["Mathematics", "Science", "English", "Social Studies", "Hindi", "Computer Science"];
-const CHAPTERS = [
-  "Chapter 1: Number Systems","Chapter 2: Polynomials","Chapter 3: Coordinate Geometry","Chapter 4: Linear Equations",
-  "Chapter 5: Triangles","Chapter 6: Quadrilaterals","Chapter 7: Areas","Chapter 8: Circles","Chapter 9: Constructions","Chapter 10: Statistics",
-];
 const ITEM_TYPES = ["Short Answer","Multiple Choice","True / False","Matching","Fill in the Blank","Assertion Reasoning"] as const;
 type ItemType = typeof ITEM_TYPES[number];
 const SECTION_LABELS = ["A","B","C","D","E","F","G","H"];
-const INSTRUCTIONS_REQUIRED_TYPES = ["Final Exam", "Mid-Term Exam"];
 
 interface SectionItem { id: string; question: string; score: number; type: ItemType; }
 interface Section { id: string; label: string; description: string; items: SectionItem[]; }
