@@ -213,6 +213,7 @@ export default function Dashboard() {
                 <BookOpen className="h-4 w-4" />
                 Question Repository
               </Button>
+              <span aria-hidden="true" className="h-6 w-px bg-border/80 mx-1" />
               <Button
                 size="sm"
                 className="h-9 gap-1.5"
