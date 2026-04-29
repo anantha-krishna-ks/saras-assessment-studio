@@ -23,7 +23,8 @@ const statusStyles: Record<AssessmentStatus, string> = {
   "Not yet started": "bg-secondary text-muted-foreground",
   Draft: "bg-warning/10 text-warning",
   "Not yet received": "bg-primary-soft text-primary",
-  Completed: "bg-success/10 text-success",
+  Reverted: "bg-destructive/10 text-destructive",
+  Accepted: "bg-success/10 text-success",
 };
 
 function formatDate(d: string) {
