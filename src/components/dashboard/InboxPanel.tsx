@@ -5,14 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   ArrowUpRight,
+  CalendarClock,
   Check,
   FileSearch,
   Inbox,
+  RotateCcw,
   UserCog,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { assessments as allAssessments } from "@/data/assessments";
+import { assessments as allAssessments, type Assessment } from "@/data/assessments";
 import {
   reassignmentRequests as seed,
   type ReassignmentRequest,
@@ -20,19 +22,32 @@ import {
 
 interface Props {
   showRequests?: boolean;
+  teacherView?: boolean;
+  filterAssessments?: (a: Assessment) => boolean;
 }
 
-type TabKey = "queue" | "requests";
+type TabKey = "queue" | "requests" | "upcoming" | "rework";
 
-export function InboxPanel({ showRequests = true }: Props) {
+export function InboxPanel({ showRequests = true, teacherView = false, filterAssessments }: Props) {
   const navigate = useNavigate();
   const [requests, setRequests] = useState<ReassignmentRequest[]>(seed);
-  const [tab, setTab] = useState<TabKey>("queue");
+  const [tab, setTab] = useState<TabKey>(teacherView ? "upcoming" : "queue");
 
-  const queueItems = allAssessments
+  const scoped = filterAssessments ? allAssessments.filter(filterAssessments) : allAssessments;
+
+  const queueItems = scoped
     .filter((a) => a.status === "Not yet received" || a.status === "Draft")
     .slice(0, 5);
   const queueCount = queueItems.length;
+
+  const upcomingItems = scoped
+    .filter((a) => a.status === "Not yet started")
+    .sort((a, b) => +new Date(a.scheduledAt) - +new Date(b.scheduledAt))
+    .slice(0, 5);
+  const upcomingCount = upcomingItems.length;
+
+  const reworkItems = scoped.filter((a) => a.status === "Reverted").slice(0, 5);
+  const reworkCount = reworkItems.length;
 
   const pending = requests.filter((r) => r.status === "Pending");
   const pendingCount = pending.length;
