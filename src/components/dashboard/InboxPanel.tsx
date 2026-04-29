@@ -126,7 +126,7 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
         >
           {tabs.map((t) => {
             const active = tab === t.key;
-            const isAlert = t.key === "requests" && t.count > 0;
+            const isAlert = (t.key === "requests" || t.key === "rework") && t.count > 0;
             return (
               <button
                 key={t.key}
