@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, ChevronDown } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useRole, Role } from "@/context/RoleContext";
 import { Button } from "@/components/ui/button";
