@@ -61,8 +61,8 @@ const statusConfig: Record<
 
 const filters: ("All" | ReviewStatus)[] = [
   "All",
-  "Waiting for approval",
   "Submitted to teacher",
+  "Waiting for approval",
   "Reverted for revision",
   "Accepted",
 ];
