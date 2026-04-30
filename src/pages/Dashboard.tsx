@@ -271,6 +271,41 @@ export default function Dashboard() {
             }
           />
         </div>
+      ) : isHOD ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <PastelStat
+            tone="sky"
+            icon={<FileSearch className="h-3.5 w-3.5" />}
+            label="Submitted to teacher"
+            value={review}
+            caption="awaiting teacher action"
+            progress={(review / Math.max(total, 1)) * 100}
+          />
+          <PastelStat
+            tone="lavender"
+            icon={<ClipboardCheck className="h-3.5 w-3.5" />}
+            label="Waiting for approval"
+            value={drafts}
+            caption="pending your review"
+            progress={(drafts / Math.max(total, 1)) * 100}
+          />
+          <PastelStat
+            tone="peach"
+            icon={<FilePlus2 className="h-3.5 w-3.5" />}
+            label="Reverted for revision"
+            value={reverted}
+            caption="sent back to teacher"
+            progress={(reverted / Math.max(total, 1)) * 100}
+          />
+          <PastelStat
+            tone="mint"
+            icon={<TrendingUp className="h-3.5 w-3.5" />}
+            label="Accepted"
+            value={completed}
+            caption={`${completionPct}% completion rate`}
+            progress={completionPct}
+          />
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <PastelStat
