@@ -112,6 +112,7 @@ const createDefaultPairs = (): MatchPair[] =>
 
 const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: SectionItem) => void; activeFolderId: string }) => {
   const [type, setType] = useState<ItemType>("Short Answer");
+  const [taxonomy, setTaxonomy] = useState<string>("Remember");
   const [question, setQuestion] = useState("");
   const [score, setScore] = useState("1.00");
   const [answerText, setAnswerText] = useState("");
