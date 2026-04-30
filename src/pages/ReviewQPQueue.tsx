@@ -12,41 +12,49 @@ import {
   RotateCcw,
   Search,
   Send,
-  User,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { reviewQueue, type ReviewStatus } from "@/data/reviewQueue";
 import { cn } from "@/lib/utils";
 
 const statusConfig: Record<
   ReviewStatus,
-  { label: string; dot: string; pill: string; icon: React.ComponentType<{ className?: string }> }
+  {
+    label: string;
+    dot: string;
+    pill: string;
+    accent: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }
 > = {
   "Submitted to teacher": {
     label: "Submitted to teacher",
     dot: "bg-sky-500",
     pill: "bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-500/20",
+    accent: "before:bg-sky-500",
     icon: Send,
   },
   "Waiting for approval": {
     label: "Waiting for approval",
     dot: "bg-amber-500",
     pill: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
+    accent: "before:bg-amber-500",
     icon: Hourglass,
   },
   "Reverted for revision": {
     label: "Reverted for revision",
     dot: "bg-rose-500",
     pill: "bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20",
+    accent: "before:bg-rose-500",
     icon: RotateCcw,
   },
   Approved: {
     label: "Approved",
     dot: "bg-emerald-500",
     pill: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
+    accent: "before:bg-emerald-500",
     icon: CheckCircle2,
   },
 };
@@ -189,109 +197,86 @@ export default function ReviewQPQueue() {
           </p>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered.map((qp, i) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3">
+          {filtered.map((qp) => {
             const cfg = statusConfig[qp.status];
             const StatusIcon = cfg.icon;
             const canReview = qp.status !== "Approved";
             return (
               <Card
                 key={qp.id}
-                className="group relative p-5 rounded-2xl border border-border/70 bg-card shadow-soft-xs hover:shadow-soft-md hover:border-primary/30 transition-all duration-200"
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate(`/review-qp/${qp.id}`)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    navigate(`/review-qp/${qp.id}`);
+                  }
+                }}
+                className={cn(
+                  "group relative overflow-hidden p-4 pl-[18px] rounded-xl border border-border/70 bg-card shadow-soft-xs",
+                  "hover:shadow-soft-md hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer",
+                  "before:absolute before:left-0 before:top-0 before:h-full before:w-1",
+                  cfg.accent
+                )}
               >
-                {/* Header: index + status */}
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-secondary text-xs font-medium text-muted-foreground">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <Badge
-                      variant="outline"
-                      className="rounded-full font-normal bg-background"
-                    >
-                      {qp.type}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="rounded-full font-normal bg-background"
-                    >
-                      {qp.grade}
-                    </Badge>
-                  </div>
+                {/* Row 1: status + chevron */}
+                <div className="flex items-center justify-between gap-2">
                   <span
                     className={cn(
-                      "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium",
+                      "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10.5px] font-medium",
                       cfg.pill
                     )}
                   >
-                    <StatusIcon className="h-3 w-3" />
+                    <StatusIcon className="h-2.5 w-2.5" />
                     {cfg.label}
                   </span>
+                  <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/60 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                 </div>
 
-                {/* Title */}
-                <h3 className="mt-4 text-[16px] text-foreground tracking-tight">
+                {/* Row 2: Title */}
+                <h3 className="mt-2.5 text-[14.5px] font-medium text-foreground tracking-tight leading-snug line-clamp-1">
                   {qp.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-0.5">{qp.subject}</p>
+                <div className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span>{qp.subject}</span>
+                  <span className="h-0.5 w-0.5 rounded-full bg-muted-foreground/50" />
+                  <span>{qp.type}</span>
+                </div>
 
-                {/* Teacher */}
-                <div className="mt-4 flex items-center gap-2.5">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-soft text-primary text-xs font-medium">
+                {/* Row 3: Teacher */}
+                <div className="mt-3 flex items-center gap-1.5 min-w-0">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary text-[10px] font-medium">
                     {qp.teacherInitials}
                   </span>
-                  <div className="min-w-0">
-                    <div className="text-sm text-foreground truncate">{qp.teacher}</div>
-                    <div className="text-xs text-muted-foreground inline-flex items-center gap-1">
-                      <User className="h-3 w-3" /> Subject teacher
-                    </div>
-                  </div>
+                  <span className="text-xs text-foreground/80 truncate">{qp.teacher}</span>
                 </div>
 
-                {/* Meta grid */}
-                <div className="mt-4 grid grid-cols-3 gap-2 rounded-xl bg-secondary/40 p-3">
-                  <Meta
-                    icon={<ClipboardList className="h-3.5 w-3.5" />}
-                    label="Marks"
-                    value={`${qp.totalMarks}`}
-                  />
-                  <Meta
-                    icon={<FileSearch className="h-3.5 w-3.5" />}
-                    label="Questions"
-                    value={`${qp.totalQuestions}`}
-                  />
-                  <Meta
-                    icon={<Clock className="h-3.5 w-3.5" />}
-                    label="Duration"
-                    value={qp.duration}
-                  />
-                </div>
-
-                {/* Dates */}
-                <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-                  <span className="inline-flex items-center gap-1.5">
-                    <CalendarDays className="h-3.5 w-3.5" />
-                    Submitted {qp.submittedOn}
+                {/* Row 4: meta strip */}
+                <div className="mt-3 pt-3 border-t border-border/60 flex items-center justify-between text-[11px] text-muted-foreground">
+                  <span className="inline-flex items-center gap-1" title="Questions">
+                    <FileSearch className="h-3 w-3" />
+                    {qp.totalQuestions}q
                   </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    Due <span className="text-foreground font-medium">{qp.dueBy}</span>
+                  <span className="inline-flex items-center gap-1" title="Marks">
+                    <ClipboardList className="h-3 w-3" />
+                    {qp.totalMarks}m
                   </span>
-                </div>
-
-                {/* CTA */}
-                <div className="mt-5 pt-4 border-t border-border/70 flex items-center justify-between gap-2">
-                  <span className="text-xs text-muted-foreground">
-                    {canReview ? "Open preview to comment & decide" : "Already approved"}
+                  <span className="inline-flex items-center gap-1" title="Duration">
+                    <Clock className="h-3 w-3" />
+                    {qp.duration}
                   </span>
-                  <Button
-                    size="sm"
-                    variant={canReview ? "default" : "outline"}
-                    className="rounded-xl gap-1.5"
-                    onClick={() => navigate(`/review-qp/${qp.id}`)}
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1",
+                      !canReview && "text-emerald-600 dark:text-emerald-400"
+                    )}
+                    title="Due by"
                   >
-                    {canReview ? "Review QP" : "View QP"}
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
+                    <CalendarDays className="h-3 w-3" />
+                    {qp.dueBy.split(" ").slice(0, 2).join(" ")}
+                  </span>
                 </div>
               </Card>
             );
