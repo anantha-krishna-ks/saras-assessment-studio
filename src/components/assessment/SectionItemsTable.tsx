@@ -185,13 +185,21 @@ const QuestionRow = ({
       <GripVertical className={`w-3.5 h-3.5 -ml-1 ${showDragHandle ? "text-muted-foreground/30 cursor-grab active:cursor-grabbing group-hover/row:text-muted-foreground/60" : "text-muted-foreground/20"}`} aria-hidden="true" focusable="false" />
       <span className="text-sm font-medium text-foreground">{label}</span>
     </div>
-    <div className="pl-2 pr-2">
+    <div className="pl-2 pr-2 min-w-0">
       <Input
         value={item.question}
         onChange={(e) => onUpdateItem(item.id, { question: e.target.value })}
         placeholder="Enter question text..."
         className="h-8 text-sm bg-transparent border-0 shadow-none focus-visible:ring-0 px-0"
       />
+      {item.taxonomy && (
+        <div className="flex items-center gap-1 mt-0.5">
+          <Brain className="w-3 h-3 text-primary/70" aria-hidden="true" focusable="false" />
+          <span className="text-[10px] font-medium text-primary/80 uppercase tracking-wide">
+            {item.taxonomy}
+          </span>
+        </div>
+      )}
     </div>
     <div className="flex flex-col items-center gap-1">
       <span className="text-[10px] font-medium text-muted-foreground">Marks</span>
@@ -204,15 +212,10 @@ const QuestionRow = ({
         max={100}
       />
     </div>
-    <div className="flex flex-col items-center gap-1 min-w-0">
+    <div className="flex justify-center min-w-0">
       <span className="text-xs text-muted-foreground bg-muted/60 rounded-md px-2 py-1 truncate max-w-[110px]">
         {item.type}
       </span>
-      {item.taxonomy && (
-        <span className="text-[10px] font-medium text-primary bg-primary/10 border border-primary/20 rounded-md px-1.5 py-0.5 truncate max-w-[110px]">
-          {item.taxonomy}
-        </span>
-      )}
     </div>
     <div className="flex justify-center">
       <ItemActions
