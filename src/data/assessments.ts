@@ -1,4 +1,8 @@
-export type AssessmentStatus = "Not yet started" | "Draft" | "Not yet received" | "Reverted" | "Accepted";
+export type AssessmentStatus =
+  | "Submitted to teacher"
+  | "Waiting for approval"
+  | "Reverted for revision"
+  | "Accepted";
 
 export interface Assessment {
   id: string;
