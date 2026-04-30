@@ -221,7 +221,7 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
 
   return (
     <div className="flex-1 overflow-auto">
-      <div className="max-w-5xl mx-auto py-8 px-6 space-y-6">
+      <div className="max-w-4xl mx-auto py-8 px-6 space-y-6">
         <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-primary/[0.06] border border-primary/15">
           <Folder className="w-4 h-4 text-primary shrink-0" />
           <span className="text-sm text-foreground">
