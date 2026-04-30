@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LogOut, ChevronDown } from "lucide-react";
+import { LogOut, ChevronDown, User } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useRole, Role } from "@/context/RoleContext";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,10 @@ export function Header() {
           {/* Profile */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 hover:bg-secondary transition-colors">
+              <button className="flex items-center gap-2 rounded-full px-3 py-1.5 hover:bg-secondary transition-colors">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-muted-foreground">
+                  <User className="h-4 w-4" />
+                </div>
                 <div className="hidden md:block text-left leading-tight">
                   <div className="text-sm text-foreground">{user.name}</div>
                 </div>
