@@ -358,7 +358,7 @@ export default function Dashboard() {
                     : "bg-card text-foreground ring-border/70 hover:ring-primary/40 hover:bg-primary-soft/40"
                 )}
               >
-                <span className="font-medium">{opt}</span>
+                <span className="font-medium">{getFilterLabel(opt)}</span>
                 <span
                   className={cn(
                     "inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-medium tabular-nums",
