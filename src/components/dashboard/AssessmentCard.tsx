@@ -100,7 +100,7 @@ export function AssessmentCard({ a }: { a: Assessment }) {
   return (
     <Card className="group relative overflow-hidden p-0 border border-border/60 bg-card hover:border-border hover:shadow-soft-sm transition-all duration-200 rounded-xl">
       {/* Status accent bar */}
-      <div className="pointer-events-none absolute inset-x-4 top-0 h-[3px] flex justify-center" aria-hidden="true">
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-[3px] w-16 flex justify-center" aria-hidden="true">
         <span className={cn("h-full w-full rounded-b-full opacity-90", styles.bar)} />
       </div>
 
