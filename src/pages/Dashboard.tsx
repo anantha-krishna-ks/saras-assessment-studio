@@ -32,7 +32,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const isTeacher = role === "Teacher";
 
-  const [statusFilter, setStatusFilter] = useState<AssessmentStatus | "All">("All");
+  const [statusFilter, setStatusFilter] = useState<AssessmentStatus | "All" | "Submitted to HM">("All");
   const [gradeFilter, setGradeFilter] = useState<string>("All");
   const [subjectFilter, setSubjectFilter] = useState<string>("All");
 
