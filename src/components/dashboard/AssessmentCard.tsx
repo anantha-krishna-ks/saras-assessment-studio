@@ -25,47 +25,47 @@ import { cn } from "@/lib/utils";
 
 const statusStyles: Record<
   AssessmentStatus,
-  { chip: string; dot: string; halo: string; iconWrap: string; iconColor: string }
+  { chip: string; dot: string; bar: string; iconWrap: string; iconColor: string }
 > = {
   "Not yet started": {
     chip: "bg-muted/60 text-muted-foreground",
     dot: "bg-muted-foreground/40",
-    halo: "from-muted/40 via-transparent to-transparent",
+    bar: "bg-muted-foreground/40",
     iconWrap: "bg-muted/70",
     iconColor: "text-muted-foreground",
   },
   Draft: {
     chip: "bg-warning/10 text-warning",
     dot: "bg-warning/80",
-    halo: "from-warning/15 via-transparent to-transparent",
+    bar: "bg-warning",
     iconWrap: "bg-warning/10",
     iconColor: "text-warning",
   },
   "Not yet received": {
     chip: "bg-primary-soft text-primary",
     dot: "bg-primary/80",
-    halo: "from-primary/15 via-transparent to-transparent",
+    bar: "bg-primary",
     iconWrap: "bg-primary-soft",
     iconColor: "text-primary",
   },
   Reverted: {
     chip: "bg-destructive/10 text-destructive",
     dot: "bg-destructive/80",
-    halo: "from-destructive/15 via-transparent to-transparent",
+    bar: "bg-destructive",
     iconWrap: "bg-destructive/10",
     iconColor: "text-destructive",
   },
   Accepted: {
     chip: "bg-success/10 text-success",
     dot: "bg-success/80",
-    halo: "from-success/15 via-transparent to-transparent",
+    bar: "bg-success",
     iconWrap: "bg-success/10",
     iconColor: "text-success",
   },
   "Submitted to HM": {
     chip: "bg-primary/10 text-primary",
     dot: "bg-primary/80",
-    halo: "from-primary/15 via-transparent to-transparent",
+    bar: "bg-primary",
     iconWrap: "bg-primary/10",
     iconColor: "text-primary",
   },
