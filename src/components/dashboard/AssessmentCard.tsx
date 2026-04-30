@@ -76,7 +76,15 @@ export function AssessmentCard({ a }: { a: Assessment }) {
 
       <div className="mt-4 flex items-center gap-2">
         <span className={cn("inline-flex items-center text-sm px-2 h-5 rounded-full", statusStyles[a.status])}>
-          {a.status}
+          {isHOD
+            ? a.status === "Not yet received"
+              ? "Submitted to teacher"
+              : a.status === "Draft"
+                ? "Waiting for approval"
+                : a.status === "Reverted"
+                  ? "Reverted for revision"
+                  : a.status
+            : a.status}
         </span>
         <span className="text-sm text-muted-foreground">{a.subject}</span>
       </div>
