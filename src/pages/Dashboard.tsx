@@ -85,14 +85,20 @@ export default function Dashboard() {
     [assessments, statusFilter]
   );
 
-  const filterOptions: (AssessmentStatus | "All")[] = [
-    "All",
-    "Not yet started",
-    "Draft",
-    "Not yet received",
-    "Reverted",
-    "Accepted",
-  ];
+  const isHOD = role === "HOD";
+
+  const filterOptions: (AssessmentStatus | "All")[] = isHOD
+    ? ["All", "Not yet received", "Draft", "Reverted", "Accepted"]
+    : ["All", "Not yet started", "Draft", "Not yet received", "Reverted", "Accepted"];
+
+  const hodLabelMap: Partial<Record<AssessmentStatus | "All", string>> = {
+    "Not yet received": "Submitted to teacher",
+    Draft: "Waiting for approval",
+    Reverted: "Reverted for revision",
+  };
+
+  const getFilterLabel = (opt: AssessmentStatus | "All") =>
+    isHOD ? hodLabelMap[opt] ?? opt : opt;
 
   const inboxFilter = useMemo(
     () =>
@@ -352,7 +358,7 @@ export default function Dashboard() {
                     : "bg-card text-foreground ring-border/70 hover:ring-primary/40 hover:bg-primary-soft/40"
                 )}
               >
-                <span className="font-medium">{opt}</span>
+                <span className="font-medium">{getFilterLabel(opt)}</span>
                 <span
                   className={cn(
                     "inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-medium tabular-nums",
@@ -376,7 +382,7 @@ export default function Dashboard() {
               <Inbox className="h-5 w-5 text-muted-foreground" />
             </div>
             <h3 className="mt-4 text-[15px] text-foreground">
-              No assessments in "{statusFilter}"
+              No assessments in "{getFilterLabel(statusFilter)}"
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
               Try a different status filter to see more.
