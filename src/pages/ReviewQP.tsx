@@ -318,35 +318,60 @@ export default function ReviewQP() {
       </div>
 
       {/* Comment dialog */}
-      <Dialog open={openCommentFor !== null} onOpenChange={(o) => !o && setOpenCommentFor(null)}>
-        <DialogContent className="rounded-2xl">
-          <DialogHeader>
-            <DialogTitle>Add comment</DialogTitle>
-            <DialogDescription>
-              Share specific feedback for the subject teacher on this question.
-            </DialogDescription>
-          </DialogHeader>
-          <Textarea
-            value={draftComment}
-            onChange={(e) => setDraftComment(e.target.value)}
-            placeholder="e.g. Rephrase the question for clarity, or adjust difficulty…"
-            className="min-h-[120px] rounded-xl"
-            autoFocus
-          />
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setOpenCommentFor(null)}>
-              Cancel
-            </Button>
-            <Button
-              className="bg-primary hover:bg-primary-hover"
-              onClick={saveComment}
-              disabled={!draftComment.trim()}
-            >
-              Save comment
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {(() => {
+        const activeQuestion = openCommentFor
+          ? qp.sections
+              .flatMap((s) => s.questions.map((q) => ({ q, section: s })))
+              .find(({ q, section }) => `${section.name}-${q.number}` === openCommentFor)
+          : null;
+        return (
+          <Dialog open={openCommentFor !== null} onOpenChange={(o) => !o && setOpenCommentFor(null)}>
+            <DialogContent className="rounded-2xl">
+              <DialogHeader>
+                <DialogTitle>Add comment</DialogTitle>
+                <DialogDescription>
+                  Share specific feedback for the subject teacher on this question.
+                </DialogDescription>
+              </DialogHeader>
+              {activeQuestion && (
+                <div className="rounded-xl border border-border bg-muted/40 p-3">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Badge variant="secondary" className="rounded-full font-normal text-[11px] px-2 py-0.5">
+                      {activeQuestion.section.name}
+                    </Badge>
+                    <span className="text-xs font-medium text-foreground">
+                      Question {activeQuestion.q.number}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground">
+                      · {activeQuestion.q.marks} mark{activeQuestion.q.marks === 1 ? "" : "s"}
+                    </span>
+                  </div>
+                  <p className="text-sm text-foreground line-clamp-3">{activeQuestion.q.text}</p>
+                </div>
+              )}
+              <Textarea
+                value={draftComment}
+                onChange={(e) => setDraftComment(e.target.value)}
+                placeholder="e.g. Rephrase the question for clarity, or adjust difficulty…"
+                className="min-h-[120px] rounded-xl"
+                autoFocus
+              />
+              <DialogFooter>
+                <Button variant="ghost" onClick={() => setOpenCommentFor(null)}>
+                  Cancel
+                </Button>
+                <Button
+                  className="bg-primary hover:bg-primary-hover"
+                  onClick={saveComment}
+                  disabled={!draftComment.trim()}
+                >
+                  Save comment
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        );
+      })()}
 
       {/* Revert dialog */}
       <Dialog open={revertOpen} onOpenChange={setRevertOpen}>
