@@ -112,6 +112,7 @@ const createDefaultPairs = (): MatchPair[] =>
 
 const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: SectionItem) => void; activeFolderId: string }) => {
   const [type, setType] = useState<ItemType>("Short Answer");
+  const [taxonomy, setTaxonomy] = useState<string>("Remember");
   const [question, setQuestion] = useState("");
   const [score, setScore] = useState("1.00");
   const [answerText, setAnswerText] = useState("");
@@ -222,6 +223,17 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
               <SelectTrigger className="h-10 text-sm"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {ITEM_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2 flex-1">
+            <Label className="text-sm font-medium">Taxonomy</Label>
+            <Select value={taxonomy} onValueChange={setTaxonomy}>
+              <SelectTrigger className="h-10 text-sm"><SelectValue placeholder="Select taxonomy" /></SelectTrigger>
+              <SelectContent>
+                {["Remember", "Understand", "Apply", "Analyze", "Evaluate", "Create"].map((t) => (
+                  <SelectItem key={t} value={t}>{t}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
