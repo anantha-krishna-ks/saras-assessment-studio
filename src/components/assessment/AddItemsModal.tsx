@@ -31,6 +31,24 @@ interface AddItemsModalProps {
   onAddItems: (items: SectionItem[]) => void;
 }
 
+const TAXONOMY_LEVELS = ["Remember", "Understand", "Apply", "Analyze", "Evaluate", "Create"] as const;
+type TaxonomyLevel = (typeof TAXONOMY_LEVELS)[number];
+
+const TAXONOMY_STYLES: Record<TaxonomyLevel, string> = {
+  Remember: "bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300",
+  Understand: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300",
+  Apply: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
+  Analyze: "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
+  Evaluate: "bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300",
+  Create: "bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-500/15 dark:text-fuchsia-300",
+};
+
+function getTaxonomyForQuestion(id: string): TaxonomyLevel {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
+  return TAXONOMY_LEVELS[hash % TAXONOMY_LEVELS.length];
+}
+
 function countQuestions(folder: RepositoryFolder): number {
   let count = folder.questions.length;
   if (folder.children) for (const c of folder.children) count += countQuestions(c);
@@ -390,12 +408,13 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
                 </div>
               </div>
               <ScrollArea className="flex-1">
-                <div className="grid grid-cols-[40px_44px_1fr_72px_130px] items-center px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-muted-foreground border-b border-border bg-muted/30 sticky top-0 z-10">
+                <div className="grid grid-cols-[40px_44px_1fr_72px_130px_120px] items-center px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-muted-foreground border-b border-border bg-muted/30 sticky top-0 z-10">
                   <div className="flex justify-center"><Checkbox checked={allSelected} onCheckedChange={toggleAll} /></div>
                   <span className="text-center">#</span>
                   <span className="pl-1">Question</span>
                   <span className="text-center">Score</span>
                   <span className="text-center">Type</span>
+                  <span className="text-center">Taxonomy</span>
                 </div>
                 {questions.length === 0 ? (
                   <div className="py-20 flex flex-col items-center justify-center gap-2 text-muted-foreground">
@@ -405,7 +424,7 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
                 ) : (
                   questions.map((q, i) => (
                     <div key={q.id}
-                      className={`grid grid-cols-[40px_44px_1fr_72px_130px] items-start px-5 py-3.5 border-b border-border/60 transition-colors cursor-pointer
+                      className={`grid grid-cols-[40px_44px_1fr_72px_130px_120px] items-start px-5 py-3.5 border-b border-border/60 transition-colors cursor-pointer
                         ${selectedIds.has(q.id) ? "bg-primary/[0.04]" : "hover:bg-muted/20"}`}
                       onClick={() => toggleSelect(q.id)}
                     >
@@ -417,6 +436,16 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
                       <span className="text-sm text-foreground text-center font-medium pt-0.5 tabular-nums">{q.score}</span>
                       <div className="flex justify-center pt-0.5">
                         <Badge variant="secondary" className="text-[11px] font-normal px-2.5 py-0.5 rounded-md">{q.type}</Badge>
+                      </div>
+                      <div className="flex justify-center pt-0.5">
+                        {(() => {
+                          const tax = getTaxonomyForQuestion(q.id);
+                          return (
+                            <span className={`inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-full ${TAXONOMY_STYLES[tax]}`}>
+                              {tax}
+                            </span>
+                          );
+                        })()}
                       </div>
                     </div>
                   ))
