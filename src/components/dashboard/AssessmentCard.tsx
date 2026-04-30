@@ -209,7 +209,7 @@ function Stat({
   value: number;
 }) {
   return (
-    <div className="text-center py-1.5">
+    <div className="flex-1 text-center">
       <div className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wide text-muted-foreground">
         {icon}
         {label}
