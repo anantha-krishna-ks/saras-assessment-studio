@@ -173,15 +173,12 @@ export function AssessmentCard({ a }: { a: Assessment }) {
 
         {/* Quick stats */}
         {!isHOD && (
-          <div className="grid grid-cols-3 gap-1 rounded-2xl bg-secondary/40 p-1">
+          <div className="flex items-stretch rounded-2xl bg-secondary/40 px-2 py-2">
             <Stat icon={<HelpCircle className="h-3 w-3" />} label="Questions" value={a.questions} />
-            <div className="my-1.5 w-px bg-border/60 justify-self-center" aria-hidden="true" />
-            <Stat icon={<Target className="h-3 w-3" />} label="Marks" value={a.totalMarks} />
-          </div>
-        )}
-        {!isHOD && (
-          <div className="-mt-2 grid grid-cols-1">
+            <div className="w-px bg-border/60 mx-1" aria-hidden="true" />
             <Stat icon={<Layers className="h-3 w-3" />} label="Sections" value={a.sections} />
+            <div className="w-px bg-border/60 mx-1" aria-hidden="true" />
+            <Stat icon={<Target className="h-3 w-3" />} label="Marks" value={a.totalMarks} />
           </div>
         )}
 
