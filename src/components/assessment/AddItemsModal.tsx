@@ -170,6 +170,7 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
       question: question.trim(),
       score: Math.max(0, parseFloat(score) || 1),
       type,
+      taxonomy,
     };
     if (type === "True / False" && trueFalseAnswer !== null) item.correctAnswer = trueFalseAnswer ? "True" : "False";
     if (type === "Short Answer" && answerText.trim()) item.correctAnswer = answerText.trim();
