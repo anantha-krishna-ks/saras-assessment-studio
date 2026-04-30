@@ -37,6 +37,7 @@ export default function ReviewQP() {
   const [draftComment, setDraftComment] = useState("");
   const [revertOpen, setRevertOpen] = useState(false);
   const [revertNote, setRevertNote] = useState("");
+  const [acceptOpen, setAcceptOpen] = useState(false);
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
   const commentCount = Object.values(comments).filter((c) => c.text.trim().length > 0).length;
