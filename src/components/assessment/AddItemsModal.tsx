@@ -183,7 +183,7 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
               ].map((opt) => (
                 <button key={opt.label} type="button" onClick={() => setTrueFalseAnswer(opt.val)}
                   className={cn(
-                    "relative flex items-center justify-center gap-2.5 rounded-xl border-2 py-4 text-sm font-semibold transition-all",
+                    "relative flex items-center justify-center gap-2.5 rounded-xl border-2 py-4 text-sm font-medium transition-all",
                     trueFalseAnswer === opt.val
                       ? opt.val
                         ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/60"
@@ -225,7 +225,7 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
         <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-primary/[0.06] border border-primary/15">
           <Folder className="w-4 h-4 text-primary shrink-0" />
           <span className="text-sm text-foreground">
-            Saving to: <span className="font-semibold text-primary">{selectedFolderName}</span>
+            Saving to: <span className="font-medium text-primary">{selectedFolderName}</span>
           </span>
         </div>
 
@@ -326,7 +326,7 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
               <FileText className="w-4 h-4 text-primary" />
             </div>
             <div>
-              <DialogTitle className="text-base font-semibold text-foreground">Add Items to Section</DialogTitle>
+              <DialogTitle className="text-base font-medium text-foreground">Add Items to Section</DialogTitle>
               <p className="text-xs text-muted-foreground mt-0.5">Browse your repository or create new questions</p>
             </div>
           </div>
@@ -337,7 +337,7 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
                 { id: "create" as const, label: "Create New", icon: PlusCircle },
               ]).map(({ id, label, icon: Icon }) => (
                 <button key={id} type="button" onClick={() => setActiveTab(id)}
-                  className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all
+                  className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-all
                     ${activeTab === id ? "bg-primary/10 text-primary shadow-sm ring-1 ring-primary/20" : "text-muted-foreground hover:text-foreground"}`}
                 >
                   <Icon className="w-3.5 h-3.5" /> {label}
@@ -356,7 +356,7 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
           <div className="flex flex-1 overflow-hidden">
             <div className="w-56 border-r border-border flex flex-col bg-muted/20 shrink-0">
               <div className="px-4 py-3 border-b border-border">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Folders</span>
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Folders</span>
               </div>
               <ScrollArea className="flex-1 py-1.5 px-1.5">
                 {REPOSITORY_FOLDERS.map((folder) => (
@@ -381,16 +381,16 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
                   </Select>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-muted/60">
-                      <span className="font-semibold text-foreground tabular-nums">{selectedIds.size}</span> selected
+                      <span className="font-medium text-foreground tabular-nums">{selectedIds.size}</span> selected
                     </span>
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-muted/60">
-                      <span className="font-semibold text-foreground tabular-nums">{questions.length}</span> total
+                      <span className="font-medium text-foreground tabular-nums">{questions.length}</span> total
                     </span>
                   </div>
                 </div>
               </div>
               <ScrollArea className="flex-1">
-                <div className="grid grid-cols-[40px_44px_1fr_72px_130px] items-center px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border bg-muted/30 sticky top-0 z-10">
+                <div className="grid grid-cols-[40px_44px_1fr_72px_130px] items-center px-5 py-2.5 text-xs font-medium uppercase tracking-wider text-muted-foreground border-b border-border bg-muted/30 sticky top-0 z-10">
                   <div className="flex justify-center"><Checkbox checked={allSelected} onCheckedChange={toggleAll} /></div>
                   <span className="text-center">#</span>
                   <span className="pl-1">Question</span>
@@ -428,7 +428,7 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
           <div className="flex flex-1 overflow-hidden">
             <div className="w-56 border-r border-border flex flex-col bg-muted/20 shrink-0">
               <div className="px-4 py-3 border-b border-border">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Save to Folder</span>
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Save to Folder</span>
               </div>
               <ScrollArea className="flex-1 py-1.5 px-1.5">
                 {REPOSITORY_FOLDERS.map((folder) => (

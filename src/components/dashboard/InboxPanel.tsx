@@ -156,7 +156,7 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
                 {t.count > 0 && (
                   <span
                     className={cn(
-                      "shrink-0 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
+                      "shrink-0 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-medium tabular-nums",
                       active
                         ? "bg-primary-foreground/20 text-primary-foreground"
                         : isAlert

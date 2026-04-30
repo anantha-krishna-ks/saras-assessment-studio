@@ -65,7 +65,7 @@ const ItemActions = ({
     <DropdownMenuContent align="end" className="w-48">
       {onAddSub && (
         <>
-          <DropdownMenuItem disabled className="text-xs font-semibold text-muted-foreground uppercase tracking-wider py-1">
+          <DropdownMenuItem disabled className="text-xs font-medium text-muted-foreground uppercase tracking-wider py-1">
             Add Sub Question
           </DropdownMenuItem>
           {ITEM_TYPES.map((type) => (
@@ -79,7 +79,7 @@ const ItemActions = ({
       {onAddOr && !hasOr && (
         <>
           <DropdownMenuSeparator />
-          <DropdownMenuItem disabled className="text-xs font-semibold text-muted-foreground uppercase tracking-wider py-1">
+          <DropdownMenuItem disabled className="text-xs font-medium text-muted-foreground uppercase tracking-wider py-1">
             Add OR Alternative
           </DropdownMenuItem>
           {ITEM_TYPES.map((type) => (
@@ -183,7 +183,7 @@ const QuestionRow = ({
     </div>
     <div className="flex items-center gap-0.5 justify-start">
       <GripVertical className={`w-3.5 h-3.5 -ml-1 ${showDragHandle ? "text-muted-foreground/30 cursor-grab active:cursor-grabbing group-hover/row:text-muted-foreground/60" : "text-muted-foreground/20"}`} aria-hidden="true" focusable="false" />
-      <span className="text-sm font-semibold text-foreground">{label}</span>
+      <span className="text-sm font-medium text-foreground">{label}</span>
     </div>
     <div className="pl-2 pr-2">
       <Input
@@ -280,7 +280,7 @@ const QuestionBlock = ({
               <div className="flex items-center justify-between gap-3 px-3 py-1.5 bg-muted/40 border-b border-border/40">
                 <div className="flex items-center gap-2">
                   <CornerDownRight className="w-3 h-3 text-muted-foreground" aria-hidden="true" focusable="false" />
-                  <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                  <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
                     Sub-Questions
                   </span>
                 </div>
@@ -319,7 +319,7 @@ const QuestionBlock = ({
         <div className="border-t border-border/70 bg-primary/[0.02]">
           <div className="flex items-center gap-3 px-4 py-2" aria-label="OR divider">
             <span className="h-px flex-1 bg-gradient-to-r from-transparent via-primary/35 to-primary/10" />
-            <span className="rounded-sm border border-primary/25 bg-background px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary shadow-[inset_0_1px_3px_hsl(var(--primary)/0.12)]">
+            <span className="rounded-sm border border-primary/25 bg-background px-3 py-0.5 text-[10px] font-medium uppercase tracking-wider text-primary shadow-[inset_0_1px_3px_hsl(var(--primary)/0.12)]">
               OR
             </span>
             <span className="h-px flex-1 bg-gradient-to-l from-transparent via-primary/35 to-primary/10" />

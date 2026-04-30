@@ -252,7 +252,7 @@ const QuestionRepository = () => {
           <ChevronLeft className="w-5 h-5" />
         </Button>
         <div>
-          <h1 className="text-xl font-semibold text-foreground">Question Repository</h1>
+          <h1 className="text-xl font-medium text-foreground">Question Repository</h1>
           <p className="text-sm text-muted-foreground">Manage and organize your question bank</p>
         </div>
         <div className="ml-auto w-44">
@@ -274,7 +274,7 @@ const QuestionRepository = () => {
         <div className="bg-card border border-border rounded-xl overflow-visible flex flex-col">
           <div className="p-4 border-b border-border space-y-3">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 Grade
               </label>
               <Select value={selectedGrade} onValueChange={setSelectedGrade}>
@@ -291,7 +291,7 @@ const QuestionRepository = () => {
           </div>
 
           <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
               Repositories
             </span>
             <div className="flex items-center gap-1">
@@ -353,7 +353,7 @@ const QuestionRepository = () => {
         {/* Right Panel */}
         <div className="bg-card border border-border rounded-xl overflow-hidden flex flex-col">
           <div className="p-5 border-b border-border">
-            <h2 className="text-base font-semibold text-foreground">Repository Setup</h2>
+            <h2 className="text-base font-medium text-foreground">Repository Setup</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
               Configure filters and add questions to the selected repository
             </p>

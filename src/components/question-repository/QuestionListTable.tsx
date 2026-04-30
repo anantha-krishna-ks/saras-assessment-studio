@@ -56,7 +56,7 @@ const QuestionListTable = ({
 
   return (
     <div className="border border-border rounded-xl overflow-hidden">
-      <div className="grid grid-cols-[48px_1fr_80px_140px_120px_100px] items-center bg-primary text-primary-foreground px-3 py-2.5 text-xs font-semibold uppercase tracking-wider">
+      <div className="grid grid-cols-[48px_1fr_80px_140px_120px_100px] items-center bg-primary text-primary-foreground px-3 py-2.5 text-xs font-medium uppercase tracking-wider">
         <span className="text-center">Sl No.</span>
         <span>Question</span>
         <span className="text-center">Marks</span>
