@@ -24,6 +24,7 @@ import {
   Plus,
   BookOpen,
   TrendingUp,
+  ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -371,8 +372,9 @@ export default function Dashboard() {
               PA1, PA2, Mid-term, Final Exam, Unit Tests
             </p>
           </div>
-          <Button variant="ghost" size="sm" className="text-sm rounded-full">
+          <Button variant="ghost" size="sm" className="text-sm rounded-full group">
             View all
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Button>
         </div>
 
