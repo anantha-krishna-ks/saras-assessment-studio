@@ -57,20 +57,21 @@ export default function Dashboard() {
 
   const assessments = scopedAssessments;
 
-  const drafts = assessments.filter((a) => a.status === "Waiting for approval").length;
-  const review = assessments.filter((a) => a.status === "Submitted to teacher").length;
+  const drafts = assessments.filter((a) => a.status === "Draft").length;
+  const review = assessments.filter((a) => a.status === "Not yet received").length;
   const completed = assessments.filter((a) => a.status === "Accepted").length;
   const total = assessments.length;
   const completionPct = Math.round((completed / Math.max(total, 1)) * 100);
 
-  const reverted = assessments.filter((a) => a.status === "Reverted for revision").length;
+  const reverted = assessments.filter((a) => a.status === "Reverted").length;
 
   const statusCounts: Record<AssessmentStatus | "All", number> = useMemo(
     () => ({
       All: assessments.length,
-      "Submitted to teacher": review,
-      "Waiting for approval": drafts,
-      "Reverted for revision": reverted,
+      "Not yet started": assessments.filter((a) => a.status === "Not yet started").length,
+      Draft: drafts,
+      "Not yet received": review,
+      Reverted: reverted,
       Accepted: completed,
     }),
     [assessments, drafts, review, completed, reverted]
@@ -86,9 +87,10 @@ export default function Dashboard() {
 
   const filterOptions: (AssessmentStatus | "All")[] = [
     "All",
-    "Submitted to teacher",
-    "Waiting for approval",
-    "Reverted for revision",
+    "Not yet started",
+    "Draft",
+    "Not yet received",
+    "Reverted",
     "Accepted",
   ];
 
@@ -254,10 +256,10 @@ export default function Dashboard() {
             tone="lavender"
             icon={<ClipboardCheck className="h-3.5 w-3.5" />}
             label="Assessments Yet to Create"
-            value={assessments.filter((a) => a.status === "Waiting for approval").length}
+            value={assessments.filter((a) => a.status === "Not yet started").length}
             caption="not yet started"
             progress={
-              (assessments.filter((a) => a.status === "Waiting for approval").length /
+              (assessments.filter((a) => a.status === "Not yet started").length /
                 Math.max(total, 1)) *
               100
             }
@@ -284,7 +286,7 @@ export default function Dashboard() {
           <PastelStat
             tone="sky"
             icon={<FileSearch className="h-3.5 w-3.5" />}
-            label="Submitted to teacher"
+            label="Not yet received"
             value={review}
             caption="needs your sign-off"
             progress={(review / Math.max(total, 1)) * 100}

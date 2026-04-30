@@ -36,17 +36,17 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
   const scoped = filterAssessments ? allAssessments.filter(filterAssessments) : allAssessments;
 
   const queueItems = scoped
-    .filter((a) => a.status === "Submitted to teacher" || a.status === "Waiting for approval")
+    .filter((a) => a.status === "Not yet received" || a.status === "Draft")
     .slice(0, 5);
   const queueCount = queueItems.length;
 
   const upcomingItems = scoped
-    .filter((a) => a.status === "Waiting for approval")
+    .filter((a) => a.status === "Not yet started")
     .sort((a, b) => +new Date(a.scheduledAt) - +new Date(b.scheduledAt))
     .slice(0, 5);
   const upcomingCount = upcomingItems.length;
 
-  const reworkItems = scoped.filter((a) => a.status === "Reverted for revision").slice(0, 5);
+  const reworkItems = scoped.filter((a) => a.status === "Reverted").slice(0, 5);
   const reworkCount = reworkItems.length;
 
   const pending = requests.filter((r) => r.status === "Pending");
