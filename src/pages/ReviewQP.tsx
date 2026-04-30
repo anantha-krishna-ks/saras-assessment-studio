@@ -25,6 +25,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { sampleQP } from "@/data/sampleQP";
+import { assessments } from "@/data/assessments";
 import { cn } from "@/lib/utils";
 
 export default function ReviewQP() {
@@ -73,6 +74,9 @@ export default function ReviewQP() {
 
   const confirmAccept = () => {
     setAcceptOpen(false);
+    // Move the first "Waiting for approval" (Draft) item into "Submitted to HM"
+    const target = assessments.find((a) => a.status === "Draft") ?? assessments.find((a) => a.status === "Not yet received");
+    if (target) target.status = "Submitted to HM";
     toast.success("Sent to HM for approval", {
       description: `${qp.title} has been forwarded to the Head Master for final approval.`,
     });
