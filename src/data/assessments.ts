@@ -31,6 +31,7 @@ export const assessments: Assessment[] = [
     questions: 24,
     sections: 4,
     totalMarks: 50,
+    taxonomy: "Bloom's",
     reviewer: "Mr. Rao",
   },
   {
@@ -46,9 +47,7 @@ export const assessments: Assessment[] = [
     questions: 15,
     sections: 3,
     totalMarks: 30,
-  },
-  {
-    id: "a3",
+    taxonomy: "Bloom's",
     title: "Mid-term — English",
     type: "Mid-term",
     subject: "English",
@@ -60,6 +59,7 @@ export const assessments: Assessment[] = [
     questions: 30,
     sections: 5,
     totalMarks: 80,
+    taxonomy: "SOLO",
   },
   {
     id: "a4",
@@ -74,9 +74,7 @@ export const assessments: Assessment[] = [
     questions: 22,
     sections: 4,
     totalMarks: 50,
-  },
-  {
-    id: "a5",
+    taxonomy: "Bloom's",
     title: "Unit Test 2 — Biology",
     type: "Unit Test 2",
     subject: "Biology",
@@ -88,9 +86,7 @@ export const assessments: Assessment[] = [
     questions: 18,
     sections: 3,
     totalMarks: 30,
-  },
-  {
-    id: "a7",
+    taxonomy: "Webb's DOK",
     title: "Unit Test 3 — History",
     type: "Unit Test 3",
     subject: "History",
@@ -102,6 +98,7 @@ export const assessments: Assessment[] = [
     questions: 20,
     sections: 3,
     totalMarks: 40,
+    taxonomy: "Bloom's",
     reviewer: "Ms. Iyer",
   },
   {
@@ -117,5 +114,6 @@ export const assessments: Assessment[] = [
     questions: 40,
     sections: 6,
     totalMarks: 100,
+    taxonomy: "Bloom's",
   },
 ];
