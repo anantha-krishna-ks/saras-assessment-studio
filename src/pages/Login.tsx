@@ -50,7 +50,7 @@ const roleOptions: {
 
 export default function Login() {
   const navigate = useNavigate();
-  const { role, setRole } = useRole();
+  const { role } = useRole();
   const [email, setEmail] = useState("anita.sharma@school.edu");
   const [password, setPassword] = useState("supersecret");
   const [showPassword, setShowPassword] = useState(false);
