@@ -21,10 +21,9 @@ import {
 import { cn } from "@/lib/utils";
 
 const statusStyles: Record<AssessmentStatus, string> = {
-  "Waiting for approval": "bg-secondary text-muted-foreground",
-  Draft: "bg-warning/10 text-warning",
   "Submitted to teacher": "bg-primary-soft text-primary",
-  Reverted: "bg-destructive/10 text-destructive",
+  "Waiting for approval": "bg-warning/10 text-warning",
+  "Reverted for revision": "bg-destructive/10 text-destructive",
   Accepted: "bg-success/10 text-success",
 };
 
