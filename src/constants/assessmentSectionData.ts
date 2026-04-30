@@ -171,4 +171,5 @@ export const createSectionItem = (type: ItemType): SectionItem => ({
   question: "",
   score: 1,
   type,
+  taxonomy: "Remember",
 });
