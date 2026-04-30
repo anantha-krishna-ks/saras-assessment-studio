@@ -65,7 +65,9 @@ export default function Dashboard() {
 
   const reverted = assessments.filter((a) => a.status === "Reverted").length;
 
-  const statusCounts: Record<AssessmentStatus | "All", number> = useMemo(
+  type FilterKey = AssessmentStatus | "All" | "Submitted to HM";
+
+  const statusCounts: Record<FilterKey, number> = useMemo(
     () => ({
       All: assessments.length,
       "Not yet started": assessments.filter((a) => a.status === "Not yet started").length,
@@ -73,31 +75,33 @@ export default function Dashboard() {
       "Not yet received": review,
       Reverted: reverted,
       Accepted: completed,
+      "Submitted to HM": 0,
     }),
     [assessments, drafts, review, completed, reverted]
   );
 
   const filteredAssessments = useMemo(
-    () =>
-      statusFilter === "All"
-        ? assessments
-        : assessments.filter((a) => a.status === statusFilter),
+    () => {
+      if (statusFilter === "All") return assessments;
+      if (statusFilter === "Submitted to HM") return [];
+      return assessments.filter((a) => a.status === statusFilter);
+    },
     [assessments, statusFilter]
   );
 
   const isHOD = role === "HOD";
 
-  const filterOptions: (AssessmentStatus | "All")[] = isHOD
-    ? ["All", "Not yet received", "Draft", "Reverted", "Accepted"]
+  const filterOptions: FilterKey[] = isHOD
+    ? ["All", "Not yet received", "Draft", "Submitted to HM", "Reverted", "Accepted"]
     : ["All", "Not yet started", "Draft", "Not yet received", "Reverted", "Accepted"];
 
-  const hodLabelMap: Partial<Record<AssessmentStatus | "All", string>> = {
+  const hodLabelMap: Partial<Record<FilterKey, string>> = {
     "Not yet received": "Submitted to teacher",
     Draft: "Waiting for approval",
     Reverted: "Reverted for revision",
   };
 
-  const getFilterLabel = (opt: AssessmentStatus | "All") =>
+  const getFilterLabel = (opt: FilterKey) =>
     isHOD ? hodLabelMap[opt] ?? opt : opt;
 
   const inboxFilter = useMemo(
