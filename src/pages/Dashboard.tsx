@@ -382,7 +382,7 @@ export default function Dashboard() {
               <Inbox className="h-5 w-5 text-muted-foreground" />
             </div>
             <h3 className="mt-4 text-[15px] text-foreground">
-              No assessments in "{statusFilter}"
+              No assessments in "{getFilterLabel(statusFilter)}"
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
               Try a different status filter to see more.
