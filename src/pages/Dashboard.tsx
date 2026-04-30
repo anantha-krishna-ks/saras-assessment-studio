@@ -211,7 +211,7 @@ export default function Dashboard() {
                 variant="outline"
                 size="sm"
                 className="h-9 gap-1.5 justify-center"
-                onClick={() => navigate("/repositories")}
+                onClick={() => navigate("/question-repository")}
               >
                 <BookOpen className="h-4 w-4" />
                 Question Repository
