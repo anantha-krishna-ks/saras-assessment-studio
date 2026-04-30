@@ -26,6 +26,7 @@ const statusStyles: Record<AssessmentStatus, string> = {
   "Not yet received": "bg-primary-soft text-primary",
   Reverted: "bg-destructive/10 text-destructive",
   Accepted: "bg-success/10 text-success",
+  "Submitted to HM": "bg-primary/10 text-primary",
 };
 
 function formatDate(d: string) {
