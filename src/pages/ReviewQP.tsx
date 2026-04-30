@@ -326,41 +326,67 @@ export default function ReviewQP() {
           : null;
         return (
           <Dialog open={openCommentFor !== null} onOpenChange={(o) => !o && setOpenCommentFor(null)}>
-            <DialogContent className="rounded-2xl">
-              <DialogHeader>
-                <DialogTitle>Add comment</DialogTitle>
-                <DialogDescription>
-                  Share specific feedback for the subject teacher on this question.
-                </DialogDescription>
-              </DialogHeader>
-              {activeQuestion && (
-                <div className="rounded-xl border border-border bg-muted/40 p-3">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <Badge variant="secondary" className="rounded-full font-normal text-[11px] px-2 py-0.5">
-                      {activeQuestion.section.name}
-                    </Badge>
-                    <span className="text-xs font-medium text-foreground">
-                      Question {activeQuestion.q.number}
-                    </span>
-                    <span className="text-[11px] text-muted-foreground">
-                      · {activeQuestion.q.marks} mark{activeQuestion.q.marks === 1 ? "" : "s"}
-                    </span>
+            <DialogContent className="rounded-2xl p-0 overflow-hidden gap-0 sm:max-w-[520px]">
+              {/* Header */}
+              <DialogHeader className="px-6 pt-5 pb-4 border-b border-border">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <MessageSquarePlus className="h-4.5 w-4.5" />
                   </div>
-                  <p className="text-sm text-foreground line-clamp-3">{activeQuestion.q.text}</p>
+                  <div className="min-w-0">
+                    <DialogTitle className="text-[15px] leading-tight">Add comment</DialogTitle>
+                    <DialogDescription className="text-xs mt-0.5">
+                      Feedback will be shared with the subject teacher.
+                    </DialogDescription>
+                  </div>
                 </div>
-              )}
-              <Textarea
-                value={draftComment}
-                onChange={(e) => setDraftComment(e.target.value)}
-                placeholder="e.g. Rephrase the question for clarity, or adjust difficulty…"
-                className="min-h-[120px] rounded-xl"
-                autoFocus
-              />
-              <DialogFooter>
-                <Button variant="ghost" onClick={() => setOpenCommentFor(null)}>
+              </DialogHeader>
+
+              {/* Body */}
+              <div className="px-6 py-5 space-y-4">
+                {activeQuestion && (
+                  <div className="rounded-xl border border-border bg-muted/40 overflow-hidden">
+                    <div className="flex items-center justify-between px-3.5 py-2 bg-muted/60 border-b border-border/70">
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          Section {activeQuestion.section.name}
+                        </span>
+                        <span className="text-muted-foreground/50">·</span>
+                        <span className="text-[11.5px] font-medium text-foreground">
+                          Q{activeQuestion.q.number}
+                        </span>
+                      </div>
+                      <span className="text-[10.5px] font-medium text-muted-foreground tabular-nums">
+                        {activeQuestion.q.marks} {activeQuestion.q.marks === 1 ? "mark" : "marks"}
+                      </span>
+                    </div>
+                    <p className="px-3.5 py-2.5 text-[13px] leading-relaxed text-foreground line-clamp-3">
+                      {activeQuestion.q.text}
+                    </p>
+                  </div>
+                )}
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-foreground">
+                    Your comment
+                  </label>
+                  <Textarea
+                    value={draftComment}
+                    onChange={(e) => setDraftComment(e.target.value)}
+                    placeholder="e.g. Rephrase the question for clarity, or adjust difficulty…"
+                    className="min-h-[110px] rounded-xl text-sm resize-none"
+                    autoFocus
+                  />
+                </div>
+              </div>
+
+              {/* Footer */}
+              <DialogFooter className="px-6 py-3.5 border-t border-border bg-muted/20 sm:justify-end gap-2">
+                <Button variant="ghost" size="sm" onClick={() => setOpenCommentFor(null)}>
                   Cancel
                 </Button>
                 <Button
+                  size="sm"
                   className="bg-primary hover:bg-primary-hover"
                   onClick={saveComment}
                   disabled={!draftComment.trim()}
