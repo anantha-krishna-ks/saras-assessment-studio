@@ -65,7 +65,9 @@ export default function Dashboard() {
 
   const reverted = assessments.filter((a) => a.status === "Reverted").length;
 
-  type FilterKey = AssessmentStatus | "All" | "Submitted to HM";
+  type FilterKey = AssessmentStatus | "All";
+
+  const submittedToHM = assessments.filter((a) => a.status === "Submitted to HM").length;
 
   const statusCounts: Record<FilterKey, number> = useMemo(
     () => ({
@@ -75,17 +77,16 @@ export default function Dashboard() {
       "Not yet received": review,
       Reverted: reverted,
       Accepted: completed,
-      "Submitted to HM": 0,
+      "Submitted to HM": submittedToHM,
     }),
-    [assessments, drafts, review, completed, reverted]
+    [assessments, drafts, review, completed, reverted, submittedToHM]
   );
 
   const filteredAssessments = useMemo(
-    () => {
-      if (statusFilter === "All") return assessments;
-      if (statusFilter === "Submitted to HM") return [];
-      return assessments.filter((a) => a.status === statusFilter);
-    },
+    () =>
+      statusFilter === "All"
+        ? assessments
+        : assessments.filter((a) => a.status === statusFilter),
     [assessments, statusFilter]
   );
 
