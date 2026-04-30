@@ -45,15 +45,11 @@ export function Header() {
           {/* Profile */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-secondary transition-colors">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary-soft text-primary text-sm">
-                    {user.initials}
-                  </AvatarFallback>
-                </Avatar>
+              <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 hover:bg-secondary transition-colors">
                 <div className="hidden md:block text-left leading-tight">
                   <div className="text-sm text-foreground">{user.name}</div>
                 </div>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
