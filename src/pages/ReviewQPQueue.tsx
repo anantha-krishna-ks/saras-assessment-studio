@@ -12,41 +12,48 @@ import {
   RotateCcw,
   Search,
   Send,
-  User,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { reviewQueue, type ReviewStatus } from "@/data/reviewQueue";
 import { cn } from "@/lib/utils";
 
 const statusConfig: Record<
   ReviewStatus,
-  { label: string; dot: string; pill: string; icon: React.ComponentType<{ className?: string }> }
+  {
+    label: string;
+    dot: string;
+    pill: string;
+    accent: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }
 > = {
   "Submitted to teacher": {
     label: "Submitted to teacher",
     dot: "bg-sky-500",
     pill: "bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-500/20",
+    accent: "before:bg-sky-500",
     icon: Send,
   },
   "Waiting for approval": {
     label: "Waiting for approval",
     dot: "bg-amber-500",
     pill: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
+    accent: "before:bg-amber-500",
     icon: Hourglass,
   },
   "Reverted for revision": {
     label: "Reverted for revision",
     dot: "bg-rose-500",
     pill: "bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20",
+    accent: "before:bg-rose-500",
     icon: RotateCcw,
   },
   Approved: {
     label: "Approved",
     dot: "bg-emerald-500",
     pill: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
+    accent: "before:bg-emerald-500",
     icon: CheckCircle2,
   },
 };
