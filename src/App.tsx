@@ -11,6 +11,7 @@ import CreateAssessment from "./pages/CreateAssessment.tsx";
 import CreateAssessmentV2 from "./pages/CreateAssessmentV2.tsx";
 import ReviewQP from "./pages/ReviewQP.tsx";
 import QuestionRepository from "./pages/QuestionRepository.tsx";
+import Repositories from "./pages/Repositories.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
