@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import MCQOptionsEditor from "@/components/question-repository/MCQOptionsEditor";
 import FillInBlankEditor from "@/components/question-repository/FillInBlankEditor";
 import MatchTheFollowingEditor, { type MatchPair } from "@/components/question-repository/MatchTheFollowingEditor";
+import AssertionReasoningEditor, { createDefaultPair, type AssertionReasonPair } from "@/components/question-repository/AssertionReasoningEditor";
 import { cn } from "@/lib/utils";
 
 interface AddItemsModalProps {
@@ -120,6 +121,7 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
   const [includeWordBank, setIncludeWordBank] = useState(false);
   const [matchPairs, setMatchPairs] = useState<MatchPair[]>(createDefaultPairs());
   const [trueFalseAnswer, setTrueFalseAnswer] = useState<boolean | null>(null);
+  const [arPairs, setArPairs] = useState<AssertionReasonPair[]>(() => [createDefaultPair()]);
 
   const selectedFolderName = useMemo(() => {
     const find = (folders: RepositoryFolder[]): string | null => {
@@ -135,10 +137,14 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
   const reset = () => {
     setQuestion(""); setScore("1.00"); setAnswerText(""); setCorrectAnswer("");
     setIncludeWordBank(false); setMatchPairs(createDefaultPairs()); setTrueFalseAnswer(null);
+    setArPairs([createDefaultPair()]);
   };
 
   const handleSubmit = () => {
-    if (!question.trim() && type !== "Matching") {
+    if (type === "Assertion Reasoning") {
+      const valid = arPairs.every((p) => p.assertion.trim() && p.reason.trim() && p.answer);
+      if (!valid) { toast.error("Each pair needs assertion, reason, and a selected answer."); return; }
+    } else if (!question.trim() && type !== "Matching") {
       toast.error("Question text is required."); return;
     }
     const item: SectionItem = {
@@ -150,6 +156,10 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
     if (type === "True / False" && trueFalseAnswer !== null) item.correctAnswer = trueFalseAnswer ? "True" : "False";
     if (type === "Short Answer" && answerText.trim()) item.correctAnswer = answerText.trim();
     if (type === "Fill in the Blank" && correctAnswer.trim()) item.correctAnswer = correctAnswer.trim();
+    if (type === "Assertion Reasoning") {
+      item.question = arPairs.map((p, i) => `Q${i + 1}: A: ${p.assertion} | R: ${p.reason}`).join("\n");
+      item.correctAnswer = arPairs.map((p, i) => `Q${i + 1}: ${p.answer}`).join(", ");
+    }
     onAddItem(item);
     reset();
     toast.success(`Item created and saved to "${selectedFolderName}".`);
@@ -189,6 +199,9 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
     }
     if (type === "Matching") {
       return <MatchTheFollowingEditor pairs={matchPairs} onChange={setMatchPairs} />;
+    }
+    if (type === "Assertion Reasoning") {
+      return <AssertionReasoningEditor pairs={arPairs} onPairsChange={setArPairs} />;
     }
     return (
       <div className="space-y-3">
