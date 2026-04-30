@@ -23,36 +23,51 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const statusStyles: Record<AssessmentStatus, { chip: string; dot: string; accent: string }> = {
+const statusStyles: Record<
+  AssessmentStatus,
+  { chip: string; dot: string; halo: string; iconWrap: string; iconColor: string }
+> = {
   "Not yet started": {
-    chip: "bg-secondary text-muted-foreground border-border/60",
-    dot: "bg-muted-foreground/50",
-    accent: "bg-muted-foreground/30",
+    chip: "bg-muted/60 text-muted-foreground",
+    dot: "bg-muted-foreground/40",
+    halo: "from-muted/40 via-transparent to-transparent",
+    iconWrap: "bg-muted/70",
+    iconColor: "text-muted-foreground",
   },
   Draft: {
-    chip: "bg-warning/10 text-warning border-warning/20",
-    dot: "bg-warning",
-    accent: "bg-warning/60",
+    chip: "bg-warning/10 text-warning",
+    dot: "bg-warning/80",
+    halo: "from-warning/15 via-transparent to-transparent",
+    iconWrap: "bg-warning/10",
+    iconColor: "text-warning",
   },
   "Not yet received": {
-    chip: "bg-primary-soft text-primary border-primary/20",
-    dot: "bg-primary",
-    accent: "bg-primary/60",
+    chip: "bg-primary-soft text-primary",
+    dot: "bg-primary/80",
+    halo: "from-primary/15 via-transparent to-transparent",
+    iconWrap: "bg-primary-soft",
+    iconColor: "text-primary",
   },
   Reverted: {
-    chip: "bg-destructive/10 text-destructive border-destructive/20",
-    dot: "bg-destructive",
-    accent: "bg-destructive/60",
+    chip: "bg-destructive/10 text-destructive",
+    dot: "bg-destructive/80",
+    halo: "from-destructive/15 via-transparent to-transparent",
+    iconWrap: "bg-destructive/10",
+    iconColor: "text-destructive",
   },
   Accepted: {
-    chip: "bg-success/10 text-success border-success/20",
-    dot: "bg-success",
-    accent: "bg-success/60",
+    chip: "bg-success/10 text-success",
+    dot: "bg-success/80",
+    halo: "from-success/15 via-transparent to-transparent",
+    iconWrap: "bg-success/10",
+    iconColor: "text-success",
   },
   "Submitted to HM": {
-    chip: "bg-primary/10 text-primary border-primary/20",
-    dot: "bg-primary",
-    accent: "bg-primary/60",
+    chip: "bg-primary/10 text-primary",
+    dot: "bg-primary/80",
+    halo: "from-primary/15 via-transparent to-transparent",
+    iconWrap: "bg-primary/10",
+    iconColor: "text-primary",
   },
 };
 
@@ -83,22 +98,30 @@ export function AssessmentCard({ a }: { a: Assessment }) {
   const statusLabel = isHOD ? getHODLabel(a.status) : a.status;
 
   return (
-    <Card className="group relative overflow-hidden p-0 border border-border shadow-soft-xs hover:shadow-soft-sm hover:border-border transition-all rounded-2xl">
-      {/* Status accent bar */}
-      <div className={cn("absolute inset-x-0 top-0 h-0.5", styles.accent)} aria-hidden="true" />
+    <Card className="group relative overflow-hidden p-0 border border-border/60 bg-card hover:border-border hover:shadow-soft-sm transition-all duration-200 rounded-3xl">
+      {/* Soft status halo */}
+      <div
+        className={cn("pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b opacity-70", styles.halo)}
+        aria-hidden="true"
+      />
 
-      <div className="p-5 space-y-4">
+      <div className="relative p-5 space-y-4">
         {/* Header: icon + title + menu */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-start gap-3 min-w-0 flex-1">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft">
-              <FileText className="h-4.5 w-4.5 text-primary" />
+            <div
+              className={cn(
+                "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ring-1 ring-inset ring-border/40",
+                styles.iconWrap,
+              )}
+            >
+              <FileText className={cn("h-5 w-5", styles.iconColor)} />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-[14.5px] font-medium text-foreground leading-snug truncate">
+              <h3 className="text-[15px] font-medium text-foreground leading-snug truncate">
                 {a.title}
               </h3>
-              <div className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
                 <span className="font-medium text-foreground/70">{a.type}</span>
                 <span className="text-muted-foreground/40">•</span>
                 <span>{a.grade}</span>
@@ -113,12 +136,12 @@ export function AssessmentCard({ a }: { a: Assessment }) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="h-8 w-8 shrink-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuContent align="end" className="w-44 rounded-xl">
               <DropdownMenuItem><Eye className="h-4 w-4 mr-2" />View results</DropdownMenuItem>
               <DropdownMenuItem><Pencil className="h-4 w-4 mr-2" />Edit</DropdownMenuItem>
               <DropdownMenuItem><Copy className="h-4 w-4 mr-2" />Duplicate</DropdownMenuItem>
@@ -130,10 +153,10 @@ export function AssessmentCard({ a }: { a: Assessment }) {
         </div>
 
         {/* Status pill */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span
             className={cn(
-              "inline-flex items-center gap-1.5 text-xs font-medium px-2.5 h-6 rounded-full border",
+              "inline-flex items-center gap-1.5 text-[11.5px] font-medium px-2.5 h-6 rounded-full",
               styles.chip,
             )}
           >
@@ -150,20 +173,26 @@ export function AssessmentCard({ a }: { a: Assessment }) {
 
         {/* Quick stats */}
         {!isHOD && (
-          <div className="grid grid-cols-3 gap-2 rounded-xl bg-secondary/50 p-2.5">
+          <div className="flex items-stretch rounded-2xl bg-secondary/40 px-2 py-2">
             <Stat icon={<HelpCircle className="h-3 w-3" />} label="Questions" value={a.questions} />
+            <div className="w-px bg-border/60 mx-1" aria-hidden="true" />
             <Stat icon={<Layers className="h-3 w-3" />} label="Sections" value={a.sections} />
+            <div className="w-px bg-border/60 mx-1" aria-hidden="true" />
             <Stat icon={<Target className="h-3 w-3" />} label="Marks" value={a.totalMarks} />
           </div>
         )}
 
         {/* Footer dates */}
-        <div className="flex items-center justify-between pt-3 border-t border-border/70 text-xs text-muted-foreground">
+        <div className="flex items-center justify-between pt-3 border-t border-border/50 text-xs text-muted-foreground">
           <div className="inline-flex items-center gap-1.5">
             <CalendarIcon className="h-3 w-3" />
-            <span>Scheduled <span className="text-foreground/80 font-medium">{formatDate(a.scheduledAt)}</span></span>
+            <span>
+              Scheduled <span className="text-foreground/80 font-medium">{formatDate(a.scheduledAt)}</span>
+            </span>
           </div>
-          <span>Due <span className="text-foreground/80 font-medium">{formatDate(a.dueAt)}</span></span>
+          <span>
+            Due <span className="text-foreground/80 font-medium">{formatDate(a.dueAt)}</span>
+          </span>
         </div>
       </div>
     </Card>
@@ -180,12 +209,12 @@ function Stat({
   value: number;
 }) {
   return (
-    <div className="text-center">
+    <div className="flex-1 text-center">
       <div className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wide text-muted-foreground">
         {icon}
         {label}
       </div>
-      <div className="text-[15px] font-medium text-foreground tabular-nums">{value}</div>
+      <div className="text-[15px] font-medium text-foreground tabular-nums leading-tight">{value}</div>
     </div>
   );
 }
