@@ -68,10 +68,9 @@ export default function Dashboard() {
   const statusCounts: Record<AssessmentStatus | "All", number> = useMemo(
     () => ({
       All: assessments.length,
-      "Waiting for approval": assessments.filter((a) => a.status === "Waiting for approval").length,
-      Draft: drafts,
       "Submitted to teacher": review,
-      Reverted: reverted,
+      "Waiting for approval": drafts,
+      "Reverted for revision": reverted,
       Accepted: completed,
     }),
     [assessments, drafts, review, completed, reverted]
@@ -87,9 +86,8 @@ export default function Dashboard() {
 
   const filterOptions: (AssessmentStatus | "All")[] = [
     "All",
-    "Waiting for approval",
-    "Waiting for approval",
     "Submitted to teacher",
+    "Waiting for approval",
     "Reverted for revision",
     "Accepted",
   ];
