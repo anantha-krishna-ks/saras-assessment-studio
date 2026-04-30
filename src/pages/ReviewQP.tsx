@@ -25,6 +25,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { sampleQP } from "@/data/sampleQP";
+import { assessments } from "@/data/assessments";
 import { cn } from "@/lib/utils";
 
 export default function ReviewQP() {
