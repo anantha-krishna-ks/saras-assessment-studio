@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Lottie from "lottie-react";
 import emptyAnimation from "@/assets/empty-section-lottie.json";
-import { GripVertical, Trash2, GitBranch, Split, MoreHorizontal, CornerDownRight, Brain } from "lucide-react";
+import { GripVertical, Trash2, GitBranch, Split, MoreHorizontal, CornerDownRight } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
@@ -193,9 +193,8 @@ const QuestionRow = ({
         className="h-8 text-sm bg-transparent border-0 shadow-none focus-visible:ring-0 px-0"
       />
       {item.taxonomy && (
-        <div className="flex items-center gap-1 mt-0.5">
-          <Brain className="w-3 h-3 text-primary/70" aria-hidden="true" focusable="false" />
-          <span className="text-[10px] font-medium text-primary/80 uppercase tracking-wide">
+        <div className="mt-1">
+          <span className="inline-flex items-center text-[10px] font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-2 py-0.5 uppercase tracking-wide">
             {item.taxonomy}
           </span>
         </div>
