@@ -13,6 +13,7 @@ export interface Assessment {
   questions: number;
   sections: number;
   totalMarks: number;
+  taxonomy: string;
   reviewer?: string;
 }
 
@@ -30,6 +31,7 @@ export const assessments: Assessment[] = [
     questions: 24,
     sections: 4,
     totalMarks: 50,
+    taxonomy: "Bloom's",
     reviewer: "Mr. Rao",
   },
   {
@@ -45,6 +47,7 @@ export const assessments: Assessment[] = [
     questions: 15,
     sections: 3,
     totalMarks: 30,
+    taxonomy: "Bloom's",
   },
   {
     id: "a3",
@@ -59,6 +62,7 @@ export const assessments: Assessment[] = [
     questions: 30,
     sections: 5,
     totalMarks: 80,
+    taxonomy: "SOLO",
   },
   {
     id: "a4",
@@ -73,6 +77,7 @@ export const assessments: Assessment[] = [
     questions: 22,
     sections: 4,
     totalMarks: 50,
+    taxonomy: "Bloom's",
   },
   {
     id: "a5",
@@ -87,6 +92,7 @@ export const assessments: Assessment[] = [
     questions: 18,
     sections: 3,
     totalMarks: 30,
+    taxonomy: "Webb's DOK",
   },
   {
     id: "a7",
@@ -101,6 +107,7 @@ export const assessments: Assessment[] = [
     questions: 20,
     sections: 3,
     totalMarks: 40,
+    taxonomy: "Bloom's",
     reviewer: "Ms. Iyer",
   },
   {
@@ -116,5 +123,6 @@ export const assessments: Assessment[] = [
     questions: 40,
     sections: 6,
     totalMarks: 100,
+    taxonomy: "Bloom's",
   },
 ];
