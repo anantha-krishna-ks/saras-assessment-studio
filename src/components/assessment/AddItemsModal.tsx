@@ -31,6 +31,24 @@ interface AddItemsModalProps {
   onAddItems: (items: SectionItem[]) => void;
 }
 
+const TAXONOMY_LEVELS = ["Remember", "Understand", "Apply", "Analyze", "Evaluate", "Create"] as const;
+type TaxonomyLevel = (typeof TAXONOMY_LEVELS)[number];
+
+const TAXONOMY_STYLES: Record<TaxonomyLevel, string> = {
+  Remember: "bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300",
+  Understand: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300",
+  Apply: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
+  Analyze: "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300",
+  Evaluate: "bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300",
+  Create: "bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-500/15 dark:text-fuchsia-300",
+};
+
+function getTaxonomyForQuestion(id: string): TaxonomyLevel {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
+  return TAXONOMY_LEVELS[hash % TAXONOMY_LEVELS.length];
+}
+
 function countQuestions(folder: RepositoryFolder): number {
   let count = folder.questions.length;
   if (folder.children) for (const c of folder.children) count += countQuestions(c);
