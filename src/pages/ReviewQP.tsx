@@ -37,6 +37,7 @@ export default function ReviewQP() {
   const [draftComment, setDraftComment] = useState("");
   const [revertOpen, setRevertOpen] = useState(false);
   const [revertNote, setRevertNote] = useState("");
+  const [acceptOpen, setAcceptOpen] = useState(false);
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
   const commentCount = Object.values(comments).filter((c) => c.text.trim().length > 0).length;
@@ -67,8 +68,13 @@ export default function ReviewQP() {
   };
 
   const handleAccept = () => {
-    toast.success("Question paper accepted", {
-      description: `${qp.title} has been approved and is ready to be scheduled.`,
+    setAcceptOpen(true);
+  };
+
+  const confirmAccept = () => {
+    setAcceptOpen(false);
+    toast.success("Sent to HM for approval", {
+      description: `${qp.title} has been forwarded to the Head Master for final approval.`,
     });
     navigate("/dashboard");
   };
@@ -365,6 +371,31 @@ export default function ReviewQP() {
             <Button onClick={handleRevert}>
               <RotateCcw className="h-4 w-4 mr-2" />
               Send back for revision
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Accept confirmation dialog */}
+      <Dialog open={acceptOpen} onOpenChange={setAcceptOpen}>
+        <DialogContent className="rounded-2xl">
+          <DialogHeader>
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
+              <Check className="h-6 w-6 text-emerald-600" />
+            </div>
+            <DialogTitle className="text-center">Send for HM approval?</DialogTitle>
+            <DialogDescription className="text-center">
+              Once you accept, <span className="font-medium text-foreground">{qp.title}</span> will be forwarded to the
+              Head Master for final approval. You won't be able to make further edits until the HM responds.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center gap-2">
+            <Button variant="outline" onClick={() => setAcceptOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={confirmAccept} className="bg-primary hover:bg-primary-hover">
+              <Check className="h-4 w-4 mr-2" />
+              Send to HM
             </Button>
           </DialogFooter>
         </DialogContent>
