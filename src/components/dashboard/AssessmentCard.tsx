@@ -17,7 +17,6 @@ import {
   Pencil,
   Trash2,
   Layers,
-  Tags,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -83,11 +82,10 @@ export function AssessmentCard({ a }: { a: Assessment }) {
       </div>
 
       {!isHOD && (
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-border">
+        <div className="mt-4 grid grid-cols-3 gap-3 pt-4 border-t border-border">
           <Stat label="Questions" value={a.questions.toString()} />
           <Stat label="Sections" value={a.sections.toString()} icon={<Layers className="h-3 w-3" />} />
           <Stat label="Marks" value={a.totalMarks.toString()} />
-          <Stat label="Taxonomy" value={a.taxonomy} icon={<Tags className="h-3 w-3" />} />
         </div>
       )}
 
