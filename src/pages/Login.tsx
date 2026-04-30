@@ -120,58 +120,9 @@ export default function Login() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Role Select */}
-              <div className="space-y-1.5">
-                <Label className="text-sm font-medium text-foreground">
-                  Select your role
-                </Label>
-                <Select value={role} onValueChange={(v) => setRole(v as Role)}>
-                  <SelectTrigger className="h-[64px] rounded-2xl border border-border bg-card hover:border-primary/40 focus:border-primary transition-colors px-3 shadow-soft-xs">
-                    <SelectValue>
-                      <div className="flex items-center gap-3 text-left">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-soft text-primary">
-                          {activeRole.icon}
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium text-foreground">
-                            {activeRole.label}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            {activeRole.description}
-                          </div>
-                        </div>
-                      </div>
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="rounded-2xl">
-                    {roleOptions.map((r) => (
-                      <SelectItem
-                        key={r.id}
-                        value={r.id}
-                        className="rounded-xl py-2.5"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-soft text-primary">
-                            {r.icon}
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium text-foreground">
-                              {r.label}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {r.description}
-                            </div>
-                          </div>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email */}
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium text-foreground">
                   Email address
                 </Label>
@@ -183,7 +134,7 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@school.edu"
-                    className="h-12 pl-10 rounded-2xl bg-card border border-border text-foreground placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors"
+                    className="h-14 pl-10 rounded-2xl bg-card border border-border text-foreground placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors"
                     required
                   />
                 </div>
