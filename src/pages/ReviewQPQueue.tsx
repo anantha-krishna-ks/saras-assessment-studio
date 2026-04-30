@@ -216,7 +216,7 @@ export default function ReviewQPQueue() {
                 }}
                 className={cn(
                   "group relative overflow-hidden rounded-2xl border border-border/70 bg-card shadow-soft-xs flex flex-col",
-                  "hover:shadow-soft-md hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                  "hover:shadow-soft-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
                 )}
               >
                 {/* Top accent line */}
