@@ -324,7 +324,7 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
     const allQuestions = REPOSITORY_FOLDERS.flatMap((f) => collectQuestions(f));
     const items: SectionItem[] = allQuestions
       .filter((q) => selectedIds.has(q.id))
-      .map((q) => ({ id: crypto.randomUUID(), question: q.question, options: q.options, correctAnswer: q.correctAnswer, score: q.score, type: q.type }));
+      .map((q) => ({ id: crypto.randomUUID(), question: q.question, options: q.options, correctAnswer: q.correctAnswer, score: q.score, type: q.type, taxonomy: "Remember" }));
     onAddItems(items);
     setSelectedIds(new Set());
     onOpenChange(false);
