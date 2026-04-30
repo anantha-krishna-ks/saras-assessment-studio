@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import CreateAssessment from "./pages/CreateAssessment.tsx";
 import CreateAssessmentV2 from "./pages/CreateAssessmentV2.tsx";
 import ReviewQP from "./pages/ReviewQP.tsx";
+import ReviewQPQueue from "./pages/ReviewQPQueue.tsx";
 import QuestionRepository from "./pages/QuestionRepository.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -28,7 +29,7 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/create" element={<CreateAssessment />} />
               <Route path="/create-v2" element={<CreateAssessmentV2 />} />
-              <Route path="/review-qp" element={<ReviewQP />} />
+              <Route path="/review-qp" element={<ReviewQPQueue />} />
               <Route path="/review-qp/:id" element={<ReviewQP />} />
               <Route path="/question-repository" element={<QuestionRepository />} />
             </Route>
