@@ -68,8 +68,13 @@ export default function ReviewQP() {
   };
 
   const handleAccept = () => {
-    toast.success("Question paper accepted", {
-      description: `${qp.title} has been approved and is ready to be scheduled.`,
+    setAcceptOpen(true);
+  };
+
+  const confirmAccept = () => {
+    setAcceptOpen(false);
+    toast.success("Sent to HM for approval", {
+      description: `${qp.title} has been forwarded to the Head Master for final approval.`,
     });
     navigate("/dashboard");
   };
