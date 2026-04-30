@@ -141,7 +141,7 @@ export default function Login() {
               </div>
 
               {/* Password */}
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <Label htmlFor="password" className="text-sm font-medium text-foreground">
                     Password
@@ -161,7 +161,7 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
-                    className="h-12 pl-10 pr-10 rounded-2xl bg-card border border-border text-foreground placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors"
+                    className="h-14 pl-10 pr-10 rounded-2xl bg-card border border-border text-foreground placeholder:text-muted-foreground/70 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors"
                     required
                   />
                   <button
@@ -198,13 +198,13 @@ export default function Login() {
               <Button
                 type="submit"
                 size="lg"
-                className="group w-full h-12 text-[14px] shadow-soft-sm hover:shadow-soft-md"
+                className="group w-full h-14 text-[14px] shadow-soft-sm hover:shadow-soft-md"
               >
                 Sign In
                 <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
 
-              <p className="text-center text-sm text-muted-foreground pt-1">
+              <p className="text-center text-sm text-muted-foreground pt-2">
                 Need access?{" "}
                 <a className="text-primary font-medium hover:underline" href="#">
                   Contact your administrator
