@@ -48,6 +48,9 @@ export const assessments: Assessment[] = [
     sections: 3,
     totalMarks: 30,
     taxonomy: "Bloom's",
+  },
+  {
+    id: "a3",
     title: "Mid-term — English",
     type: "Mid-term",
     subject: "English",
@@ -75,6 +78,9 @@ export const assessments: Assessment[] = [
     sections: 4,
     totalMarks: 50,
     taxonomy: "Bloom's",
+  },
+  {
+    id: "a5",
     title: "Unit Test 2 — Biology",
     type: "Unit Test 2",
     subject: "Biology",
@@ -87,6 +93,9 @@ export const assessments: Assessment[] = [
     sections: 3,
     totalMarks: 30,
     taxonomy: "Webb's DOK",
+  },
+  {
+    id: "a7",
     title: "Unit Test 3 — History",
     type: "Unit Test 3",
     subject: "History",
