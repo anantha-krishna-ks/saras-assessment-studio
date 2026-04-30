@@ -85,14 +85,20 @@ export default function Dashboard() {
     [assessments, statusFilter]
   );
 
-  const filterOptions: (AssessmentStatus | "All")[] = [
-    "All",
-    "Not yet started",
-    "Draft",
-    "Not yet received",
-    "Reverted",
-    "Accepted",
-  ];
+  const isHOD = role === "HOD";
+
+  const filterOptions: (AssessmentStatus | "All")[] = isHOD
+    ? ["All", "Not yet received", "Draft", "Reverted", "Accepted"]
+    : ["All", "Not yet started", "Draft", "Not yet received", "Reverted", "Accepted"];
+
+  const hodLabelMap: Partial<Record<AssessmentStatus | "All", string>> = {
+    "Not yet received": "Submitted to teacher",
+    Draft: "Waiting for approval",
+    Reverted: "Reverted for revision",
+  };
+
+  const getFilterLabel = (opt: AssessmentStatus | "All") =>
+    isHOD ? hodLabelMap[opt] ?? opt : opt;
 
   const inboxFilter = useMemo(
     () =>
