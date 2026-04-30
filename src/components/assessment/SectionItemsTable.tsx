@@ -204,10 +204,15 @@ const QuestionRow = ({
         max={100}
       />
     </div>
-    <div className="flex justify-center min-w-0">
+    <div className="flex flex-col items-center gap-1 min-w-0">
       <span className="text-xs text-muted-foreground bg-muted/60 rounded-md px-2 py-1 truncate max-w-[110px]">
         {item.type}
       </span>
+      {item.taxonomy && (
+        <span className="text-[10px] font-medium text-primary bg-primary/10 border border-primary/20 rounded-md px-1.5 py-0.5 truncate max-w-[110px]">
+          {item.taxonomy}
+        </span>
+      )}
     </div>
     <div className="flex justify-center">
       <ItemActions
