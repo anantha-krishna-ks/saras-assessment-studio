@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Lottie from "lottie-react";
 import emptyAnimation from "@/assets/empty-section-lottie.json";
-import { GripVertical, Trash2, GitBranch, Split, MoreHorizontal, CornerDownRight, Brain } from "lucide-react";
+import { GripVertical, Trash2, GitBranch, Split, MoreHorizontal, CornerDownRight } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
