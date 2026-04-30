@@ -104,9 +104,7 @@ export default function Dashboard() {
     [isTeacher, gradeFilter, subjectFilter]
   );
 
-  const greeting = `Good ${
-    new Date().getHours() < 12 ? "morning" : new Date().getHours() < 18 ? "afternoon" : "evening"
-  }`;
+  const greeting = "Hello";
 
   return (
     <div className="space-y-8 animate-fade-in-up">
