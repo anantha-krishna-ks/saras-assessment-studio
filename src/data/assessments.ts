@@ -1,4 +1,8 @@
-export type AssessmentStatus = "Not yet started" | "Draft" | "Not yet received" | "Reverted" | "Accepted";
+export type AssessmentStatus =
+  | "Submitted to teacher"
+  | "Waiting for approval"
+  | "Reverted for revision"
+  | "Accepted";
 
 export interface Assessment {
   id: string;
@@ -23,7 +27,7 @@ export const assessments: Assessment[] = [
     type: "PA1",
     subject: "Mathematics",
     grade: "Grade 9",
-    status: "Not yet received",
+    status: "Submitted to teacher",
     createdAt: "2026-04-02",
     scheduledAt: "2026-05-04",
     dueAt: "2026-05-01",
@@ -38,7 +42,7 @@ export const assessments: Assessment[] = [
     type: "Unit Test 1",
     subject: "Physics",
     grade: "Grade 10",
-    status: "Draft",
+    status: "Waiting for approval",
     createdAt: "2026-04-15",
     scheduledAt: "2026-05-12",
     dueAt: "2026-05-08",
@@ -52,7 +56,7 @@ export const assessments: Assessment[] = [
     type: "Mid-term",
     subject: "English",
     grade: "Grade 9",
-    status: "Not yet started",
+    status: "Waiting for approval",
     createdAt: "2026-04-20",
     scheduledAt: "2026-06-10",
     dueAt: "2026-06-05",
@@ -80,7 +84,7 @@ export const assessments: Assessment[] = [
     type: "Unit Test 2",
     subject: "Biology",
     grade: "Grade 9",
-    status: "Not yet started",
+    status: "Waiting for approval",
     createdAt: "2026-04-22",
     scheduledAt: "2026-05-22",
     dueAt: "2026-05-18",
@@ -94,7 +98,7 @@ export const assessments: Assessment[] = [
     type: "Unit Test 3",
     subject: "History",
     grade: "Grade 9",
-    status: "Reverted",
+    status: "Reverted for revision",
     createdAt: "2026-04-18",
     scheduledAt: "2026-05-20",
     dueAt: "2026-05-15",
@@ -109,7 +113,7 @@ export const assessments: Assessment[] = [
     type: "Final Exam",
     subject: "Mathematics",
     grade: "Grade 10",
-    status: "Not yet started",
+    status: "Waiting for approval",
     createdAt: "2026-04-25",
     scheduledAt: "2026-06-28",
     dueAt: "2026-06-20",
