@@ -1,4 +1,5 @@
 import { Assessment, AssessmentStatus } from "@/data/assessments";
+import { useRole } from "@/context/RoleContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,6 +36,8 @@ function formatDate(d: string) {
 }
 
 export function AssessmentCard({ a }: { a: Assessment }) {
+  const { role } = useRole();
+  const isHOD = role === "HOD";
   return (
     <Card className="group p-5 border border-border shadow-soft-xs hover:shadow-soft-sm transition-shadow rounded-2xl">
       <div className="flex items-start justify-between gap-3">
@@ -78,11 +81,13 @@ export function AssessmentCard({ a }: { a: Assessment }) {
         <span className="text-sm text-muted-foreground">{a.subject}</span>
       </div>
 
-      <div className="mt-4 grid grid-cols-3 gap-3 pt-4 border-t border-border">
-        <Stat label="Questions" value={a.questions.toString()} />
-        <Stat label="Sections" value={a.sections.toString()} icon={<Layers className="h-3 w-3" />} />
-        <Stat label="Marks" value={a.totalMarks.toString()} />
-      </div>
+      {!isHOD && (
+        <div className="mt-4 grid grid-cols-3 gap-3 pt-4 border-t border-border">
+          <Stat label="Questions" value={a.questions.toString()} />
+          <Stat label="Sections" value={a.sections.toString()} icon={<Layers className="h-3 w-3" />} />
+          <Stat label="Marks" value={a.totalMarks.toString()} />
+        </div>
+      )}
 
       <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
         <div className="flex items-center gap-1.5">
