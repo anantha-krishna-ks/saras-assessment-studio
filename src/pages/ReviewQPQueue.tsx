@@ -50,8 +50,8 @@ const statusConfig: Record<
     accent: "before:bg-rose-500",
     icon: RotateCcw,
   },
-  Approved: {
-    label: "Approved",
+  Accepted: {
+    label: "Accepted",
     dot: "bg-emerald-500",
     pill: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
     accent: "before:bg-emerald-500",
@@ -64,7 +64,7 @@ const filters: ("All" | ReviewStatus)[] = [
   "Waiting for approval",
   "Submitted to teacher",
   "Reverted for revision",
-  "Approved",
+  "Accepted",
 ];
 
 export default function ReviewQPQueue() {
@@ -78,7 +78,7 @@ export default function ReviewQPQueue() {
       "Submitted to teacher": 0,
       "Waiting for approval": 0,
       "Reverted for revision": 0,
-      Approved: 0,
+      Accepted: 0,
     };
     reviewQueue.forEach((q) => (c[q.status] += 1));
     return c;
@@ -201,7 +201,7 @@ export default function ReviewQPQueue() {
           {filtered.map((qp) => {
             const cfg = statusConfig[qp.status];
             const StatusIcon = cfg.icon;
-            const canReview = qp.status !== "Approved";
+            const canReview = qp.status !== "Accepted";
             return (
               <Card
                 key={qp.id}

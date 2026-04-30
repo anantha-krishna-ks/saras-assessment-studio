@@ -2,7 +2,7 @@ export type ReviewStatus =
   | "Submitted to teacher"
   | "Waiting for approval"
   | "Reverted for revision"
-  | "Approved";
+  | "Accepted";
 
 export interface ReviewQPItem {
   id: string;
@@ -94,7 +94,7 @@ export const reviewQueue: ReviewQPItem[] = [
     totalMarks: 40,
     totalQuestions: 14,
     duration: "1h 30m",
-    status: "Approved",
+    status: "Accepted",
   },
   {
     id: "qp-006",
