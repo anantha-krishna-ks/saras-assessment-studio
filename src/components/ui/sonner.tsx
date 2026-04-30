@@ -12,6 +12,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
       position="top-right"
+      closeButton
       icons={{
         success: <CheckCircle2 className="h-5 w-5 text-emerald-500" strokeWidth={2.25} />,
         error: <XCircle className="h-5 w-5 text-red-500" strokeWidth={2.25} />,
@@ -32,7 +33,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           info: "before:bg-sky-500",
           default: "before:bg-primary",
           closeButton:
-            "!bg-background !border-border/60 !text-muted-foreground hover:!text-foreground",
+            "!left-auto !right-3 !top-3 !translate-x-0 !translate-y-0 !h-6 !w-6 !rounded-full !bg-background !border-border/60 !text-muted-foreground hover:!text-foreground hover:!bg-muted opacity-0 group-hover:opacity-100 transition-opacity",
         },
       }}
       {...props}
