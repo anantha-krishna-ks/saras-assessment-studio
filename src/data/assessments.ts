@@ -13,6 +13,7 @@ export interface Assessment {
   questions: number;
   sections: number;
   totalMarks: number;
+  taxonomy: string;
   reviewer?: string;
 }
 
