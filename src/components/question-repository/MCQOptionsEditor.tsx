@@ -148,7 +148,7 @@ const MCQOptionsEditor = () => {
             <button
               onClick={() => handleToggleCorrect(opt.id)}
               className={cn(
-                "shrink-0 w-7 h-7 rounded-md border-2 flex items-center justify-center text-xs font-bold transition-colors",
+                "shrink-0 w-7 h-7 rounded-md border-2 flex items-center justify-center text-xs font-medium transition-colors",
                 opt.isCorrect
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-muted-foreground/30 text-muted-foreground hover:border-primary/50"

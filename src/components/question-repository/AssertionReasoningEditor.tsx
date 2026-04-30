@@ -66,7 +66,7 @@ const AssertionReasoningEditor = ({ pairs, onPairsChange }: Props) => {
       <ul className="grid grid-cols-2 gap-2">
         {FIXED_OPTIONS.map((opt) => (
           <li key={opt.label} className="flex items-start gap-2 rounded-md border border-border bg-muted/40 px-3 py-2 text-sm text-foreground leading-relaxed">
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0 mt-0.5">
+            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-medium shrink-0 mt-0.5">
               {opt.label}
             </span>
             <span>{opt.text}</span>
@@ -76,7 +76,7 @@ const AssertionReasoningEditor = ({ pairs, onPairsChange }: Props) => {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <Label className="text-sm font-semibold text-foreground">Question Pairs</Label>
+          <Label className="text-sm font-medium text-foreground">Question Pairs</Label>
           <Button
             type="button"
             variant="outline"
@@ -102,9 +102,9 @@ const AssertionReasoningEditor = ({ pairs, onPairsChange }: Props) => {
                 >
                   <div className="flex items-center gap-2">
                     <ChevronDown className={cn("w-4 h-4 text-foreground transition-transform duration-200", !isOpen && "-rotate-90")} />
-                    <span className="text-sm font-semibold text-foreground">Q{index + 1}</span>
+                    <span className="text-sm font-medium text-foreground">Q{index + 1}</span>
                     {pair.answer && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                         Ans: {pair.answer}
                       </span>
                     )}
@@ -161,7 +161,7 @@ const AssertionReasoningEditor = ({ pairs, onPairsChange }: Props) => {
                             >
                               {pair.answer ? (
                                 <span className="flex items-start gap-2 flex-1 min-w-0">
-                                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0 mt-0.5">
+                                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-medium shrink-0 mt-0.5">
                                     {pair.answer}
                                   </span>
                                   <span className="text-sm text-foreground leading-relaxed whitespace-normal break-words">
@@ -187,7 +187,7 @@ const AssertionReasoningEditor = ({ pairs, onPairsChange }: Props) => {
                                       }
                                       className={cn("w-full text-left flex items-start gap-2 rounded-sm px-2 py-2 text-sm hover:bg-accent transition-colors", selected && "bg-accent")}
                                     >
-                                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0 mt-0.5">
+                                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-medium shrink-0 mt-0.5">
                                         {opt.label}
                                       </span>
                                       <span className="text-sm text-foreground leading-relaxed whitespace-normal break-words flex-1">

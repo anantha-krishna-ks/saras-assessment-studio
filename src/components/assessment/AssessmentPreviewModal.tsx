@@ -47,17 +47,17 @@ const getSubQuestionLabel = (index: number, style: SectionItem["subQuestionStyle
 
 const QuestionPreview = ({ item, label }: { item: SectionItem; label: string }) => (
   <div className="flex gap-3 break-inside-avoid">
-    <span className="w-10 shrink-0 text-right font-semibold">{label}</span>
+    <span className="w-10 shrink-0 text-right font-medium">{label}</span>
     <div className="flex-1 min-w-0">
       <div className="flex justify-between gap-4">
         <p className="whitespace-pre-line">{item.question || "Untitled question"}</p>
-        <span className="font-semibold shrink-0">[{item.score || 0}]</span>
+        <span className="font-medium shrink-0">[{item.score || 0}]</span>
       </div>
       {item.options && item.options.length > 0 && (
         <div className="grid grid-cols-2 gap-x-10 gap-y-1 mt-2 pl-6">
           {item.options.map((option, index) => (
             <p key={`${item.id}-option-${index}`}>
-              <span className="font-semibold mr-3">{String.fromCharCode(65 + index)}.</span>
+              <span className="font-medium mr-3">{String.fromCharCode(65 + index)}.</span>
               {option}
             </p>
           ))}
@@ -68,10 +68,10 @@ const QuestionPreview = ({ item, label }: { item: SectionItem; label: string }) 
           {item.subItems.map((subItem, index) => (
             <div key={subItem.id} className="flex justify-between gap-4">
               <p>
-                <span className="font-semibold mr-2">{getSubQuestionLabel(index, item.subQuestionStyle)}</span>
+                <span className="font-medium mr-2">{getSubQuestionLabel(index, item.subQuestionStyle)}</span>
                 {subItem.question || "Untitled sub-question"}
               </p>
-              <span className="font-semibold shrink-0">[{subItem.score || 0}]</span>
+              <span className="font-medium shrink-0">[{subItem.score || 0}]</span>
             </div>
           ))}
         </div>
@@ -172,7 +172,7 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
 
         <div className="flex items-center justify-between px-5 py-3 border-b bg-muted/30 shrink-0">
           <div>
-            <h2 className="text-base font-semibold text-foreground">Assessment Preview</h2>
+            <h2 className="text-base font-medium text-foreground">Assessment Preview</h2>
             <p className="text-xs text-muted-foreground">Review the generated paper before publishing</p>
           </div>
           <div className="flex items-center gap-2">
@@ -214,8 +214,8 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
             style={{ fontFamily: "'Times New Roman', Times, serif", lineHeight: 1.55, fontSize: "14px" }}
           >
             <div className="text-center">
-              <h1 className="text-xl font-bold tracking-wide uppercase">{data.schoolName}</h1>
-              <h2 className="text-base font-semibold mt-1 uppercase">{data.examTitle || "ASSESSMENT PREVIEW"}</h2>
+              <h1 className="text-xl font-medium tracking-wide uppercase">{data.schoolName}</h1>
+              <h2 className="text-base font-medium mt-1 uppercase">{data.examTitle || "ASSESSMENT PREVIEW"}</h2>
             </div>
 
             <div className="flex items-start justify-between mt-4 gap-4">
@@ -233,7 +233,7 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
             <hr className="border-t border-black my-3" />
 
             <div className="text-sm">
-              <p className="italic font-semibold">General Instructions:</p>
+              <p className="italic font-medium">General Instructions:</p>
               <ol className="list-[lower-roman] pl-6 mt-1 space-y-0.5">
                 {(instructionLines.length ? instructionLines : ["Answer all questions as instructed."]).map((ins, i) => (
                   <li key={i}>{ins}</li>
@@ -244,8 +244,8 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
             {data.sections.map((section) => (
               <div key={section.id} className="mt-5">
                 <div className="text-center">
-                  <h3 className="font-bold underline">SECTION - {section.label}</h3>
-                  {section.description && <p className="text-sm font-semibold">{section.description}</p>}
+                  <h3 className="font-medium underline">SECTION - {section.label}</h3>
+                  {section.description && <p className="text-sm font-medium">{section.description}</p>}
                 </div>
 
                 <div className="mt-4 space-y-4 text-sm">
@@ -259,7 +259,7 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
                         <>
                           <div className="flex items-center gap-3 px-10" aria-label="OR divider">
                             <span className="h-px flex-1 bg-current opacity-50" />
-                            <span className="font-bold tracking-wide">OR</span>
+                            <span className="font-medium tracking-wide">OR</span>
                             <span className="h-px flex-1 bg-current opacity-50" />
                           </div>
                           <QuestionPreview item={item.orItem} label={`${index + 1}. B`} />

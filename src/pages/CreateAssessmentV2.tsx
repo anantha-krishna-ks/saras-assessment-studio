@@ -87,7 +87,7 @@ export default function CreateAssessmentV2() {
           <ChevronLeft className="w-5 h-5" />
         </Button>
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-semibold text-foreground truncate">
+          <h1 className="text-xl font-medium text-foreground truncate">
             {ctx.title ?? "Create Assessment"}
           </h1>
           <div className="flex flex-wrap items-center gap-2 mt-1">

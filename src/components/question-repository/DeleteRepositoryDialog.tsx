@@ -36,12 +36,12 @@ const DeleteRepositoryDialog = ({
             <AlertDialogTitle className="text-base">Delete Repository</AlertDialogTitle>
             <AlertDialogDescription className="text-sm text-center">
               Are you sure you want to delete{" "}
-              <span className="font-semibold text-foreground">{repositoryName}</span>? This will
+              <span className="font-medium text-foreground">{repositoryName}</span>? This will
               permanently remove the repository
               {questionCount > 0 && (
                 <>
                   {" "}and all{" "}
-                  <span className="font-semibold text-foreground">{questionCount}</span> question
+                  <span className="font-medium text-foreground">{questionCount}</span> question
                   {questionCount !== 1 ? "s" : ""} within it
                 </>
               )}

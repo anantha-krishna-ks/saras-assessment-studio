@@ -88,7 +88,7 @@ const FillInBlankEditor = ({
           <div className="flex items-center gap-3">
             {blanks.length > 0 ? (
               <div className="flex items-center gap-1.5">
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-medium">
                   {blanks.length}
                 </span>
                 <span className="text-xs text-muted-foreground">

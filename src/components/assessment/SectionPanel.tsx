@@ -245,11 +245,11 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold transition-colors ${isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-medium transition-colors ${isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
                         {String(idx + 1).padStart(2, "0")}
                       </div>
                       <div className="flex flex-col">
-                        <span className={`text-[13px] font-semibold leading-tight truncate max-w-[80px] ${isActive ? "text-primary" : "text-foreground"}`}>
+                        <span className={`text-[13px] font-medium leading-tight truncate max-w-[80px] ${isActive ? "text-primary" : "text-foreground"}`}>
                           {sec.label}
                         </span>
                       </div>
@@ -280,11 +280,11 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="flex-1 rounded-lg bg-muted/50 px-2.5 py-1.5 text-center">
-                    <span className="text-sm font-semibold text-foreground leading-none">{String(secItems).padStart(2, "0")}</span>
+                    <span className="text-sm font-medium text-foreground leading-none">{String(secItems).padStart(2, "0")}</span>
                     <p className="text-[9px] text-muted-foreground font-medium mt-0.5">Items</p>
                   </div>
                   <div className="flex-1 rounded-lg bg-muted/50 px-2.5 py-1.5 text-center">
-                    <span className="text-sm font-semibold text-foreground leading-none">{String(secScore).padStart(2, "0")}</span>
+                    <span className="text-sm font-medium text-foreground leading-none">{String(secScore).padStart(2, "0")}</span>
                     <p className="text-[9px] text-muted-foreground font-medium mt-0.5">Score</p>
                   </div>
                 </div>
@@ -302,7 +302,7 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1.5">
                 <div className="w-1 h-5 rounded-full bg-primary" />
-                <span className="text-sm font-semibold text-foreground">Section {activeSection.label}</span>
+                <span className="text-sm font-medium text-foreground">Section {activeSection.label}</span>
               </div>
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 <span>Items{" "}

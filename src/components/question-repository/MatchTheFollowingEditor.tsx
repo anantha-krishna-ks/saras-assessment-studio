@@ -83,7 +83,7 @@ const DraggableInputList = ({
 
   return (
     <div className="space-y-2 flex-1 min-w-0">
-      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+      <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
         {label}
       </span>
       <div className="space-y-1.5">
@@ -104,7 +104,7 @@ const DraggableInputList = ({
                 ${overIdx === i && dragIdx !== i ? "ring-2 ring-primary/30" : ""}`}
             >
               <GripVertical className="w-3.5 h-3.5 shrink-0 cursor-grab active:cursor-grabbing text-muted-foreground/40 group-hover:text-muted-foreground/70 mt-1.5" />
-              <span className="text-[11px] font-bold text-muted-foreground/50 shrink-0 w-4 text-center select-none mt-1.5">
+              <span className="text-[11px] font-medium text-muted-foreground/50 shrink-0 w-4 text-center select-none mt-1.5">
                 {badge}
               </span>
               <AutoTextarea

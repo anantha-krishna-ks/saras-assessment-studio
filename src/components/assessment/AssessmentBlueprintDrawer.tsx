@@ -55,21 +55,21 @@ const AssessmentBlueprintDrawer = ({ chapters, sections }: AssessmentBlueprintDr
           <section className="grid grid-cols-3 gap-3" aria-label="Blueprint totals">
             <div className="rounded-lg border border-border bg-card p-3">
               <p className="text-xs font-medium text-muted-foreground">Chapters</p>
-              <p className="mt-1 text-2xl font-semibold text-foreground">{chapters.length}</p>
+              <p className="mt-1 text-2xl font-medium text-foreground">{chapters.length}</p>
             </div>
             <div className="rounded-lg border border-border bg-card p-3">
               <p className="text-xs font-medium text-muted-foreground">Sections</p>
-              <p className="mt-1 text-2xl font-semibold text-foreground">{sections.length}</p>
+              <p className="mt-1 text-2xl font-medium text-foreground">{sections.length}</p>
             </div>
             <div className="rounded-lg border border-border bg-card p-3">
               <p className="text-xs font-medium text-muted-foreground">Marks</p>
-              <p className="mt-1 text-2xl font-semibold text-foreground">{totalMarks}</p>
+              <p className="mt-1 text-2xl font-medium text-foreground">{totalMarks}</p>
             </div>
           </section>
 
           <section className="space-y-3" aria-label="Selected chapters">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-foreground">Selected Chapters</h3>
+              <h3 className="text-sm font-medium text-foreground">Selected Chapters</h3>
               <span className="text-xs text-muted-foreground">Chapter-wise total</span>
             </div>
             <div className="overflow-hidden rounded-lg border border-border bg-card">
@@ -79,7 +79,7 @@ const AssessmentBlueprintDrawer = ({ chapters, sections }: AssessmentBlueprintDr
                   return (
                     <div key={chapter} className="grid grid-cols-[1fr_72px] items-center border-b border-border px-3 py-2.5 last:border-b-0">
                       <span className="truncate text-sm text-foreground">{chapter}</span>
-                      <span className="text-right text-sm font-semibold text-primary">{marks}</span>
+                      <span className="text-right text-sm font-medium text-primary">{marks}</span>
                     </div>
                   );
                 })
@@ -91,7 +91,7 @@ const AssessmentBlueprintDrawer = ({ chapters, sections }: AssessmentBlueprintDr
 
           <section className="space-y-3" aria-label="Section marks distribution">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-foreground">Sections Included</h3>
+              <h3 className="text-sm font-medium text-foreground">Sections Included</h3>
               <span className="text-xs text-muted-foreground">Marks per section</span>
             </div>
             <div className="space-y-2">
@@ -99,12 +99,12 @@ const AssessmentBlueprintDrawer = ({ chapters, sections }: AssessmentBlueprintDr
                 <div key={section.id} className="rounded-lg border border-border bg-card p-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold text-foreground">Section {section.label}</p>
+                      <p className="text-sm font-medium text-foreground">Section {section.label}</p>
                       <p className="mt-0.5 truncate text-xs text-muted-foreground">
                         {section.description || `${section.itemCount} item${section.itemCount !== 1 ? "s" : ""}`}
                       </p>
                     </div>
-                    <span className="rounded-md bg-primary/10 px-2.5 py-1 text-sm font-semibold text-primary">
+                    <span className="rounded-md bg-primary/10 px-2.5 py-1 text-sm font-medium text-primary">
                       {section.marks} marks
                     </span>
                   </div>
