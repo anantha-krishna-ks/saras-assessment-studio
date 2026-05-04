@@ -443,6 +443,34 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={renameModalOpen} onOpenChange={(open) => { setRenameModalOpen(open); if (!open) setRenameTargetId(null); }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Rename section</DialogTitle>
+            <DialogDescription>Update the label shown for this section.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <label htmlFor="renameSectionInput" className="text-sm font-medium text-foreground">
+              Section name <span className="text-destructive">*</span>
+            </label>
+            <Input
+              id="renameSectionInput"
+              value={renameValue}
+              autoFocus
+              onChange={(e) => setRenameValue(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); commitRenameModal(); } }}
+              placeholder="e.g. A, Section 1, Reading…"
+              autoComplete="off"
+              maxLength={50}
+            />
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setRenameModalOpen(false)}>Cancel</Button>
+            <Button type="button" onClick={commitRenameModal} disabled={!renameValue.trim()}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
