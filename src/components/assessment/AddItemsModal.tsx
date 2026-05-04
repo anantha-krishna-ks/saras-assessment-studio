@@ -429,7 +429,7 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
                         ${selectedIds.has(q.id) ? "bg-primary/[0.04]" : "hover:bg-muted/20"}`}
                       onClick={() => toggleSelect(q.id)}
                     >
-                      <div className="flex justify-center pt-0.5">
+                      <div className="flex justify-center pt-0.5" onClick={(e) => e.stopPropagation()}>
                         <Checkbox checked={selectedIds.has(q.id)} onCheckedChange={() => toggleSelect(q.id)} />
                       </div>
                       <span className="text-sm text-muted-foreground text-center pt-0.5 tabular-nums">{i + 1}</span>
