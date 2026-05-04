@@ -56,6 +56,9 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
   const [addItemsOpen, setAddItemsOpen] = useState(false);
   const [makeSubOpen, setMakeSubOpen] = useState(false);
   const [parentQuestion, setParentQuestion] = useState("");
+  const [renameModalOpen, setRenameModalOpen] = useState(false);
+  const [renameTargetId, setRenameTargetId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
   const editInputRef = useRef<HTMLInputElement>(null);
 
   const activeSection = sections.find((s) => s.id === activeSectionId) ?? null;
@@ -91,9 +94,20 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
 
   const handleRenameSection = useCallback((sectionId: string) => {
     const sec = sections.find((s) => s.id === sectionId); if (!sec) return;
-    setEditingId(sectionId); setEditingLabel(sec.label);
-    setTimeout(() => editInputRef.current?.focus(), 50);
+    setRenameTargetId(sectionId);
+    setRenameValue(sec.label);
+    setRenameModalOpen(true);
   }, [sections]);
+
+  const commitRenameModal = useCallback(() => {
+    if (!renameTargetId) return;
+    const trimmed = renameValue.trim();
+    if (!trimmed) { toast.error("Section name cannot be empty."); return; }
+    onChange(sections.map((s) => s.id === renameTargetId ? { ...s, label: trimmed } : s));
+    setRenameModalOpen(false);
+    setRenameTargetId(null);
+    toast.success("Section renamed.");
+  }, [renameTargetId, renameValue, sections, onChange]);
 
   const commitRename = useCallback(() => {
     if (!editingId || !editingLabel.trim()) { setEditingId(null); return; }
@@ -426,6 +440,34 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setMakeSubOpen(false)}>Cancel</Button>
             <Button type="button" onClick={handleCreateSubQuestionGroup}>Add Sub-Questions</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={renameModalOpen} onOpenChange={(open) => { setRenameModalOpen(open); if (!open) setRenameTargetId(null); }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Rename section</DialogTitle>
+            <DialogDescription>Update the label shown for this section.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <label htmlFor="renameSectionInput" className="text-sm font-medium text-foreground">
+              Section name <span className="text-destructive">*</span>
+            </label>
+            <Input
+              id="renameSectionInput"
+              value={renameValue}
+              autoFocus
+              onChange={(e) => setRenameValue(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); commitRenameModal(); } }}
+              placeholder="e.g. A, Section 1, Reading…"
+              autoComplete="off"
+              maxLength={50}
+            />
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setRenameModalOpen(false)}>Cancel</Button>
+            <Button type="button" onClick={commitRenameModal} disabled={!renameValue.trim()}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
