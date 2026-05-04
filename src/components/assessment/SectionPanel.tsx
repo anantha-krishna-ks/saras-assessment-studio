@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useMemo } from "react";
-import { Shuffle, Trash2, Plus, MoreHorizontal, Pencil, Copy, X, Check, Tag, Split, GitBranch, FileText } from "lucide-react";
+import { Shuffle, Trash2, Plus, MoreHorizontal, Pencil, Copy, X, Check, Split, GitBranch, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
@@ -296,110 +296,104 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
 
       {/* Active Section Content */}
       {activeSection && (
-        <div className="space-y-3">
-          <div className="-mx-6 h-2 border-y border-border/80 bg-muted/30 shadow-[inset_0_2px_3px_hsl(var(--border)/0.45),inset_0_-2px_3px_hsl(var(--background)/0.9)]" />
-          {/* Section toolbar — responsive: stacks on small screens, inline on md+ */}
-          <div className="flex flex-col gap-3 px-1 py-2 md:flex-row md:items-center md:justify-between md:gap-4">
-            {/* Left: Section identity + stats */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 min-w-0">
-              <div className="flex items-center gap-1.5 min-w-0">
+        <div className="space-y-4">
+          <div className="-mx-6 h-px bg-border/70" />
+
+          {/* Section header — clean, minimal hierarchy */}
+          <div className="flex flex-col gap-3 px-1 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex items-center gap-2 min-w-0">
                 <div className="w-1 h-5 rounded-full bg-primary shrink-0" />
-                <span className="text-sm font-medium text-foreground truncate">
+                <h3 className="text-sm font-semibold text-foreground truncate">
                   Section {activeSection.label}
-                </span>
+                </h3>
               </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5">
-                  Items
-                  <span className="inline-flex items-center justify-center min-w-[24px] h-5 rounded bg-background border border-border font-medium text-foreground px-1 tabular-nums">
-                    {String(totalItems).padStart(2, "0")}
-                  </span>
-                </span>
-                <span className="text-border" aria-hidden="true">|</span>
-                <span className="inline-flex items-center gap-1.5">
-                  Score
-                  <span className="inline-flex items-center justify-center min-w-[24px] h-5 rounded bg-background border border-border font-medium text-foreground px-1 tabular-nums">
-                    {String(totalScore).padStart(2, "0")}
-                  </span>
-                </span>
+              <span className="text-border" aria-hidden="true">·</span>
+              <div className="flex items-center gap-3 text-xs text-muted-foreground tabular-nums">
+                <span><span className="font-medium text-foreground">{String(totalItems).padStart(2, "0")}</span> items</span>
+                <span><span className="font-medium text-foreground">{String(totalScore).padStart(2, "0")}</span> marks</span>
               </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button type="button"
+                    className="p-1 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted transition-colors"
+                    aria-label="Section options">
+                    <MoreHorizontal className="w-4 h-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-44">
+                  <DropdownMenuItem onClick={() => handleRenameSection(activeSection.id)}>
+                    <Pencil className="w-3.5 h-3.5 mr-2" /> Rename
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleShuffle} disabled={totalItems < 2}>
+                    <Shuffle className="w-3.5 h-3.5 mr-2" /> Shuffle items
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleRemoveSection(activeSection.id)}
+                    disabled={sections.length <= 1}
+                    className="text-destructive focus:text-destructive">
+                    <Trash2 className="w-3.5 h-3.5 mr-2" /> Delete section
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
-            {/* Right: Action groups */}
-            <div className="flex flex-wrap items-center gap-1 md:justify-end">
-              {/* Section-level actions */}
-              <div className="flex items-center gap-1">
-                <Button type="button" variant="ghost" size="sm"
-                  className="h-7 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
-                  onClick={() => handleRenameSection(activeSection.id)}>
-                  <Pencil className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Edit</span>
-                </Button>
-                <Button type="button" variant="ghost" size="sm"
-                  className="h-7 text-xs gap-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/5"
-                  onClick={() => handleRemoveSection(activeSection.id)} disabled={sections.length <= 1}>
-                  <Trash2 className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Delete</span>
-                </Button>
-                <div className="mx-1 h-5 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
-                <Button type="button" variant="ghost" size="sm"
-                  className="h-7 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
-                  onClick={handleShuffle} disabled={totalItems < 2}>
-                  <Shuffle className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Shuffle</span>
-                </Button>
-              </div>
+            <Button type="button" size="sm" className="h-8 text-xs gap-1.5 self-start sm:self-auto"
+              onClick={() => setAddItemsOpen(true)}>
+              <Plus className="w-3.5 h-3.5" /> Add Items
+            </Button>
+          </div>
 
-              {/* Bulk-selection actions */}
-              {selectedItems.size > 0 && (
-                <div className="flex items-center gap-1 rounded-md bg-primary/5 border border-primary/15 px-1 py-0.5">
-                  {canLinkOr && (
-                    <Button type="button" variant="ghost" size="sm"
-                      className="h-6 text-xs gap-1.5 text-primary hover:text-primary hover:bg-primary/10"
-                      onClick={handleLinkAsOr}>
-                      <Split className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Link as OR</span>
-                    </Button>
-                  )}
-                  {canMakeSub && (
-                    <Button type="button" variant="ghost" size="sm"
-                      className="h-6 text-xs gap-1.5 text-primary hover:text-primary hover:bg-primary/10"
-                      onClick={handleOpenMakeSubModal}>
-                      <GitBranch className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Make Sub-Q</span>
-                    </Button>
-                  )}
+          {/* Contextual bulk-action bar */}
+          {selectedItems.size > 0 && (
+            <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2 animate-in fade-in slide-in-from-top-1">
+              <span className="text-xs font-medium text-primary">
+                {selectedItems.size} selected
+              </span>
+              <div className="flex flex-wrap items-center gap-1">
+                {canLinkOr && (
                   <Button type="button" variant="ghost" size="sm"
-                    className="h-6 text-xs gap-1.5 text-destructive/80 hover:text-destructive hover:bg-destructive/10"
-                    onClick={handleDeleteSelected}>
-                    <Trash2 className="w-3.5 h-3.5" /> Delete ({selectedItems.size})
+                    className="h-7 text-xs gap-1.5 text-foreground hover:bg-primary/10"
+                    onClick={handleLinkAsOr}>
+                    <Split className="w-3.5 h-3.5" /> Link as OR
                   </Button>
-                </div>
-              )}
-
-              {/* Primary CTA */}
-              <Button type="button" size="sm" className="h-7 text-xs gap-1.5 ml-auto md:ml-1"
-                onClick={() => setAddItemsOpen(true)}>
-                <Tag className="w-3.5 h-3.5" /> Add Items
-              </Button>
+                )}
+                {canMakeSub && (
+                  <Button type="button" variant="ghost" size="sm"
+                    className="h-7 text-xs gap-1.5 text-foreground hover:bg-primary/10"
+                    onClick={handleOpenMakeSubModal}>
+                    <GitBranch className="w-3.5 h-3.5" /> Make Sub-Q
+                  </Button>
+                )}
+                <Button type="button" variant="ghost" size="sm"
+                  className="h-7 text-xs gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
+                  onClick={handleDeleteSelected}>
+                  <Trash2 className="w-3.5 h-3.5" /> Delete
+                </Button>
+                <button type="button" onClick={() => setSelectedItems(new Set())}
+                  className="ml-1 p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  aria-label="Clear selection">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div>
-            <InlineDescriptionPill
-              value={activeSection.description}
-              onChange={(val) => handleUpdateDescription(activeSection.id, val)}
-            />
-          </div>
+          <InlineDescriptionPill
+            value={activeSection.description}
+            onChange={(val) => handleUpdateDescription(activeSection.id, val)}
+          />
 
-          <div>
-            <SectionItemsTable
-              items={activeSection.items}
-              onUpdateItem={handleUpdateItem}
-              onRemoveItem={handleRemoveItem}
-              onReorder={handleReorder}
-              selectedIds={selectedItems}
-              onToggleSelect={toggleSelect}
-              onToggleAll={toggleAll}
-              onAddSubItem={handleAddSubItem}
-              onAddOrItem={handleAddOrItem}
-            />
-          </div>
+          <SectionItemsTable
+            items={activeSection.items}
+            onUpdateItem={handleUpdateItem}
+            onRemoveItem={handleRemoveItem}
+            onReorder={handleReorder}
+            selectedIds={selectedItems}
+            onToggleSelect={toggleSelect}
+            onToggleAll={toggleAll}
+            onAddSubItem={handleAddSubItem}
+            onAddOrItem={handleAddOrItem}
+          />
         </div>
       )}
 
