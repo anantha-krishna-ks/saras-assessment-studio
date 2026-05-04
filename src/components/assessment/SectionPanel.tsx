@@ -311,7 +311,10 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
       {/* Active Section Content */}
       {activeSection && (
         <div className="space-y-4">
-          <div className="-mx-6 h-px bg-border/70" />
+          <div
+            aria-hidden
+            className="-mx-6 h-2 bg-muted/30 border-y border-border/80 shadow-[inset_0_2px_3px_hsl(var(--border)/0.45),inset_0_-2px_3px_hsl(var(--background)/0.9)]"
+          />
 
           {/* Section header — clean, minimal hierarchy */}
           <div className="flex flex-col gap-3 px-1 sm:flex-row sm:items-center sm:justify-between">
