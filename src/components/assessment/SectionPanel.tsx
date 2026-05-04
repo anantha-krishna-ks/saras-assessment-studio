@@ -298,61 +298,83 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
       {activeSection && (
         <div className="space-y-3">
           <div className="-mx-6 h-2 border-y border-border/80 bg-muted/30 shadow-[inset_0_2px_3px_hsl(var(--border)/0.45),inset_0_-2px_3px_hsl(var(--background)/0.9)]" />
-          <div className="flex items-center justify-between px-1 py-2">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5">
-                <div className="w-1 h-5 rounded-full bg-primary" />
-                <span className="text-sm font-medium text-foreground">Section {activeSection.label}</span>
+          {/* Section toolbar — responsive: stacks on small screens, inline on md+ */}
+          <div className="flex flex-col gap-3 px-1 py-2 md:flex-row md:items-center md:justify-between md:gap-4">
+            {/* Left: Section identity + stats */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 min-w-0">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <div className="w-1 h-5 rounded-full bg-primary shrink-0" />
+                <span className="text-sm font-medium text-foreground truncate">
+                  Section {activeSection.label}
+                </span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <span>Items{" "}
-                  <span className="inline-flex items-center justify-center min-w-[24px] h-5 rounded bg-background border border-border font-medium text-foreground px-1">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="inline-flex items-center gap-1.5">
+                  Items
+                  <span className="inline-flex items-center justify-center min-w-[24px] h-5 rounded bg-background border border-border font-medium text-foreground px-1 tabular-nums">
                     {String(totalItems).padStart(2, "0")}
                   </span>
                 </span>
-                <span className="text-border">|</span>
-                <span>Score{" "}
-                  <span className="inline-flex items-center justify-center min-w-[24px] h-5 rounded bg-background border border-border font-medium text-foreground px-1">
+                <span className="text-border" aria-hidden="true">|</span>
+                <span className="inline-flex items-center gap-1.5">
+                  Score
+                  <span className="inline-flex items-center justify-center min-w-[24px] h-5 rounded bg-background border border-border font-medium text-foreground px-1 tabular-nums">
                     {String(totalScore).padStart(2, "0")}
                   </span>
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-1">
-              <Button type="button" variant="ghost" size="sm" className="h-7 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
-                onClick={() => handleRenameSection(activeSection.id)}>
-                <Pencil className="w-3.5 h-3.5" /> Edit
-              </Button>
-              <Button type="button" variant="ghost" size="sm" className="h-7 text-xs gap-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/5"
-                onClick={() => handleRemoveSection(activeSection.id)} disabled={sections.length <= 1}>
-                <Trash2 className="w-3.5 h-3.5" /> Delete
-              </Button>
-              <div className="mx-2 h-5 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
-              <Button type="button" variant="ghost" size="sm" className="h-7 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
-                onClick={handleShuffle} disabled={totalItems < 2}>
-                <Shuffle className="w-3.5 h-3.5" /> Shuffle
-              </Button>
+
+            {/* Right: Action groups */}
+            <div className="flex flex-wrap items-center gap-1 md:justify-end">
+              {/* Section-level actions */}
+              <div className="flex items-center gap-1">
+                <Button type="button" variant="ghost" size="sm"
+                  className="h-7 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
+                  onClick={() => handleRenameSection(activeSection.id)}>
+                  <Pencil className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Edit</span>
+                </Button>
+                <Button type="button" variant="ghost" size="sm"
+                  className="h-7 text-xs gap-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/5"
+                  onClick={() => handleRemoveSection(activeSection.id)} disabled={sections.length <= 1}>
+                  <Trash2 className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Delete</span>
+                </Button>
+                <div className="mx-1 h-5 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
+                <Button type="button" variant="ghost" size="sm"
+                  className="h-7 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
+                  onClick={handleShuffle} disabled={totalItems < 2}>
+                  <Shuffle className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Shuffle</span>
+                </Button>
+              </div>
+
+              {/* Bulk-selection actions */}
               {selectedItems.size > 0 && (
-                <>
+                <div className="flex items-center gap-1 rounded-md bg-primary/5 border border-primary/15 px-1 py-0.5">
                   {canLinkOr && (
-                    <Button type="button" variant="ghost" size="sm" className="h-7 text-xs gap-1.5 text-primary hover:text-primary hover:bg-primary/5"
+                    <Button type="button" variant="ghost" size="sm"
+                      className="h-6 text-xs gap-1.5 text-primary hover:text-primary hover:bg-primary/10"
                       onClick={handleLinkAsOr}>
-                      <Split className="w-3.5 h-3.5" /> Link as OR
+                      <Split className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Link as OR</span>
                     </Button>
                   )}
                   {canMakeSub && (
-                    <Button type="button" variant="ghost" size="sm" className="h-7 text-xs gap-1.5 text-primary hover:text-primary hover:bg-primary/5"
+                    <Button type="button" variant="ghost" size="sm"
+                      className="h-6 text-xs gap-1.5 text-primary hover:text-primary hover:bg-primary/10"
                       onClick={handleOpenMakeSubModal}>
-                      <GitBranch className="w-3.5 h-3.5" /> Make Sub-Q
+                      <GitBranch className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Make Sub-Q</span>
                     </Button>
                   )}
-                  <Button type="button" variant="ghost" size="sm" className="h-7 text-xs gap-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/5"
+                  <Button type="button" variant="ghost" size="sm"
+                    className="h-6 text-xs gap-1.5 text-destructive/80 hover:text-destructive hover:bg-destructive/10"
                     onClick={handleDeleteSelected}>
                     <Trash2 className="w-3.5 h-3.5" /> Delete ({selectedItems.size})
                   </Button>
-                </>
+                </div>
               )}
-              <Button type="button" size="sm" className="h-7 text-xs gap-1.5" onClick={() => setAddItemsOpen(true)}>
+
+              {/* Primary CTA */}
+              <Button type="button" size="sm" className="h-7 text-xs gap-1.5 ml-auto md:ml-1"
+                onClick={() => setAddItemsOpen(true)}>
                 <Tag className="w-3.5 h-3.5" /> Add Items
               </Button>
             </div>
