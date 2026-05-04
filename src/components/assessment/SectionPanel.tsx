@@ -94,9 +94,20 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
 
   const handleRenameSection = useCallback((sectionId: string) => {
     const sec = sections.find((s) => s.id === sectionId); if (!sec) return;
-    setEditingId(sectionId); setEditingLabel(sec.label);
-    setTimeout(() => editInputRef.current?.focus(), 50);
+    setRenameTargetId(sectionId);
+    setRenameValue(sec.label);
+    setRenameModalOpen(true);
   }, [sections]);
+
+  const commitRenameModal = useCallback(() => {
+    if (!renameTargetId) return;
+    const trimmed = renameValue.trim();
+    if (!trimmed) { toast.error("Section name cannot be empty."); return; }
+    onChange(sections.map((s) => s.id === renameTargetId ? { ...s, label: trimmed } : s));
+    setRenameModalOpen(false);
+    setRenameTargetId(null);
+    toast.success("Section renamed.");
+  }, [renameTargetId, renameValue, sections, onChange]);
 
   const commitRename = useCallback(() => {
     if (!editingId || !editingLabel.trim()) { setEditingId(null); return; }
