@@ -350,7 +350,7 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center rounded-full bg-muted/50 p-1 border border-border/60">
+            <div className="flex items-center rounded-full bg-muted/50 p-1 border border-primary/25 ring-1 ring-primary/10 shadow-sm">
               {([
                 { id: "repository" as const, label: "From Repository", icon: FileText },
                 { id: "create" as const, label: "Create New", icon: PlusCircle },
