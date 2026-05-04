@@ -56,6 +56,9 @@ const SectionPanel = ({ sections, onChange }: SectionPanelProps) => {
   const [addItemsOpen, setAddItemsOpen] = useState(false);
   const [makeSubOpen, setMakeSubOpen] = useState(false);
   const [parentQuestion, setParentQuestion] = useState("");
+  const [renameModalOpen, setRenameModalOpen] = useState(false);
+  const [renameTargetId, setRenameTargetId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
   const editInputRef = useRef<HTMLInputElement>(null);
 
   const activeSection = sections.find((s) => s.id === activeSectionId) ?? null;
