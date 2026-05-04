@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useMemo } from "react";
-import { Shuffle, Trash2, Plus, MoreHorizontal, Pencil, Copy, X, Check, Tag, Split, GitBranch, FileText } from "lucide-react";
+import { Shuffle, Trash2, Plus, MoreHorizontal, Pencil, Copy, X, Check, Split, GitBranch, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
