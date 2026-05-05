@@ -143,18 +143,20 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
     }
   }, [data.examTitle]);
 
-  const handleDownloadImage = useCallback(async () => {
+  const handleDownloadWord = useCallback(async () => {
     if (!paperRef.current) return;
-    setExporting("image");
+    setExporting("word");
     try {
-      const canvas = await html2canvas(paperRef.current, { scale: 2, backgroundColor: "#ffffff" });
+      const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>${data.examTitle}</title><style>body{font-family:'Times New Roman',serif;font-size:14px;line-height:1.55;color:#000;}h1,h2,h3{margin:0;}hr{border:none;border-top:1px solid #000;margin:8px 0;}img{height:80px;}</style></head><body>${paperRef.current.innerHTML}</body></html>`;
+      const blob = new Blob(["\ufeff", html], { type: "application/msword" });
       const link = document.createElement("a");
-      link.download = `${data.examTitle.replace(/\s+/g, "_")}.png`;
-      link.href = canvas.toDataURL("image/png");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${data.examTitle.replace(/\s+/g, "_")}.doc`;
       link.click();
-      toast.success("Image downloaded");
+      URL.revokeObjectURL(link.href);
+      toast.success("Word document downloaded");
     } catch {
-      toast.error("Failed to export image");
+      toast.error("Failed to export Word document");
     } finally {
       setExporting(null);
     }
