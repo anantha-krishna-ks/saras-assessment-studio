@@ -260,14 +260,6 @@ function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
           Icon: Clock,
         };
 
-  const initials = item.teacher
-    .replace(/^(Mr\.|Ms\.|Mrs\.|Dr\.)\s*/i, "")
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
   return (
     <Card className="overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft-xs hover:shadow-soft-md transition-shadow">
       {/* Top accent strip */}
