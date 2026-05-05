@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
@@ -7,6 +7,7 @@ import {
   Check,
   ClipboardList,
   Clock,
+  Eye,
   FileText,
   MessageSquarePlus,
   RotateCcw,
@@ -27,6 +28,8 @@ import {
 import { sampleQP } from "@/data/sampleQP";
 import { assessments } from "@/data/assessments";
 import { cn } from "@/lib/utils";
+import AssessmentPreviewModal from "@/components/assessment/AssessmentPreviewModal";
+import type { Section, ItemType } from "@/constants/assessmentSectionData";
 
 export default function ReviewQP() {
   const navigate = useNavigate();
