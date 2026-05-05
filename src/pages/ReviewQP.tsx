@@ -146,7 +146,7 @@ export default function ReviewQP() {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            className="rounded-xl bg-background"
+            className="rounded-full bg-background"
             onClick={() => setPreviewOpen(true)}
           >
             <Eye className="h-4 w-4 mr-2" />
@@ -154,14 +154,14 @@ export default function ReviewQP() {
           </Button>
           <Button
             variant="outline"
-            className="rounded-xl bg-background"
+            className="rounded-full bg-background"
             onClick={() => setRevertOpen(true)}
           >
             <RotateCcw className="h-4 w-4 mr-2" />
             Revert to teacher
           </Button>
           <Button
-            className="rounded-xl bg-primary hover:bg-primary-hover"
+            className="rounded-full bg-primary hover:bg-primary-hover"
             onClick={handleAccept}
           >
             <Check className="h-4 w-4 mr-2" />
@@ -345,14 +345,14 @@ export default function ReviewQP() {
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              className="rounded-xl bg-background"
+              className="rounded-full bg-background"
               onClick={() => setRevertOpen(true)}
             >
               <RotateCcw className="h-4 w-4 mr-2" />
               Revert
             </Button>
             <Button
-              className="rounded-xl bg-primary hover:bg-primary-hover"
+              className="rounded-full bg-primary hover:bg-primary-hover"
               onClick={handleAccept}
             >
               <Check className="h-4 w-4 mr-2" />
