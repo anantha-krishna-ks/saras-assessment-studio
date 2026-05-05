@@ -12,12 +12,15 @@ import { ArrowLeft, Send, ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-const testTypes = [
-  { value: "PA", label: "PA", full: "Periodic Assessment" },
-  { value: "Term Examination", label: "Term Examination", full: "Term Examination" },
-  { value: "Evaluation", label: "Evaluation", full: "Evaluation" },
-  { value: "Preparatory", label: "Preparatory", full: "Preparatory" },
-  { value: "Unit Test", label: "Unit Test", full: "Unit Test" },
+const testTypes: { value: string; full: string; hasNumber: boolean }[] = [
+  { value: "PA", full: "Periodic Assessment", hasNumber: true },
+  { value: "Term Examination", full: "Term Examination", hasNumber: true },
+  { value: "Evaluation", full: "Evaluation", hasNumber: true },
+  { value: "Preparatory", full: "Preparatory", hasNumber: true },
+  { value: "Unit Test", full: "Unit Test", hasNumber: true },
+  { value: "Pre-board", full: "Pre-board", hasNumber: false },
+  { value: "Mid-term", full: "Mid-term", hasNumber: false },
+  { value: "Final Exam", full: "Final Exam", hasNumber: false },
 ];
 const testNumbers = ["1", "2", "3", "4", "5", "6"];
 const subjects = ["Mathematics", "Physics", "Chemistry", "Biology", "English", "History"];
