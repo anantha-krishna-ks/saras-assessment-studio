@@ -12,12 +12,15 @@ import { ArrowLeft, Send, ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-const testTypes = [
-  { value: "PA", label: "PA", full: "Periodic Assessment" },
-  { value: "Term Examination", label: "Term Examination", full: "Term Examination" },
-  { value: "Evaluation", label: "Evaluation", full: "Evaluation" },
-  { value: "Preparatory", label: "Preparatory", full: "Preparatory" },
-  { value: "Unit Test", label: "Unit Test", full: "Unit Test" },
+const testTypes: { value: string; full: string; hasNumber: boolean }[] = [
+  { value: "PA", full: "Periodic Assessment", hasNumber: true },
+  { value: "Term Examination", full: "Term Examination", hasNumber: true },
+  { value: "Evaluation", full: "Evaluation", hasNumber: true },
+  { value: "Preparatory", full: "Preparatory", hasNumber: true },
+  { value: "Unit Test", full: "Unit Test", hasNumber: true },
+  { value: "Pre-board", full: "Pre-board", hasNumber: false },
+  { value: "Mid-term", full: "Mid-term", hasNumber: false },
+  { value: "Final Exam", full: "Final Exam", hasNumber: false },
 ];
 const testNumbers = ["1", "2", "3", "4", "5", "6"];
 const subjects = ["Mathematics", "Physics", "Chemistry", "Biology", "English", "History"];
@@ -91,38 +94,49 @@ export default function CreateAssessment() {
 
       <Card className="p-8 rounded-2xl border border-border shadow-soft-xs">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
-          <Field label="Type of Test" required>
-            <div className="flex items-stretch h-11 rounded-xl border border-input bg-background overflow-hidden focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-              <Select value={testType} onValueChange={(v) => { setTestType(v); setTestNumber(""); }}>
-                <SelectTrigger className="flex-1 h-full border-0 rounded-none focus:ring-0 focus:ring-offset-0 shadow-none">
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {testTypes.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>{t.full}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <div className="w-px bg-border" />
-              <Select value={testNumber} onValueChange={setTestNumber} disabled={!testType}>
-                <SelectTrigger className="w-24 h-full border-0 rounded-none focus:ring-0 focus:ring-offset-0 shadow-none bg-muted/40 disabled:opacity-60">
-                  <SelectValue placeholder="No." />
-                </SelectTrigger>
-                <SelectContent>
-                  {testNumbers.map((n) => (
-                    <SelectItem key={n} value={n}>
-                      {testType ? `${testType}-${n}` : n}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {testType && testNumber && (
-              <p className="text-xs text-muted-foreground mt-1.5">
-                Will be saved as <span className="font-medium text-foreground">{testType}-{testNumber}</span>
-              </p>
-            )}
-          </Field>
+          {(() => {
+            const selected = testTypes.find((t) => t.value === testType);
+            const showNumber = selected?.hasNumber ?? false;
+            return (
+              <Field label="Type of Test" required>
+                <div className="flex items-stretch h-11 rounded-xl border border-input bg-background overflow-hidden focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                  <Select value={testType} onValueChange={(v) => { setTestType(v); setTestNumber(""); }}>
+                    <SelectTrigger className="flex-1 h-full border-0 rounded-none focus:ring-0 focus:ring-offset-0 shadow-none">
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {testTypes.map((t) => (
+                        <SelectItem key={t.value} value={t.value}>{t.full}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {showNumber && (
+                    <>
+                      <div className="w-px bg-border" />
+                      <Select value={testNumber} onValueChange={setTestNumber}>
+                        <SelectTrigger className="w-24 h-full border-0 rounded-none focus:ring-0 focus:ring-offset-0 shadow-none bg-muted/40">
+                          <SelectValue placeholder="No." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {testNumbers.map((n) => (
+                            <SelectItem key={n} value={n}>{n}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </>
+                  )}
+                </div>
+                {testType && (showNumber ? testNumber : true) && (
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    Will be saved as{" "}
+                    <span className="font-medium text-foreground">
+                      {showNumber ? `${testType}-${testNumber}` : testType}
+                    </span>
+                  </p>
+                )}
+              </Field>
+            );
+          })()}
           <FieldSelect label="Class" required placeholder="Select class" options={classes} />
           <FieldSelect label="Subject" required placeholder="Select subject" options={subjects} />
 
