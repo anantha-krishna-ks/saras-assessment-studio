@@ -12,6 +12,7 @@ import CreateAssessmentV2 from "./pages/CreateAssessmentV2.tsx";
 import ReviewQP from "./pages/ReviewQP.tsx";
 import ReviewQPQueue from "./pages/ReviewQPQueue.tsx";
 import QuestionRepository from "./pages/QuestionRepository.tsx";
+import AssessmentTracker from "./pages/AssessmentTracker.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/review-qp" element={<ReviewQPQueue />} />
               <Route path="/review-qp/:id" element={<ReviewQP />} />
               <Route path="/question-repository" element={<QuestionRepository />} />
+              <Route path="/assessment-tracker" element={<AssessmentTracker />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
