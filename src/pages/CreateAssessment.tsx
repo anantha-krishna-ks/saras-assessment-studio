@@ -45,6 +45,8 @@ export default function CreateAssessment() {
   const [hours, setHours] = useState<number | "">(1);
   const [minutes, setMinutes] = useState<number | "">(30);
   const [selectedChapters, setSelectedChapters] = useState<string[]>([]);
+  const [testType, setTestType] = useState<string>("");
+  const [testNumber, setTestNumber] = useState<string>("");
 
   const toggleChapter = (chapter: string) => {
     setSelectedChapters((prev) =>
