@@ -203,7 +203,7 @@ export function InboxPanel({ showRequests = true, teacherView = false, filterAss
                       {a.title}
                     </div>
                     <div className="text-sm text-muted-foreground mt-0.5 truncate">
-                      {a.subject} ·{" "}
+                      {a.grade} · {a.subject} ·{" "}
                       {new Date(a.dueAt).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
