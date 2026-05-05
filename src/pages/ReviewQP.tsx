@@ -147,6 +147,14 @@ export default function ReviewQP() {
           <Button
             variant="outline"
             className="rounded-xl bg-background"
+            onClick={() => setPreviewOpen(true)}
+          >
+            <Eye className="h-4 w-4 mr-2" />
+            Preview
+          </Button>
+          <Button
+            variant="outline"
+            className="rounded-xl bg-background"
             onClick={() => setRevertOpen(true)}
           >
             <RotateCcw className="h-4 w-4 mr-2" />
