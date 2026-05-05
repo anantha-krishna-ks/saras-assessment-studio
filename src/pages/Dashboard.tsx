@@ -141,6 +141,16 @@ export default function Dashboard() {
               <FileSearch className="h-4 w-4 mr-2" />
               Review QP
             </Button>
+            {isHM && (
+              <Button
+                variant="outline"
+                className="bg-card hover:bg-secondary/60 border-border h-10 px-5"
+                onClick={() => navigate("/assessment-tracker")}
+              >
+                <ClipboardCheck className="h-4 w-4 mr-2" />
+                Assessment Tracker
+              </Button>
+            )}
             {!isHM && (
               <>
                 <span aria-hidden="true" className="h-7 w-px bg-border/80" />
