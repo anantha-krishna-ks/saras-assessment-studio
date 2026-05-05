@@ -32,7 +32,7 @@ const baseStages = (
     { key: "subCoordinatorReview", label: "QP with Sub-Coordinator for review" },
     { key: "subTeacherRework", label: "QP with Sub-Teacher for rework" },
     { key: "subCoordinatorApproved", label: "QP approved by Sub-Coordinator" },
-    { key: "hmApproved", label: "QP approved by HM" },
+    { key: "hmApproved", label: "QP approved by HM / HOD" },
     { key: "printing", label: "QP verified and sent for printing" },
   ];
   return defs.map((d) => ({
