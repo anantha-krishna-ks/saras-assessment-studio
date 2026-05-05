@@ -218,10 +218,10 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
               <h2 className="text-base font-medium mt-1 uppercase">{data.examTitle || "ASSESSMENT PREVIEW"}</h2>
             </div>
 
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end -mt-2">
               <img src={epsLogo} alt="School logo" className="h-20 w-auto object-contain" />
             </div>
-            <div className="flex items-start justify-between mt-2 gap-4">
+            <div className="flex items-start justify-between -mt-6 gap-4">
               <div className="text-sm space-y-1">
                 <p><strong>Class :</strong> {data.className || "—"}</p>
                 <p><strong>Subject :</strong> {data.subject || "—"}</p>
