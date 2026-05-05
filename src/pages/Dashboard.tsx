@@ -174,7 +174,7 @@ export default function Dashboard() {
                     <SelectValue placeholder="Select class" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="All">All grades</SelectItem>
+                    <SelectItem value="All">All classes</SelectItem>
                     {grades.map((g) => (
                       <SelectItem key={g} value={g}>
                         {g}
