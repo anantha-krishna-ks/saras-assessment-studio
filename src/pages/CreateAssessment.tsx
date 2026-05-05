@@ -89,7 +89,38 @@ export default function CreateAssessment() {
 
       <Card className="p-8 rounded-2xl border border-border shadow-soft-xs">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
-          <FieldSelect label="Type of Test" required placeholder="Select type of test" options={types} />
+          <Field label="Type of Test" required>
+            <div className="flex items-stretch h-11 rounded-xl border border-input bg-background overflow-hidden focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+              <Select value={testType} onValueChange={(v) => { setTestType(v); setTestNumber(""); }}>
+                <SelectTrigger className="flex-1 h-full border-0 rounded-none focus:ring-0 focus:ring-offset-0 shadow-none">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {testTypes.map((t) => (
+                    <SelectItem key={t.value} value={t.value}>{t.full}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="w-px bg-border" />
+              <Select value={testNumber} onValueChange={setTestNumber} disabled={!testType}>
+                <SelectTrigger className="w-24 h-full border-0 rounded-none focus:ring-0 focus:ring-offset-0 shadow-none bg-muted/40 disabled:opacity-60">
+                  <SelectValue placeholder="No." />
+                </SelectTrigger>
+                <SelectContent>
+                  {testNumbers.map((n) => (
+                    <SelectItem key={n} value={n}>
+                      {testType ? `${testType}-${n}` : n}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {testType && testNumber && (
+              <p className="text-xs text-muted-foreground mt-1.5">
+                Will be saved as <span className="font-medium text-foreground">{testType}-{testNumber}</span>
+              </p>
+            )}
+          </Field>
           <FieldSelect label="Class" required placeholder="Select class" options={classes} />
           <FieldSelect label="Subject" required placeholder="Select subject" options={subjects} />
 
