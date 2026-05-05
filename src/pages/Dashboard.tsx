@@ -244,6 +244,13 @@ export default function Dashboard() {
         </Card>
       )}
 
+      {isHM && (
+        <div>
+          <h2 className="text-[18px] text-foreground tracking-tight">Assessment Pipeline</h2>
+          <p className="text-sm text-muted-foreground">Snapshot of where every paper stands</p>
+        </div>
+      )}
+
       {/* Hero pastel stat tiles */}
       {isTeacher ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -363,6 +370,7 @@ export default function Dashboard() {
 
       {/* Assessments grid */}
 
+      {!isHM && (
       <div>
         <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
           <div>
