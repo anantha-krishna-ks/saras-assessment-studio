@@ -37,7 +37,7 @@ interface FolderNode {
 }
 
 const ACADEMIC_YEARS = ["2024-2025", "2025-2026", "2026-2027"];
-const GRADES = ["Grade 9", "Grade 10", "Grade 11", "Grade 12"];
+const GRADES = ["Class 9", "Class 10", "Class 11", "Class 12"];
 
 const INITIAL_FOLDERS: FolderNode[] = [
   { id: "mathematics", name: "Mathematics", count: 25, children: [] },
