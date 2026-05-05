@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
@@ -7,6 +7,7 @@ import {
   Check,
   ClipboardList,
   Clock,
+  Eye,
   FileText,
   MessageSquarePlus,
   RotateCcw,
@@ -27,6 +28,8 @@ import {
 import { sampleQP } from "@/data/sampleQP";
 import { assessments } from "@/data/assessments";
 import { cn } from "@/lib/utils";
+import AssessmentPreviewModal from "@/components/assessment/AssessmentPreviewModal";
+import type { Section, ItemType } from "@/constants/assessmentSectionData";
 
 export default function ReviewQP() {
   const navigate = useNavigate();
@@ -39,9 +42,39 @@ export default function ReviewQP() {
   const [revertOpen, setRevertOpen] = useState(false);
   const [revertNote, setRevertNote] = useState("");
   const [acceptOpen, setAcceptOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
   const commentCount = Object.values(comments).filter((c) => c.text.trim().length > 0).length;
+
+  const previewSections = useMemo<Section[]>(
+    () =>
+      qp.sections.map((sec, sIdx) => ({
+        id: `prev-${sIdx}`,
+        label: sec.name.replace(/^section\s*/i, "").trim() || sec.name,
+        description: sec.description,
+        items: sec.questions.map((q, qIdx) => ({
+          id: `prev-${sIdx}-${qIdx}`,
+          question: q.text,
+          options: q.options,
+          correctAnswer: q.answer,
+          score: q.marks,
+          type: (q.type === "MCQ" ? "Multiple Choice" : "Short Answer") as ItemType,
+        })),
+      })),
+    [qp.sections]
+  );
+
+  const previewData = {
+    schoolName: "EXCEL PUBLIC SCHOOL, MYSURU",
+    examTitle: qp.title.toUpperCase(),
+    className: qp.grade,
+    subject: qp.subject,
+    totalMarks: String(qp.totalMarks),
+    duration: qp.duration,
+    instructions: ["General Instructions:", ...qp.generalInstructions.map((l, i) => `${i + 1}. ${l}`)].join("\n"),
+    sections: previewSections,
+  };
 
   const formatTimestamp = (iso: string) =>
     new Date(iso).toLocaleString("en-GB", {
@@ -111,6 +144,14 @@ export default function ReviewQP() {
           Back to dashboard
         </Button>
         <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            className="rounded-xl bg-background"
+            onClick={() => setPreviewOpen(true)}
+          >
+            <Eye className="h-4 w-4 mr-2" />
+            Preview
+          </Button>
           <Button
             variant="outline"
             className="rounded-xl bg-background"
@@ -455,6 +496,8 @@ export default function ReviewQP() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AssessmentPreviewModal open={previewOpen} onOpenChange={setPreviewOpen} data={previewData} />
     </div>
   );
 }
