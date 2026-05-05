@@ -15,7 +15,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { RoleSwitcher } from "./RoleSwitcher";
 
-const roles: Role[] = ["HOD", "Teacher", "Admin"];
+const roles: Role[] = ["HOD", "Teacher", "HM"];
 
 export function Header() {
   const { role, setRole, user } = useRole();

@@ -32,6 +32,7 @@ export default function Dashboard() {
   const { role, user } = useRole();
   const navigate = useNavigate();
   const isTeacher = role === "Teacher";
+  const isHM = role === "HM";
 
   const [statusFilter, setStatusFilter] = useState<AssessmentStatus | "All">("All");
   const [gradeFilter, setGradeFilter] = useState<string>("All");
@@ -140,17 +141,15 @@ export default function Dashboard() {
               <FileSearch className="h-4 w-4 mr-2" />
               Review QP
             </Button>
-            <span
-              aria-hidden="true"
-              className="h-7 w-px bg-border/80"
-            />
-            <Button
-              className="h-10 px-5"
-              onClick={() => navigate("/create")}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Create Assessment
-            </Button>
+            {!isHM && (
+              <>
+                <span aria-hidden="true" className="h-7 w-px bg-border/80" />
+                <Button className="h-10 px-5" onClick={() => navigate("/create")}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Assessment
+                </Button>
+              </>
+            )}
           </div>
         )}
       </div>
@@ -243,6 +242,13 @@ export default function Dashboard() {
             </div>
           </div>
         </Card>
+      )}
+
+      {isHM && (
+        <div>
+          <h2 className="text-[18px] text-foreground tracking-tight">Assessment Pipeline</h2>
+          <p className="text-sm text-muted-foreground">Snapshot of where every paper stands</p>
+        </div>
       )}
 
       {/* Hero pastel stat tiles */}
@@ -364,6 +370,7 @@ export default function Dashboard() {
 
       {/* Assessments grid */}
 
+      {!isHM && (
       <div>
         <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
           <div>
@@ -438,6 +445,7 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+      )}
     </div>
   );
 }
