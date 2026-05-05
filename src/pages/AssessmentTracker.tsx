@@ -357,64 +357,112 @@ function Stepper({ stages }: { stages: TrackerStage[] }) {
   const groups = groupByPhase(stages);
 
   return (
-    <div className="space-y-4 lg:space-y-0 lg:flex lg:items-stretch lg:gap-3">
+    <div className="relative space-y-4 lg:space-y-0 lg:flex lg:items-stretch lg:gap-0">
       {groups.map((group, gIdx) => {
         const meta = phaseMeta[group.phase];
         const groupComplete = group.stages.every((s) => s.status === "complete");
         const groupActive = group.stages.some((s) => s.status === "current");
+        const nextGroup = groups[gIdx + 1];
+        const connectorDone =
+          groupComplete &&
+          nextGroup &&
+          nextGroup.stages.some((s) => s.status === "complete" || s.status === "current");
+        const isLastGroup = gIdx === groups.length - 1;
 
         return (
           <div
             key={group.phase + gIdx}
-            className={cn(
-              "relative rounded-2xl border bg-secondary/30 p-3.5 lg:flex-1 transition-colors",
-              groupComplete
-                ? "border-emerald-500/30 bg-emerald-500/5"
-                : groupActive
-                  ? "border-primary/30 bg-primary/5"
-                  : "border-border/70"
-            )}
+            className="relative lg:flex-1 lg:flex lg:items-stretch"
           >
-            {/* Phase header */}
-            <div className="flex items-center justify-between gap-2 mb-3">
-              <span
-                className={cn(
-                  "inline-flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-wider",
-                  groupComplete
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : groupActive
-                      ? "text-primary"
-                      : meta.tone
-                )}
-              >
+            <div
+              className={cn(
+                "relative rounded-2xl border bg-secondary/30 p-3.5 w-full transition-colors",
+                groupComplete
+                  ? "border-emerald-500/30 bg-emerald-500/5"
+                  : groupActive
+                    ? "border-primary/30 bg-primary/5"
+                    : "border-border/70"
+              )}
+            >
+              {/* Phase header */}
+              <div className="flex items-center justify-between gap-2 mb-3">
                 <span
                   className={cn(
-                    "h-1.5 w-1.5 rounded-full",
+                    "inline-flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-wider",
                     groupComplete
-                      ? "bg-emerald-500"
+                      ? "text-emerald-600 dark:text-emerald-400"
                       : groupActive
-                        ? "bg-primary animate-pulse"
-                        : "bg-current opacity-60"
+                        ? "text-primary"
+                        : meta.tone
                   )}
-                />
-                {meta.label}
-              </span>
-              <span className="text-[10px] text-muted-foreground tabular-nums">
-                {group.stages.filter((s) => s.status === "complete").length}/
-                {group.stages.length}
-              </span>
+                >
+                  <span
+                    className={cn(
+                      "h-1.5 w-1.5 rounded-full",
+                      groupComplete
+                        ? "bg-emerald-500"
+                        : groupActive
+                          ? "bg-primary animate-pulse"
+                          : "bg-current opacity-60"
+                    )}
+                  />
+                  {meta.label}
+                </span>
+                <span className="text-[10px] text-muted-foreground tabular-nums">
+                  {group.stages.filter((s) => s.status === "complete").length}/
+                  {group.stages.length}
+                </span>
+              </div>
+
+              {/* Stages within phase */}
+              <ol className="space-y-3">
+                {group.stages.map((s, idx) => (
+                  <PhaseStep
+                    key={s.key}
+                    stage={s}
+                    isLast={idx === group.stages.length - 1}
+                  />
+                ))}
+              </ol>
             </div>
 
-            {/* Stages within phase */}
-            <ol className="space-y-3">
-              {group.stages.map((s, idx) => (
-                <PhaseStep
-                  key={s.key}
-                  stage={s}
-                  isLast={idx === group.stages.length - 1}
-                />
-              ))}
-            </ol>
+            {/* Connector to next phase */}
+            {!isLastGroup && (
+              <>
+                {/* Desktop: horizontal connector */}
+                <div
+                  aria-hidden
+                  className="hidden lg:flex items-center justify-center px-1.5 shrink-0"
+                >
+                  <span className="relative flex items-center">
+                    <span
+                      className={cn(
+                        "block h-0.5 w-6 rounded-full",
+                        connectorDone ? "bg-emerald-500" : "bg-border"
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "absolute -right-0.5 h-1.5 w-1.5 rotate-45 border-t-2 border-r-2 rounded-[1px]",
+                        connectorDone ? "border-emerald-500" : "border-border"
+                      )}
+                    />
+                  </span>
+                </div>
+                {/* Mobile: vertical connector */}
+                <div
+                  aria-hidden
+                  className="lg:hidden flex justify-center py-1.5"
+                >
+                  <span
+                    className={cn(
+                      "block w-0.5 h-5 rounded-full",
+                      connectorDone ? "bg-emerald-500" : "bg-border"
+                    )}
+                  />
+                </div>
+              </>
+            )}
           </div>
         );
       })}
