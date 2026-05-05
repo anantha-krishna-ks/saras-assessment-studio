@@ -260,14 +260,6 @@ function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
           Icon: Clock,
         };
 
-  const initials = item.teacher
-    .replace(/^(Mr\.|Ms\.|Mrs\.|Dr\.)\s*/i, "")
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
   return (
     <Card className="overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft-xs hover:shadow-soft-md transition-shadow">
       {/* Top accent strip */}
@@ -280,33 +272,28 @@ function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
 
       <div className="p-5 sm:p-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div className="flex items-start gap-3 min-w-0 flex-1">
-            <span className="hidden sm:flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary text-[13px] font-semibold ring-2 ring-card">
-              {initials}
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
-                <span className="inline-flex items-center rounded-md bg-secondary px-1.5 py-0.5 text-[10.5px] font-medium text-foreground/70 tracking-wide">
-                  {item.grade.toUpperCase()}
-                </span>
-                <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
-                  {item.type}
-                </span>
-                <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
-                  {item.subject}
-                </span>
-              </div>
-              <h3 className="text-[16px] sm:text-[17px] font-medium text-foreground tracking-tight leading-snug">
-                {item.title}
-              </h3>
-              <p className="text-xs text-muted-foreground mt-1">
-                Created by <span className="text-foreground/80">{item.teacher}</span>
-              </p>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+              <span className="inline-flex items-center rounded-md bg-secondary px-1.5 py-0.5 text-[10.5px] font-medium text-foreground/70 tracking-wide">
+                {item.grade.toUpperCase()}
+              </span>
+              <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
+                {item.type}
+              </span>
+              <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
+                {item.subject}
+              </span>
             </div>
+            <h3 className="text-[16px] sm:text-[17px] font-medium text-foreground tracking-tight leading-snug">
+              {item.title}
+            </h3>
+            <p className="text-xs text-muted-foreground mt-1">
+              Created by <span className="text-foreground/80">{item.teacher}</span>
+            </p>
           </div>
 
-          <div className="flex sm:flex-col items-center sm:items-end justify-between gap-3 sm:gap-2 sm:shrink-0">
+          <div className="flex items-center gap-2 sm:shrink-0">
             <span
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium whitespace-nowrap",
@@ -321,30 +308,13 @@ function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
               />
               <span className="max-w-[180px] truncate">{statusBadge.label}</span>
             </span>
-            <div className="text-right">
-              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                Progress
-              </div>
-              <div className="text-[14px] font-medium text-foreground tabular-nums">
-                {completedCount}/{total}
-                <span className="text-muted-foreground text-xs ml-1">· {pct}%</span>
-              </div>
-            </div>
+            <span className="inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-foreground tabular-nums">
+              {completedCount}/{total}
+            </span>
           </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="mt-4 h-1.5 w-full rounded-full bg-secondary overflow-hidden">
-          <div
-            className={cn(
-              "h-full rounded-full transition-all duration-500",
-              isComplete ? "bg-emerald-500" : "bg-primary"
-            )}
-            style={{ width: `${pct}%` }}
-          />
-        </div>
-
-        {/* Stepper */}
+        {/* Stepper grouped by phase */}
         <div className="mt-6">
           <Stepper stages={item.stages} />
         </div>
@@ -353,38 +323,151 @@ function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
   );
 }
 
-function Stepper({ stages }: { stages: TrackerStage[] }) {
-  return (
-    <ol className="relative">
-      {/* Desktop / tablet: horizontal */}
-      <div
-        className="hidden lg:grid gap-1"
-        style={{ gridTemplateColumns: `repeat(${stages.length}, minmax(0, 1fr))` }}
-      >
-        {stages.map((s, idx) => (
-          <StepNodeHorizontal
-            key={s.key}
-            stage={s}
-            isFirst={idx === 0}
-            isLast={idx === stages.length - 1}
-            nextStatus={stages[idx + 1]?.status}
-          />
-        ))}
-      </div>
+type PhaseKey = "authoring" | "review" | "approval" | "dispatch";
 
-      {/* Mobile / tablet: vertical timeline */}
-      <div className="lg:hidden">
-        {stages.map((s, idx) => (
-          <StepNodeVertical
-            key={s.key}
-            stage={s}
-            isLast={idx === stages.length - 1}
-          />
-        ))}
-      </div>
-    </ol>
+const phaseMeta: Record<PhaseKey, { label: string; tone: string }> = {
+  authoring: { label: "Authoring", tone: "text-sky-600 dark:text-sky-400" },
+  review: { label: "Review & Rework", tone: "text-amber-600 dark:text-amber-400" },
+  approval: { label: "Final Approval", tone: "text-violet-600 dark:text-violet-400" },
+  dispatch: { label: "Dispatch", tone: "text-emerald-600 dark:text-emerald-400" },
+};
+
+const stagePhase: Record<string, PhaseKey> = {
+  created: "authoring",
+  subCoordinatorReview: "review",
+  subTeacherRework: "review",
+  subCoordinatorApproved: "review",
+  hmApproved: "approval",
+  printing: "dispatch",
+};
+
+function groupByPhase(stages: TrackerStage[]) {
+  const groups: { phase: PhaseKey; stages: TrackerStage[] }[] = [];
+  stages.forEach((s) => {
+    const phase = stagePhase[s.key] ?? "authoring";
+    const last = groups[groups.length - 1];
+    if (last && last.phase === phase) last.stages.push(s);
+    else groups.push({ phase, stages: [s] });
+  });
+  return groups;
+}
+
+
+function Stepper({ stages }: { stages: TrackerStage[] }) {
+  const groups = groupByPhase(stages);
+
+  return (
+    <div className="space-y-4 lg:space-y-0 lg:flex lg:items-stretch lg:gap-3">
+      {groups.map((group, gIdx) => {
+        const meta = phaseMeta[group.phase];
+        const groupComplete = group.stages.every((s) => s.status === "complete");
+        const groupActive = group.stages.some((s) => s.status === "current");
+
+        return (
+          <div
+            key={group.phase + gIdx}
+            className={cn(
+              "relative rounded-2xl border bg-secondary/30 p-3.5 lg:flex-1 transition-colors",
+              groupComplete
+                ? "border-emerald-500/30 bg-emerald-500/5"
+                : groupActive
+                  ? "border-primary/30 bg-primary/5"
+                  : "border-border/70"
+            )}
+          >
+            {/* Phase header */}
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-wider",
+                  groupComplete
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : groupActive
+                      ? "text-primary"
+                      : meta.tone
+                )}
+              >
+                <span
+                  className={cn(
+                    "h-1.5 w-1.5 rounded-full",
+                    groupComplete
+                      ? "bg-emerald-500"
+                      : groupActive
+                        ? "bg-primary animate-pulse"
+                        : "bg-current opacity-60"
+                  )}
+                />
+                {meta.label}
+              </span>
+              <span className="text-[10px] text-muted-foreground tabular-nums">
+                {group.stages.filter((s) => s.status === "complete").length}/
+                {group.stages.length}
+              </span>
+            </div>
+
+            {/* Stages within phase */}
+            <ol className="space-y-3">
+              {group.stages.map((s, idx) => (
+                <PhaseStep
+                  key={s.key}
+                  stage={s}
+                  isLast={idx === group.stages.length - 1}
+                />
+              ))}
+            </ol>
+          </div>
+        );
+      })}
+    </div>
   );
 }
+
+function PhaseStep({ stage, isLast }: { stage: TrackerStage; isLast: boolean }) {
+  const styles = statusStyles(stage.status);
+  return (
+    <li className="relative flex gap-2.5">
+      {!isLast && (
+        <span
+          aria-hidden
+          className={cn(
+            "absolute left-[13px] top-7 bottom-[-12px] w-0.5",
+            stage.status === "complete" ? "bg-emerald-500" : "bg-border"
+          )}
+        />
+      )}
+      <span
+        className={cn(
+          "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition-all",
+          styles.circle
+        )}
+      >
+        <StepIcon stage={stage} />
+      </span>
+      <div className="min-w-0 flex-1 pt-0.5">
+        <div className={cn("text-[12px] leading-snug", styles.label)}>{stage.label}</div>
+        {stage.actor && (
+          <div className="text-[11px] text-foreground/75 mt-0.5 leading-tight truncate">
+            {stage.actor}
+          </div>
+        )}
+        {stage.timestamp ? (
+          <div
+            className={cn(
+              "inline-flex items-center gap-1 text-[10.5px] mt-0.5 leading-tight",
+              styles.sub
+            )}
+          >
+            <Clock className="h-2.5 w-2.5 shrink-0" />
+            <span className="truncate">{stage.timestamp}</span>
+          </div>
+        ) : (
+          <div className="text-[10.5px] text-muted-foreground/70 mt-0.5">Pending</div>
+        )}
+      </div>
+    </li>
+  );
+}
+
 
 function statusStyles(status: TrackerStage["status"]) {
   if (status === "complete") {
@@ -413,129 +496,5 @@ function StepIcon({ stage }: { stage: TrackerStage }) {
   if (stage.status === "complete") return <Check className="h-3.5 w-3.5" strokeWidth={3} />;
   const Icon = stageIcons[stage.key] ?? Clock;
   return <Icon className="h-3.5 w-3.5" />;
-}
-
-function StepNodeHorizontal({
-  stage,
-  isFirst,
-  isLast,
-  nextStatus,
-}: {
-  stage: TrackerStage;
-  isFirst: boolean;
-  isLast: boolean;
-  nextStatus?: TrackerStage["status"];
-}) {
-  const styles = statusStyles(stage.status);
-  const leftDone = stage.status === "complete" || stage.status === "current";
-  const rightDone = stage.status === "complete" && nextStatus && nextStatus !== "pending";
-
-  return (
-    <li className="relative flex flex-col items-center text-center px-1.5">
-      {/* Connector lines */}
-      {!isFirst && (
-        <span
-          aria-hidden
-          className={cn(
-            "absolute top-4 right-1/2 h-0.5 w-full",
-            leftDone ? "bg-emerald-500" : "bg-border"
-          )}
-        />
-      )}
-      {!isLast && (
-        <span
-          aria-hidden
-          className={cn(
-            "absolute top-4 left-1/2 h-0.5 w-full",
-            rightDone ? "bg-emerald-500" : "bg-border"
-          )}
-        />
-      )}
-
-      <span
-        className={cn(
-          "relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 transition-all",
-          styles.circle
-        )}
-      >
-        <StepIcon stage={stage} />
-      </span>
-      <div className="mt-3 w-full px-0.5">
-        <div className={cn("text-[11.5px] leading-snug line-clamp-2", styles.label)}>
-          {stage.label}
-        </div>
-        {stage.actor && (
-          <div className="text-[11px] text-foreground/80 mt-1.5 leading-tight truncate">
-            {stage.actor}
-          </div>
-        )}
-        {stage.timestamp ? (
-          <div
-            className={cn(
-              "inline-flex items-center gap-1 text-[10.5px] mt-1 leading-tight",
-              styles.sub
-            )}
-          >
-            <Clock className="h-2.5 w-2.5 shrink-0" />
-            <span className="truncate">{stage.timestamp}</span>
-          </div>
-        ) : (
-          <div className="text-[10.5px] text-muted-foreground/70 mt-1">Pending</div>
-        )}
-      </div>
-    </li>
-  );
-}
-
-function StepNodeVertical({
-  stage,
-  isLast,
-}: {
-  stage: TrackerStage;
-  isLast: boolean;
-}) {
-  const styles = statusStyles(stage.status);
-  return (
-    <li className="relative flex gap-3.5 pb-5 last:pb-0">
-      {!isLast && (
-        <span
-          aria-hidden
-          className={cn(
-            "absolute left-4 top-8 bottom-0 w-0.5",
-            stage.status === "complete" ? "bg-emerald-500" : "bg-border"
-          )}
-        />
-      )}
-      <span
-        className={cn(
-          "relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-all",
-          styles.circle
-        )}
-      >
-        <StepIcon stage={stage} />
-      </span>
-      <div className="min-w-0 flex-1 pt-0.5">
-        <div className={cn("text-[13px] leading-snug", styles.label)}>{stage.label}</div>
-        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-          {stage.actor && (
-            <div className="text-[12px] text-foreground/80 leading-tight">{stage.actor}</div>
-          )}
-          {stage.timestamp ? (
-            <div
-              className={cn(
-                "inline-flex items-center gap-1 text-[11px] leading-tight",
-                styles.sub
-              )}
-            >
-              <Clock className="h-2.5 w-2.5" />
-              {stage.timestamp}
-            </div>
-          ) : (
-            <div className="text-[11px] text-muted-foreground/70">Pending</div>
-          )}
-        </div>
-      </div>
-    </li>
-  );
 }
 
