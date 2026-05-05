@@ -18,7 +18,7 @@ interface RoleOption {
 const roleOptions: RoleOption[] = [
   { id: "HOD", label: "HOD", description: "Review papers & oversee assessments", icon: ShieldCheck },
   { id: "Teacher", label: "Teacher", description: "Create and manage assessments", icon: Users },
-  { id: "Admin", label: "Admin", description: "Full system access", icon: UserCog },
+  { id: "HM", label: "HM", description: "Head Master oversight", icon: UserCog },
 ];
 
 export function RoleSwitcher() {

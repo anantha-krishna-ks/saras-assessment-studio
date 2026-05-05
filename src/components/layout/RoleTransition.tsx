@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 const iconFor: Record<string, LucideIcon> = {
   HOD: ShieldCheck,
   Teacher: Users,
-  Admin: UserCog,
+  HM: UserCog,
 };
 
 export function RoleTransition() {

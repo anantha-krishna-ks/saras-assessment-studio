@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useCallback } from "react";
 
-export type Role = "HOD" | "Teacher" | "Admin";
+export type Role = "HOD" | "Teacher" | "HM";
 
 interface RoleContextValue {
   role: Role;

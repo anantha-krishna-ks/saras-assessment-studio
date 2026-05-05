@@ -41,9 +41,9 @@ const roleOptions: {
     icon: <Users className="h-4 w-4" />,
   },
   {
-    id: "Admin",
-    label: "Admin",
-    description: "Full system access",
+    id: "HM",
+    label: "HM",
+    description: "Head Master oversight",
     icon: <UserCog className="h-4 w-4" />,
   },
 ];
