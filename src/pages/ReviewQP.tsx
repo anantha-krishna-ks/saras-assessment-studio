@@ -496,6 +496,8 @@ export default function ReviewQP() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AssessmentPreviewModal open={previewOpen} onOpenChange={setPreviewOpen} data={previewData} />
     </div>
   );
 }
