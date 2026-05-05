@@ -14,7 +14,7 @@ import { toast } from "sonner";
 
 const types = ["PA1", "PA2", "Mid-term", "Final Exam", "Unit Test 1", "Unit Test 2", "Unit Test 3"];
 const subjects = ["Mathematics", "Physics", "Chemistry", "Biology", "English", "History"];
-const classes = ["Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"];
+const classes = ["Class 6", "Class 7", "Class 8", "Class 9", "Class 10", "Class 11", "Class 12"];
 const chapterOptions = [
   "Chapter 1 — Real Numbers",
   "Chapter 2 — Polynomials",

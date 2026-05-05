@@ -168,13 +168,13 @@ export default function Dashboard() {
                 <span className="font-medium text-foreground">Scope</span>
               </div>
               <div className="flex items-center gap-2 min-w-0">
-                <span className="text-xs text-muted-foreground shrink-0">Grade</span>
+                <span className="text-xs text-muted-foreground shrink-0">Class</span>
                 <Select value={gradeFilter} onValueChange={setGradeFilter}>
                   <SelectTrigger className="h-9 w-[140px] sm:w-[160px] text-sm">
-                    <SelectValue placeholder="Select grade" />
+                    <SelectValue placeholder="Select class" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="All">All grades</SelectItem>
+                    <SelectItem value="All">All classes</SelectItem>
                     {grades.map((g) => (
                       <SelectItem key={g} value={g}>
                         {g}
