@@ -328,7 +328,7 @@ type PhaseKey = "authoring" | "review" | "approval" | "dispatch";
 const phaseMeta: Record<PhaseKey, { label: string; tone: string }> = {
   authoring: { label: "Authoring", tone: "text-sky-600 dark:text-sky-400" },
   review: { label: "Review & Rework", tone: "text-amber-600 dark:text-amber-400" },
-  approval: { label: "Final Approval", tone: "text-violet-600 dark:text-violet-400" },
+  approval: { label: "Approval", tone: "text-violet-600 dark:text-violet-400" },
   dispatch: { label: "Dispatch", tone: "text-emerald-600 dark:text-emerald-400" },
 };
 
