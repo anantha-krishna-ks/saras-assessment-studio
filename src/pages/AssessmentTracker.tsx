@@ -362,37 +362,120 @@ function groupByPhase(stages: TrackerStage[]) {
 
 
 function Stepper({ stages }: { stages: TrackerStage[] }) {
-  return (
-    <ol className="relative">
-      {/* Desktop / tablet: horizontal */}
-      <div
-        className="hidden lg:grid gap-1"
-        style={{ gridTemplateColumns: `repeat(${stages.length}, minmax(0, 1fr))` }}
-      >
-        {stages.map((s, idx) => (
-          <StepNodeHorizontal
-            key={s.key}
-            stage={s}
-            isFirst={idx === 0}
-            isLast={idx === stages.length - 1}
-            nextStatus={stages[idx + 1]?.status}
-          />
-        ))}
-      </div>
+  const groups = groupByPhase(stages);
 
-      {/* Mobile / tablet: vertical timeline */}
-      <div className="lg:hidden">
-        {stages.map((s, idx) => (
-          <StepNodeVertical
-            key={s.key}
-            stage={s}
-            isLast={idx === stages.length - 1}
-          />
-        ))}
-      </div>
-    </ol>
+  return (
+    <div className="space-y-4 lg:space-y-0 lg:flex lg:items-stretch lg:gap-3">
+      {groups.map((group, gIdx) => {
+        const meta = phaseMeta[group.phase];
+        const groupComplete = group.stages.every((s) => s.status === "complete");
+        const groupActive = group.stages.some((s) => s.status === "current");
+
+        return (
+          <div
+            key={group.phase + gIdx}
+            className={cn(
+              "relative rounded-2xl border bg-secondary/30 p-3.5 lg:flex-1 transition-colors",
+              groupComplete
+                ? "border-emerald-500/30 bg-emerald-500/5"
+                : groupActive
+                  ? "border-primary/30 bg-primary/5"
+                  : "border-border/70"
+            )}
+          >
+            {/* Phase header */}
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-wider",
+                  groupComplete
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : groupActive
+                      ? "text-primary"
+                      : meta.tone
+                )}
+              >
+                <span
+                  className={cn(
+                    "h-1.5 w-1.5 rounded-full",
+                    groupComplete
+                      ? "bg-emerald-500"
+                      : groupActive
+                        ? "bg-primary animate-pulse"
+                        : "bg-current opacity-60"
+                  )}
+                />
+                {meta.label}
+              </span>
+              <span className="text-[10px] text-muted-foreground tabular-nums">
+                {group.stages.filter((s) => s.status === "complete").length}/
+                {group.stages.length}
+              </span>
+            </div>
+
+            {/* Stages within phase */}
+            <ol className="space-y-3">
+              {group.stages.map((s, idx) => (
+                <PhaseStep
+                  key={s.key}
+                  stage={s}
+                  isLast={idx === group.stages.length - 1}
+                />
+              ))}
+            </ol>
+          </div>
+        );
+      })}
+    </div>
   );
 }
+
+function PhaseStep({ stage, isLast }: { stage: TrackerStage; isLast: boolean }) {
+  const styles = statusStyles(stage.status);
+  return (
+    <li className="relative flex gap-2.5">
+      {!isLast && (
+        <span
+          aria-hidden
+          className={cn(
+            "absolute left-[13px] top-7 bottom-[-12px] w-0.5",
+            stage.status === "complete" ? "bg-emerald-500" : "bg-border"
+          )}
+        />
+      )}
+      <span
+        className={cn(
+          "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition-all",
+          styles.circle
+        )}
+      >
+        <StepIcon stage={stage} />
+      </span>
+      <div className="min-w-0 flex-1 pt-0.5">
+        <div className={cn("text-[12px] leading-snug", styles.label)}>{stage.label}</div>
+        {stage.actor && (
+          <div className="text-[11px] text-foreground/75 mt-0.5 leading-tight truncate">
+            {stage.actor}
+          </div>
+        )}
+        {stage.timestamp ? (
+          <div
+            className={cn(
+              "inline-flex items-center gap-1 text-[10.5px] mt-0.5 leading-tight",
+              styles.sub
+            )}
+          >
+            <Clock className="h-2.5 w-2.5 shrink-0" />
+            <span className="truncate">{stage.timestamp}</span>
+          </div>
+        ) : (
+          <div className="text-[10.5px] text-muted-foreground/70 mt-0.5">Pending</div>
+        )}
+      </div>
+    </li>
+  );
+}
+
 
 function statusStyles(status: TrackerStage["status"]) {
   if (status === "complete") {
