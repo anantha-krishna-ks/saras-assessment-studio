@@ -82,7 +82,7 @@ const QuestionPreview = ({ item, label }: { item: SectionItem; label: string }) 
 
 const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewModalProps) => {
   const paperRef = useRef<HTMLDivElement>(null);
-  const [exporting, setExporting] = useState<"pdf" | "image" | null>(null);
+  const [exporting, setExporting] = useState<"pdf" | "word" | null>(null);
   const instructionLines = getInstructionLines(data.instructions);
 
   const handlePrint = useCallback(() => {
