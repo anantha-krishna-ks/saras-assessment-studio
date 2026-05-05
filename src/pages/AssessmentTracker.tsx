@@ -4,11 +4,18 @@ import {
   ArrowLeft,
   BookOpen,
   Check,
+  CheckCircle2,
   ClipboardCheck,
   Clock,
+  FileEdit,
   GraduationCap,
   Layers,
+  Loader2,
+  Printer,
   Search,
+  ShieldCheck,
+  UserCheck,
+  Users,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -218,46 +225,129 @@ function FilterField({ label, children }: { label: string; children: React.React
   );
 }
 
+
+const stageIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  created: FileEdit,
+  subCoordinatorReview: Users,
+  subTeacherRework: FileEdit,
+  subCoordinatorApproved: UserCheck,
+  hmApproved: ShieldCheck,
+  printing: Printer,
+};
+
 function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
   const completedCount = item.stages.filter((s) => s.status === "complete").length;
   const total = item.stages.length;
   const pct = Math.round((completedCount / total) * 100);
+  const currentStage = item.stages.find((s) => s.status === "current");
+  const isComplete = completedCount === total;
+
+  const statusBadge = isComplete
+    ? {
+        label: "Completed",
+        cls: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
+        Icon: CheckCircle2,
+      }
+    : currentStage
+      ? {
+          label: currentStage.label,
+          cls: "bg-primary/10 text-primary border-primary/20",
+          Icon: Loader2,
+        }
+      : {
+          label: "Not started",
+          cls: "bg-secondary text-muted-foreground border-border",
+          Icon: Clock,
+        };
+
+  const initials = item.teacher
+    .replace(/^(Mr\.|Ms\.|Mrs\.|Dr\.)\s*/i, "")
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
-    <Card className="p-5 sm:p-6 rounded-3xl border border-border/70 bg-card shadow-soft-xs">
-      {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <span className="inline-flex items-center rounded-md bg-secondary px-1.5 py-0.5 text-[10.5px] font-medium text-foreground/70 tracking-wide">
-              {item.grade.toUpperCase()}
+    <Card className="overflow-hidden rounded-3xl border border-border/70 bg-card shadow-soft-xs hover:shadow-soft-md transition-shadow">
+      {/* Top accent strip */}
+      <div
+        className={cn(
+          "h-1 w-full",
+          isComplete ? "bg-emerald-500" : currentStage ? "bg-primary" : "bg-border"
+        )}
+      />
+
+      <div className="p-5 sm:p-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="flex items-start gap-3 min-w-0 flex-1">
+            <span className="hidden sm:flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary text-[13px] font-semibold ring-2 ring-card">
+              {initials}
             </span>
-            <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
-              {item.type}
-            </span>
-            <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
-              {item.subject}
-            </span>
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                <span className="inline-flex items-center rounded-md bg-secondary px-1.5 py-0.5 text-[10.5px] font-medium text-foreground/70 tracking-wide">
+                  {item.grade.toUpperCase()}
+                </span>
+                <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
+                  {item.type}
+                </span>
+                <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
+                  {item.subject}
+                </span>
+              </div>
+              <h3 className="text-[16px] sm:text-[17px] font-medium text-foreground tracking-tight leading-snug">
+                {item.title}
+              </h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                Created by <span className="text-foreground/80">{item.teacher}</span>
+              </p>
+            </div>
           </div>
-          <h3 className="text-[16px] font-medium text-foreground tracking-tight leading-snug">
-            {item.title}
-          </h3>
-          <p className="text-xs text-muted-foreground mt-0.5">Created by {item.teacher}</p>
+
+          <div className="flex sm:flex-col items-center sm:items-end justify-between gap-3 sm:gap-2 sm:shrink-0">
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium whitespace-nowrap",
+                statusBadge.cls
+              )}
+            >
+              <statusBadge.Icon
+                className={cn(
+                  "h-3 w-3",
+                  !isComplete && currentStage && "animate-spin"
+                )}
+              />
+              <span className="max-w-[180px] truncate">{statusBadge.label}</span>
+            </span>
+            <div className="text-right">
+              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                Progress
+              </div>
+              <div className="text-[14px] font-medium text-foreground tabular-nums">
+                {completedCount}/{total}
+                <span className="text-muted-foreground text-xs ml-1">· {pct}%</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="text-right">
-          <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-            Progress
-          </div>
-          <div className="text-[15px] font-medium text-foreground tabular-nums">
-            {completedCount}/{total} <span className="text-muted-foreground text-xs">· {pct}%</span>
-          </div>
+        {/* Progress bar */}
+        <div className="mt-4 h-1.5 w-full rounded-full bg-secondary overflow-hidden">
+          <div
+            className={cn(
+              "h-full rounded-full transition-all duration-500",
+              isComplete ? "bg-emerald-500" : "bg-primary"
+            )}
+            style={{ width: `${pct}%` }}
+          />
         </div>
-      </div>
 
-      {/* Stepper */}
-      <div className="mt-5">
-        <Stepper stages={item.stages} />
+        {/* Stepper */}
+        <div className="mt-6">
+          <Stepper stages={item.stages} />
+        </div>
       </div>
     </Card>
   );
@@ -266,8 +356,11 @@ function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
 function Stepper({ stages }: { stages: TrackerStage[] }) {
   return (
     <ol className="relative">
-      {/* Desktop: horizontal */}
-      <div className="hidden md:grid" style={{ gridTemplateColumns: `repeat(${stages.length}, minmax(0, 1fr))` }}>
+      {/* Desktop / tablet: horizontal */}
+      <div
+        className="hidden lg:grid gap-1"
+        style={{ gridTemplateColumns: `repeat(${stages.length}, minmax(0, 1fr))` }}
+      >
         {stages.map((s, idx) => (
           <StepNodeHorizontal
             key={s.key}
@@ -279,8 +372,8 @@ function Stepper({ stages }: { stages: TrackerStage[] }) {
         ))}
       </div>
 
-      {/* Mobile: vertical */}
-      <div className="md:hidden space-y-0">
+      {/* Mobile / tablet: vertical timeline */}
+      <div className="lg:hidden">
         {stages.map((s, idx) => (
           <StepNodeVertical
             key={s.key}
@@ -296,8 +389,7 @@ function Stepper({ stages }: { stages: TrackerStage[] }) {
 function statusStyles(status: TrackerStage["status"]) {
   if (status === "complete") {
     return {
-      circle: "bg-emerald-500 text-white border-emerald-500",
-      line: "bg-emerald-500",
+      circle: "bg-emerald-500 text-white border-emerald-500 shadow-sm",
       label: "text-foreground",
       sub: "text-muted-foreground",
     };
@@ -305,18 +397,22 @@ function statusStyles(status: TrackerStage["status"]) {
   if (status === "current") {
     return {
       circle:
-        "bg-primary text-primary-foreground border-primary ring-4 ring-primary/15 animate-pulse",
-      line: "bg-border",
+        "bg-primary text-primary-foreground border-primary ring-4 ring-primary/15 shadow-sm",
       label: "text-foreground font-medium",
       sub: "text-primary",
     };
   }
   return {
-    circle: "bg-card text-muted-foreground border-border",
-    line: "bg-border",
+    circle: "bg-card text-muted-foreground border-border border-dashed",
     label: "text-muted-foreground",
     sub: "text-muted-foreground/70",
   };
+}
+
+function StepIcon({ stage }: { stage: TrackerStage }) {
+  if (stage.status === "complete") return <Check className="h-3.5 w-3.5" strokeWidth={3} />;
+  const Icon = stageIcons[stage.key] ?? Clock;
+  return <Icon className="h-3.5 w-3.5" />;
 }
 
 function StepNodeHorizontal({
@@ -331,20 +427,18 @@ function StepNodeHorizontal({
   nextStatus?: TrackerStage["status"];
 }) {
   const styles = statusStyles(stage.status);
-  const connectorComplete =
-    stage.status === "complete" && nextStatus && nextStatus !== "pending";
+  const leftDone = stage.status === "complete" || stage.status === "current";
+  const rightDone = stage.status === "complete" && nextStatus && nextStatus !== "pending";
 
   return (
-    <li className="relative flex flex-col items-center text-center px-2">
-      {/* Connectors */}
+    <li className="relative flex flex-col items-center text-center px-1.5">
+      {/* Connector lines */}
       {!isFirst && (
         <span
           aria-hidden
           className={cn(
-            "absolute top-3.5 right-1/2 h-0.5 w-full",
-            stage.status === "complete" || stage.status === "current"
-              ? "bg-emerald-500"
-              : "bg-border"
+            "absolute top-4 right-1/2 h-0.5 w-full",
+            leftDone ? "bg-emerald-500" : "bg-border"
           )}
         />
       )}
@@ -352,32 +446,41 @@ function StepNodeHorizontal({
         <span
           aria-hidden
           className={cn(
-            "absolute top-3.5 left-1/2 h-0.5 w-full",
-            connectorComplete ? "bg-emerald-500" : "bg-border"
+            "absolute top-4 left-1/2 h-0.5 w-full",
+            rightDone ? "bg-emerald-500" : "bg-border"
           )}
         />
       )}
 
       <span
         className={cn(
-          "relative z-10 flex h-7 w-7 items-center justify-center rounded-full border-2 text-[11px] font-medium",
+          "relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 transition-all",
           styles.circle
         )}
       >
-        {stage.status === "complete" ? <Check className="h-3.5 w-3.5" /> : null}
+        <StepIcon stage={stage} />
       </span>
-      <div className="mt-2.5 px-1">
-        <div className={cn("text-[12px] leading-tight", styles.label)}>{stage.label}</div>
+      <div className="mt-3 w-full px-0.5">
+        <div className={cn("text-[11.5px] leading-snug line-clamp-2", styles.label)}>
+          {stage.label}
+        </div>
         {stage.actor && (
-          <div className="text-[11px] text-foreground/80 mt-1 leading-tight">{stage.actor}</div>
+          <div className="text-[11px] text-foreground/80 mt-1.5 leading-tight truncate">
+            {stage.actor}
+          </div>
         )}
         {stage.timestamp ? (
-          <div className={cn("inline-flex items-center gap-1 text-[10.5px] mt-0.5", styles.sub)}>
-            <Clock className="h-2.5 w-2.5" />
-            {stage.timestamp}
+          <div
+            className={cn(
+              "inline-flex items-center gap-1 text-[10.5px] mt-1 leading-tight",
+              styles.sub
+            )}
+          >
+            <Clock className="h-2.5 w-2.5 shrink-0" />
+            <span className="truncate">{stage.timestamp}</span>
           </div>
         ) : (
-          <div className="text-[10.5px] text-muted-foreground/70 mt-0.5">Pending</div>
+          <div className="text-[10.5px] text-muted-foreground/70 mt-1">Pending</div>
         )}
       </div>
     </li>
@@ -393,38 +496,46 @@ function StepNodeVertical({
 }) {
   const styles = statusStyles(stage.status);
   return (
-    <li className="relative flex gap-3 pb-4 last:pb-0">
+    <li className="relative flex gap-3.5 pb-5 last:pb-0">
       {!isLast && (
         <span
           aria-hidden
           className={cn(
-            "absolute left-3.5 top-7 bottom-0 w-0.5",
+            "absolute left-4 top-8 bottom-0 w-0.5",
             stage.status === "complete" ? "bg-emerald-500" : "bg-border"
           )}
         />
       )}
       <span
         className={cn(
-          "relative z-10 mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-[11px] font-medium",
+          "relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-all",
           styles.circle
         )}
       >
-        {stage.status === "complete" ? <Check className="h-3.5 w-3.5" /> : null}
+        <StepIcon stage={stage} />
       </span>
-      <div className="min-w-0 pb-1">
-        <div className={cn("text-[13px] leading-tight", styles.label)}>{stage.label}</div>
-        {stage.actor && (
-          <div className="text-[12px] text-foreground/80 mt-0.5 leading-tight">{stage.actor}</div>
-        )}
-        {stage.timestamp ? (
-          <div className={cn("inline-flex items-center gap-1 text-[11px] mt-0.5", styles.sub)}>
-            <Clock className="h-2.5 w-2.5" />
-            {stage.timestamp}
-          </div>
-        ) : (
-          <div className="text-[11px] text-muted-foreground/70 mt-0.5">Pending</div>
-        )}
+      <div className="min-w-0 flex-1 pt-0.5">
+        <div className={cn("text-[13px] leading-snug", styles.label)}>{stage.label}</div>
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+          {stage.actor && (
+            <div className="text-[12px] text-foreground/80 leading-tight">{stage.actor}</div>
+          )}
+          {stage.timestamp ? (
+            <div
+              className={cn(
+                "inline-flex items-center gap-1 text-[11px] leading-tight",
+                styles.sub
+              )}
+            >
+              <Clock className="h-2.5 w-2.5" />
+              {stage.timestamp}
+            </div>
+          ) : (
+            <div className="text-[11px] text-muted-foreground/70">Pending</div>
+          )}
+        </div>
       </div>
     </li>
   );
 }
+
