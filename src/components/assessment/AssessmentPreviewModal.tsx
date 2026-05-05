@@ -192,8 +192,8 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
                 <DropdownMenuItem onClick={handleDownloadPDF} className="gap-2 cursor-pointer">
                   <FileText className="w-4 h-4" /> Download as PDF
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDownloadImage} className="gap-2 cursor-pointer">
-                  <FileImage className="w-4 h-4" /> Download as Image
+                <DropdownMenuItem onClick={handleDownloadWord} className="gap-2 cursor-pointer">
+                  <FileType className="w-4 h-4" /> Download as Word
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
