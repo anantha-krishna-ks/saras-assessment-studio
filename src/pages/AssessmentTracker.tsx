@@ -280,33 +280,28 @@ function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
 
       <div className="p-5 sm:p-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div className="flex items-start gap-3 min-w-0 flex-1">
-            <span className="hidden sm:flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-soft text-primary text-[13px] font-semibold ring-2 ring-card">
-              {initials}
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
-                <span className="inline-flex items-center rounded-md bg-secondary px-1.5 py-0.5 text-[10.5px] font-medium text-foreground/70 tracking-wide">
-                  {item.grade.toUpperCase()}
-                </span>
-                <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
-                  {item.type}
-                </span>
-                <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
-                  {item.subject}
-                </span>
-              </div>
-              <h3 className="text-[16px] sm:text-[17px] font-medium text-foreground tracking-tight leading-snug">
-                {item.title}
-              </h3>
-              <p className="text-xs text-muted-foreground mt-1">
-                Created by <span className="text-foreground/80">{item.teacher}</span>
-              </p>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+              <span className="inline-flex items-center rounded-md bg-secondary px-1.5 py-0.5 text-[10.5px] font-medium text-foreground/70 tracking-wide">
+                {item.grade.toUpperCase()}
+              </span>
+              <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
+                {item.type}
+              </span>
+              <span className="inline-flex items-center rounded-md border border-border/70 px-1.5 py-0.5 text-[10.5px] font-medium text-muted-foreground tracking-wide">
+                {item.subject}
+              </span>
             </div>
+            <h3 className="text-[16px] sm:text-[17px] font-medium text-foreground tracking-tight leading-snug">
+              {item.title}
+            </h3>
+            <p className="text-xs text-muted-foreground mt-1">
+              Created by <span className="text-foreground/80">{item.teacher}</span>
+            </p>
           </div>
 
-          <div className="flex sm:flex-col items-center sm:items-end justify-between gap-3 sm:gap-2 sm:shrink-0">
+          <div className="flex items-center gap-2 sm:shrink-0">
             <span
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium whitespace-nowrap",
@@ -321,30 +316,13 @@ function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
               />
               <span className="max-w-[180px] truncate">{statusBadge.label}</span>
             </span>
-            <div className="text-right">
-              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                Progress
-              </div>
-              <div className="text-[14px] font-medium text-foreground tabular-nums">
-                {completedCount}/{total}
-                <span className="text-muted-foreground text-xs ml-1">· {pct}%</span>
-              </div>
-            </div>
+            <span className="inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-foreground tabular-nums">
+              {completedCount}/{total}
+            </span>
           </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="mt-4 h-1.5 w-full rounded-full bg-secondary overflow-hidden">
-          <div
-            className={cn(
-              "h-full rounded-full transition-all duration-500",
-              isComplete ? "bg-emerald-500" : "bg-primary"
-            )}
-            style={{ width: `${pct}%` }}
-          />
-        </div>
-
-        {/* Stepper */}
+        {/* Stepper grouped by phase */}
         <div className="mt-6">
           <Stepper stages={item.stages} />
         </div>
@@ -352,6 +330,36 @@ function TrackerCard({ item }: { item: (typeof trackerItems)[number] }) {
     </Card>
   );
 }
+
+type PhaseKey = "authoring" | "review" | "approval" | "dispatch";
+
+const phaseMeta: Record<PhaseKey, { label: string; tone: string }> = {
+  authoring: { label: "Authoring", tone: "text-sky-600 dark:text-sky-400" },
+  review: { label: "Review & Rework", tone: "text-amber-600 dark:text-amber-400" },
+  approval: { label: "Final Approval", tone: "text-violet-600 dark:text-violet-400" },
+  dispatch: { label: "Dispatch", tone: "text-emerald-600 dark:text-emerald-400" },
+};
+
+const stagePhase: Record<string, PhaseKey> = {
+  created: "authoring",
+  subCoordinatorReview: "review",
+  subTeacherRework: "review",
+  subCoordinatorApproved: "review",
+  hmApproved: "approval",
+  printing: "dispatch",
+};
+
+function groupByPhase(stages: TrackerStage[]) {
+  const groups: { phase: PhaseKey; stages: TrackerStage[] }[] = [];
+  stages.forEach((s) => {
+    const phase = stagePhase[s.key] ?? "authoring";
+    const last = groups[groups.length - 1];
+    if (last && last.phase === phase) last.stages.push(s);
+    else groups.push({ phase, stages: [s] });
+  });
+  return groups;
+}
+
 
 function Stepper({ stages }: { stages: TrackerStage[] }) {
   return (
