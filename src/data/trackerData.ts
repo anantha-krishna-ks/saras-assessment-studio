@@ -4,6 +4,7 @@ export type TrackerStageKey =
   | "subTeacherRework"
   | "subCoordinatorApproved"
   | "hmApproved"
+  | "hodApproved"
   | "printing";
 
 export interface TrackerStage {
@@ -32,7 +33,8 @@ const baseStages = (
     { key: "subCoordinatorReview", label: "QP with Sub-Coordinator for review" },
     { key: "subTeacherRework", label: "QP with Sub-Teacher for rework" },
     { key: "subCoordinatorApproved", label: "QP approved by Sub-Coordinator" },
-    { key: "hmApproved", label: "QP approved by HM or HOD" },
+    { key: "hmApproved", label: "QP approved by HM" },
+    { key: "hodApproved", label: "QP approved by HOD" },
     { key: "printing", label: "QP verified and sent for printing" },
   ];
   return defs.map((d) => ({
@@ -72,6 +74,7 @@ export const trackerItems: TrackerItem[] = [
       subCoordinatorReview: { actor: "Mr. Suresh Menon", timestamp: "21 Apr 2026, 10:10 AM", status: "complete" },
       subCoordinatorApproved: { actor: "Mr. Suresh Menon", timestamp: "23 Apr 2026, 03:48 PM", status: "complete" },
       hmApproved: { actor: "Dr. Meera Iyer", timestamp: "25 Apr 2026, 11:00 AM", status: "complete" },
+      hodApproved: { actor: "Mr. Suresh Menon", timestamp: "26 Apr 2026, 10:00 AM", status: "complete" },
       printing: { actor: "Print Cell", timestamp: "27 Apr 2026, 09:30 AM", status: "complete" },
     }),
   },
@@ -112,6 +115,7 @@ export const trackerItems: TrackerItem[] = [
       subCoordinatorReview: { actor: "Mr. Suresh Menon", timestamp: "16 Apr 2026, 11:20 AM", status: "complete" },
       subCoordinatorApproved: { actor: "Mr. Suresh Menon", timestamp: "18 Apr 2026, 04:00 PM", status: "complete" },
       hmApproved: { actor: "Dr. Meera Iyer", timestamp: "20 Apr 2026, 09:30 AM", status: "complete" },
+      hodApproved: { actor: "Mr. Karthik Rao", timestamp: "21 Apr 2026, 11:30 AM", status: "complete" },
       printing: { actor: "Print Cell", timestamp: "22 Apr 2026, 10:00 AM", status: "complete" },
     }),
   },

@@ -338,6 +338,7 @@ const stagePhase: Record<string, PhaseKey> = {
   subTeacherRework: "review",
   subCoordinatorApproved: "review",
   hmApproved: "approval",
+  hodApproved: "approval",
   printing: "dispatch",
 };
 
