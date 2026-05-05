@@ -232,6 +232,8 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
               </div>
             </div>
 
+            <hr className="border-t border-black my-3" />
+
             <div className="text-sm">
               <p className="italic font-medium">General Instructions:</p>
               <ol className="list-[lower-roman] pl-6 mt-1 space-y-0.5">
