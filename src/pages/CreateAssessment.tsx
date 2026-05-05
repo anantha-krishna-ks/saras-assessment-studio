@@ -12,7 +12,14 @@ import { ArrowLeft, Send, ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-const types = ["PA1", "PA2", "Mid-term", "Final Exam", "Unit Test 1", "Unit Test 2", "Unit Test 3"];
+const testTypes = [
+  { value: "PA", label: "PA", full: "Periodic Assessment" },
+  { value: "Term Examination", label: "Term Examination", full: "Term Examination" },
+  { value: "Evaluation", label: "Evaluation", full: "Evaluation" },
+  { value: "Preparatory", label: "Preparatory", full: "Preparatory" },
+  { value: "Unit Test", label: "Unit Test", full: "Unit Test" },
+];
+const testNumbers = ["1", "2", "3", "4", "5", "6"];
 const subjects = ["Mathematics", "Physics", "Chemistry", "Biology", "English", "History"];
 const classes = ["Class 6", "Class 7", "Class 8", "Class 9", "Class 10", "Class 11", "Class 12"];
 const chapterOptions = [
