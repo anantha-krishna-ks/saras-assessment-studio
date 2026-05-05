@@ -223,10 +223,12 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
                 <p><strong>Class :</strong> {data.className || "—"}</p>
                 <p><strong>Subject :</strong> {data.subject || "—"}</p>
               </div>
-              <img src={epsLogo} alt="School logo" className="h-20 w-auto object-contain" />
-              <div className="text-sm space-y-1 text-right">
-                <p><strong>Total Marks:</strong> {data.totalMarks || "—"}</p>
-                <p><strong>Time:</strong> {data.duration || "—"}</p>
+              <div className="flex flex-col items-end gap-2">
+                <img src={epsLogo} alt="School logo" className="h-20 w-auto object-contain" />
+                <div className="text-sm space-y-1 text-right">
+                  <p><strong>Total Marks:</strong> {data.totalMarks || "—"}</p>
+                  <p><strong>Time:</strong> {data.duration || "—"}</p>
+                </div>
               </div>
             </div>
 
