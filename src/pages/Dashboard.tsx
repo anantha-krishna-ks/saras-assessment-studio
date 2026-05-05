@@ -244,13 +244,6 @@ export default function Dashboard() {
         </Card>
       )}
 
-      {isHM && (
-        <div>
-          <h2 className="text-[18px] text-foreground tracking-tight">Assessment Pipeline</h2>
-          <p className="text-sm text-muted-foreground">Snapshot of where every paper stands</p>
-        </div>
-      )}
-
       {/* Hero pastel stat tiles */}
       {isTeacher ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -318,7 +311,7 @@ export default function Dashboard() {
             progress={completionPct}
           />
         </div>
-      ) : (
+      ) : isHM ? null : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <PastelStat
             tone="lavender"
