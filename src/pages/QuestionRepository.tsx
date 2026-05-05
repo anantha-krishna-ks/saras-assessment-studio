@@ -275,7 +275,7 @@ const QuestionRepository = () => {
           <div className="p-4 border-b border-border space-y-3">
             <div className="space-y-1.5">
               <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Grade
+                Class
               </label>
               <Select value={selectedGrade} onValueChange={setSelectedGrade}>
                 <SelectTrigger>
