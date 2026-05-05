@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Download, Printer, FileText, FileImage, X, Loader2, ChevronDown } from "lucide-react";
+import { Download, Printer, FileText, FileType, X, Loader2, ChevronDown } from "lucide-react";
 import type { Section, SectionItem } from "@/constants/assessmentSectionData";
 import epsLogo from "@/assets/eps-logo.png";
 import { toast } from "sonner";
