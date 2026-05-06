@@ -225,7 +225,7 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
             </div>
             <div className="flex items-start justify-between mt-2 gap-4">
               <div className="text-sm space-y-1">
-                <p><strong>Class :</strong> {data.className || "—"}</p>
+                <p><strong>Class :</strong> {data.className ? data.className.replace(/^class\s*/i, "") : "—"}</p>
                 <p><strong>Subject :</strong> {data.subject || "—"}</p>
               </div>
               <div className="text-sm space-y-1 text-right">
