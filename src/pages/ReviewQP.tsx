@@ -474,22 +474,41 @@ export default function ReviewQP() {
 
       {/* Accept confirmation dialog */}
       <Dialog open={acceptOpen} onOpenChange={setAcceptOpen}>
-        <DialogContent className="rounded-2xl">
-          <DialogHeader>
-            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
-              <Check className="h-6 w-6 text-emerald-600" />
+        <DialogContent className="rounded-2xl p-0 overflow-hidden gap-0 sm:max-w-[460px]">
+          {/* Header */}
+          <div className="px-8 pt-8 pb-6 flex flex-col items-center text-center">
+            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/10 ring-8 ring-emerald-500/5">
+              <Check className="h-7 w-7 text-emerald-600" />
             </div>
-            <DialogTitle className="text-center">Send for HM approval?</DialogTitle>
-            <DialogDescription className="text-center">
-              Once you accept, <span className="font-medium text-foreground">{qp.title}</span> will be forwarded to the
-              Head Master for final approval. You won't be able to make further edits until the HM responds.
+            <DialogTitle className="text-[17px] leading-tight">
+              Send for HM approval?
+            </DialogTitle>
+            <DialogDescription className="text-sm mt-2 leading-relaxed max-w-[340px]">
+              Once accepted, this paper will be forwarded to the Head Master for final approval.
             </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="sm:justify-center gap-2">
-            <Button variant="outline" onClick={() => setAcceptOpen(false)}>
+          </div>
+
+          {/* Summary card */}
+          <div className="mx-8 mb-6 rounded-xl border border-border bg-muted/40 px-4 py-3 space-y-2">
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-xs uppercase tracking-wide text-muted-foreground">Question paper</span>
+              <span className="text-xs text-muted-foreground">{qp.grade}</span>
+            </div>
+            <p className="text-sm font-medium text-foreground leading-snug">{qp.title}</p>
+          </div>
+
+          {/* Notice */}
+          <div className="mx-8 mb-6 flex items-start gap-2 text-xs text-muted-foreground">
+            <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
+            <span>You won't be able to make further edits until the HM responds.</span>
+          </div>
+
+          {/* Footer */}
+          <DialogFooter className="px-6 py-4 border-t border-border bg-muted/20 sm:justify-end gap-2">
+            <Button variant="ghost" size="sm" onClick={() => setAcceptOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={confirmAccept} className="bg-primary hover:bg-primary-hover">
+            <Button size="sm" onClick={confirmAccept} className="bg-primary hover:bg-primary-hover">
               <Check className="h-4 w-4 mr-2" />
               Send to HM
             </Button>
