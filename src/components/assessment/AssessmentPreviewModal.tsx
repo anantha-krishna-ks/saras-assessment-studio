@@ -248,8 +248,8 @@ const AssessmentPreviewModal = ({ open, onOpenChange, data }: AssessmentPreviewM
             {data.sections.map((section) => (
               <div key={section.id} className="mt-5">
                 <div className="text-center">
-                  <h3 className="font-medium underline">SECTION - {section.label}</h3>
-                  {section.description && <p className="text-sm font-medium">{section.description}</p>}
+                  <h3 className="font-semibold underline">SECTION - {section.label}</h3>
+                  {section.description && <p className="text-sm font-semibold">{section.description}</p>}
                 </div>
 
                 <div className="mt-4 space-y-4 text-sm">
