@@ -124,9 +124,8 @@ export default function Dashboard() {
       {/* Greeting */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-foreground tracking-tight flex items-baseline gap-3 flex-wrap">
-            <span className="hello-rainbow text-[64px] sm:text-[72px]">Hello</span>
-            <span className="text-[32px] leading-tight">, {user.name.split(" ")[0]}</span>
+          <h1 className="text-[32px] leading-tight text-foreground tracking-tight">
+            {greeting}, {user.name.split(" ")[0]}
           </h1>
           <p className="text-sm text-muted-foreground mt-1.5">
             Here's what needs your attention today.

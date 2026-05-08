@@ -1,17 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-
-.hello-rainbow {
-  font-family: 'Great Vibes', cursive;
-  background: linear-gradient(90deg, #8BC34A 0%, #FFC107 22%, #FF7043 42%, #E53935 58%, #8E24AA 78%, #1E88E5 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  font-weight: 400;
-  line-height: 1.1;
-  padding-bottom: 0.1em;
-}
 
 @tailwind base;
 @tailwind components;
