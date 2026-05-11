@@ -30,9 +30,12 @@ import { assessments } from "@/data/assessments";
 import { cn } from "@/lib/utils";
 import AssessmentPreviewModal from "@/components/assessment/AssessmentPreviewModal";
 import type { Section, ItemType } from "@/constants/assessmentSectionData";
+import { useRole } from "@/context/RoleContext";
 
 export default function ReviewQP() {
   const navigate = useNavigate();
+  const { role } = useRole();
+  const isHM = role === "HM";
   const qp = sampleQP;
 
   type CommentEntry = { text: string; createdAt: string };
@@ -42,6 +45,7 @@ export default function ReviewQP() {
   const [revertOpen, setRevertOpen] = useState(false);
   const [revertNote, setRevertNote] = useState("");
   const [acceptOpen, setAcceptOpen] = useState(false);
+  const [hmConfirmOpen, setHmConfirmOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
@@ -107,11 +111,23 @@ export default function ReviewQP() {
 
   const confirmAccept = () => {
     setAcceptOpen(false);
+    if (isHM) {
+      setHmConfirmOpen(true);
+      return;
+    }
     // Move the first "Waiting for approval" (Draft) item into "Submitted to HM"
     const target = assessments.find((a) => a.status === "Draft") ?? assessments.find((a) => a.status === "Not yet received");
     if (target) target.status = "Submitted to HM";
     toast.success("Sent to HM for approval", {
       description: `${qp.title} has been forwarded to the Head Master for final approval.`,
+    });
+    navigate("/dashboard");
+  };
+
+  const confirmHmSendToAdmin = () => {
+    setHmConfirmOpen(false);
+    toast.success("Sent to Admin", {
+      description: `${qp.title} has been shared with the Admin.`,
     });
     navigate("/dashboard");
   };
@@ -489,10 +505,12 @@ export default function ReviewQP() {
               <Check className="h-7 w-7 text-emerald-600" />
             </div>
             <DialogTitle className="text-[17px] leading-tight">
-              Send for HM approval?
+              {isHM ? "Send question paper to Admin?" : "Send for HM approval?"}
             </DialogTitle>
             <DialogDescription className="text-sm mt-2 leading-relaxed max-w-[340px]">
-              Once accepted, this paper will be forwarded to the Head Master for final approval.
+              {isHM
+                ? "This question paper will be shared with the Admin for their records."
+                : "Once accepted, this paper will be forwarded to the Head Master for final approval."}
             </DialogDescription>
           </div>
 
@@ -503,12 +521,22 @@ export default function ReviewQP() {
               <span className="text-xs text-muted-foreground">{qp.grade}</span>
             </div>
             <p className="text-sm font-medium text-foreground leading-snug">{qp.title}</p>
+            {isHM && (
+              <div className="flex items-center justify-between pt-2 mt-1 border-t border-border/60">
+                <span className="text-xs text-muted-foreground">Total questions</span>
+                <span className="text-sm font-semibold text-foreground tabular-nums">{totalQuestions}</span>
+              </div>
+            )}
           </div>
 
           {/* Notice */}
           <div className="mx-8 mb-6 flex items-start gap-2 text-xs text-muted-foreground">
             <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
-            <span>You won't be able to make further edits until the HM responds.</span>
+            <span>
+              {isHM
+                ? "The Admin will receive a copy of this paper for their records."
+                : "You won't be able to make further edits until the HM responds."}
+            </span>
           </div>
 
           {/* Footer */}
@@ -518,7 +546,28 @@ export default function ReviewQP() {
             </Button>
             <Button size="sm" onClick={confirmAccept} className="bg-primary hover:bg-primary-hover">
               <Check className="h-4 w-4 mr-2" />
-              Send to HM
+              {isHM ? "Send" : "Send to HM"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* HM → Admin final confirmation */}
+      <Dialog open={hmConfirmOpen} onOpenChange={setHmConfirmOpen}>
+        <DialogContent className="rounded-2xl sm:max-w-[420px]">
+          <DialogHeader>
+            <DialogTitle>Confirm send to Admin</DialogTitle>
+            <DialogDescription>
+              Please confirm you want to send <span className="font-medium text-foreground">{qp.title}</span> ({totalQuestions} questions) to the Admin.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:justify-end">
+            <Button variant="ghost" size="sm" onClick={() => setHmConfirmOpen(false)}>
+              Cancel
+            </Button>
+            <Button size="sm" onClick={confirmHmSendToAdmin} className="bg-primary hover:bg-primary-hover">
+              <Check className="h-4 w-4 mr-2" />
+              Confirm & send
             </Button>
           </DialogFooter>
         </DialogContent>
