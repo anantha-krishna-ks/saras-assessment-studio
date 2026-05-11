@@ -572,18 +572,30 @@ export default function ReviewQP() {
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Question paper count
                 </span>
+                <span className="text-destructive text-xs">*</span>
               </div>
               <Input
                 type="number"
                 min={1}
                 value={questionPaperCount}
-                onChange={(e) => setQuestionPaperCount(e.target.value)}
+                onChange={(e) => {
+                  setQuestionPaperCount(e.target.value);
+                  if (qpCountError) validateQpCount(e.target.value);
+                }}
+                onBlur={(e) => validateQpCount(e.target.value)}
                 placeholder="Enter number of copies"
-                className="rounded-lg bg-background text-sm"
+                className={cn(
+                  "rounded-lg bg-background text-sm",
+                  qpCountError && "border-destructive focus-visible:ring-destructive"
+                )}
               />
-              <p className="text-[11px] text-muted-foreground mt-1.5">
-                Number of copies to be printed and sent to Admin.
-              </p>
+              {qpCountError ? (
+                <p className="text-[11px] text-destructive font-medium mt-1.5">{qpCountError}</p>
+              ) : (
+                <p className="text-[11px] text-muted-foreground mt-1.5">
+                  Number of copies to be printed and sent to Admin.
+                </p>
+              )}
             </div>
           )}
 
