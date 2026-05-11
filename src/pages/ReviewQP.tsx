@@ -598,14 +598,33 @@ export default function ReviewQP() {
 
       {/* HM → Admin final confirmation */}
       <Dialog open={hmConfirmOpen} onOpenChange={setHmConfirmOpen}>
-        <DialogContent className="rounded-2xl sm:max-w-[420px]">
-          <DialogHeader>
-            <DialogTitle>Confirm send to Admin</DialogTitle>
-            <DialogDescription>
-              Please confirm you want to send <span className="font-medium text-foreground">{qp.title}</span> ({totalQuestions} questions) to the Admin.
+        <DialogContent className="rounded-2xl p-0 overflow-hidden gap-0 sm:max-w-[420px]">
+          {/* Header */}
+          <div className="px-8 pt-8 pb-6 flex flex-col items-center text-center">
+            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 ring-8 ring-primary/5">
+              <Printer className="h-7 w-7 text-primary" />
+            </div>
+            <DialogTitle className="text-[17px] leading-tight">Confirm send to Admin</DialogTitle>
+            <DialogDescription className="text-sm mt-2 leading-relaxed max-w-[320px]">
+              Please confirm you want to send <span className="font-medium text-foreground">{qp.title}</span> to the Admin for printing.
             </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:justify-end">
+          </div>
+
+          {/* Summary */}
+          <div className="mx-8 mb-6 rounded-xl border border-border bg-muted/40 px-4 py-3 space-y-3">
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-xs uppercase tracking-wide text-muted-foreground">Question paper</span>
+              <span className="text-xs text-muted-foreground">{qp.grade}</span>
+            </div>
+            <p className="text-sm font-medium text-foreground leading-snug">{qp.title}</p>
+            <div className="pt-2 border-t border-border/70 flex items-center justify-between">
+              <span className="text-xs uppercase tracking-wide text-muted-foreground">Copies to print</span>
+              <span className="text-lg font-semibold text-foreground tabular-nums">{questionPaperCount}</span>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <DialogFooter className="px-6 py-4 border-t border-border bg-muted/20 sm:justify-end gap-2">
             <Button variant="ghost" size="sm" onClick={() => setHmConfirmOpen(false)}>
               Cancel
             </Button>
