@@ -101,8 +101,10 @@ export function AssessmentCard({ a }: { a: Assessment }) {
   const isHOD = role === "HOD";
   const styles = statusStyles[a.status];
   const statusLabel = isHOD ? getHODLabel(a.status) : a.status;
+  const [transferOpen, setTransferOpen] = useState(false);
 
   return (
+    <>
     <Card className="group relative overflow-hidden p-0 border border-border/60 bg-card hover:border-border hover:shadow-soft-sm transition-all duration-200 rounded-xl">
       {/* Status accent bar */}
       <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-[3px] w-16 flex justify-center" aria-hidden="true">
