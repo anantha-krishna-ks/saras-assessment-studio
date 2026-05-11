@@ -31,6 +31,7 @@ import {
   GraduationCap,
   BookOpen,
   Timer,
+  Target,
   User as UserIcon,
   X,
 } from "lucide-react";
