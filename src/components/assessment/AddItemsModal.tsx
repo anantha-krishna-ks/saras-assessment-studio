@@ -334,7 +334,16 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
     const allQuestions = REPOSITORY_FOLDERS.flatMap((f) => collectQuestions(f));
     const items: SectionItem[] = allQuestions
       .filter((q) => selectedIds.has(q.id))
-      .map((q) => ({ id: crypto.randomUUID(), question: q.question, options: q.options, correctAnswer: q.correctAnswer, score: q.score, type: q.type, taxonomy: "Remember" }));
+      .map((q) => ({
+        id: crypto.randomUUID(),
+        question: q.question,
+        options: q.options,
+        correctAnswer: q.correctAnswer,
+        score: q.score,
+        type: q.type,
+        taxonomy: getTaxonomyForQuestion(q.id),
+        chapter: findQuestionFolderName(REPOSITORY_FOLDERS, q.id) ?? undefined,
+      }));
     onAddItems(items);
     setSelectedIds(new Set());
     onOpenChange(false);
