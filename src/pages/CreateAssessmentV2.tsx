@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ChevronLeft, CalendarClock, Eye, Info } from "lucide-react";
+import { ChevronLeft, CalendarClock, Eye, Info, X, Save, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
@@ -165,12 +165,15 @@ export default function CreateAssessmentV2() {
 
         <div className="flex justify-end gap-2 pt-6 mt-6 border-t border-border">
           <Button variant="outline" onClick={() => navigate("/dashboard")}>
+            <X className="w-4 h-4" />
             Cancel
           </Button>
           <Button variant="outline" onClick={() => toast.success("Saved to draft")}>
+            <Save className="w-4 h-4" />
             Save to draft
           </Button>
           <Button onClick={handleSubmit} className="px-8">
+            <CheckCircle2 className="w-4 h-4" />
             Create Assessment
           </Button>
         </div>
