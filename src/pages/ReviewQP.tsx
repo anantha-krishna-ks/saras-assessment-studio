@@ -589,12 +589,8 @@ export default function ReviewQP() {
                   qpCountError && "border-destructive focus-visible:ring-destructive"
                 )}
               />
-              {qpCountError ? (
+              {qpCountError && (
                 <p className="text-[11px] text-destructive font-medium mt-1.5">{qpCountError}</p>
-              ) : (
-                <p className="text-[11px] text-muted-foreground mt-1.5">
-                  Number of copies to be printed and sent to Admin.
-                </p>
               )}
             </div>
           )}
