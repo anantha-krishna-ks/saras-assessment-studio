@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Assessment, AssessmentStatus } from "@/data/assessments";
 import { useRole } from "@/context/RoleContext";
+import { TransferToColleagueModal } from "./TransferToColleagueModal";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -99,8 +101,10 @@ export function AssessmentCard({ a }: { a: Assessment }) {
   const isHOD = role === "HOD";
   const styles = statusStyles[a.status];
   const statusLabel = isHOD ? getHODLabel(a.status) : a.status;
+  const [transferOpen, setTransferOpen] = useState(false);
 
   return (
+    <>
     <Card className="group relative overflow-hidden p-0 border border-border/60 bg-card hover:border-border hover:shadow-soft-sm transition-all duration-200 rounded-xl">
       {/* Status accent bar */}
       <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-[3px] w-16 flex justify-center" aria-hidden="true">
@@ -147,7 +151,7 @@ export function AssessmentCard({ a }: { a: Assessment }) {
               {role === "Teacher" ? (
                 <>
                   <DropdownMenuItem><Eye className="h-4 w-4 mr-2" />Preview</DropdownMenuItem>
-                  <DropdownMenuItem><UserPlus className="h-4 w-4 mr-2" />Transfer to colleague</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => setTransferOpen(true)}><UserPlus className="h-4 w-4 mr-2" />Transfer to colleague</DropdownMenuItem>
                   <DropdownMenuItem className="text-destructive">
                     <Trash2 className="h-4 w-4 mr-2" />Delete
                   </DropdownMenuItem>
@@ -210,6 +214,8 @@ export function AssessmentCard({ a }: { a: Assessment }) {
         </div>
       </div>
     </Card>
+    <TransferToColleagueModal open={transferOpen} onOpenChange={setTransferOpen} assessment={a} />
+    </>
   );
 }
 
