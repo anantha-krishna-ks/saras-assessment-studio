@@ -14,7 +14,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Progress } from "@/components/ui/progress";
 import type { Section, SectionItem } from "@/constants/assessmentSectionData";
 
 interface AssessmentBlueprintDrawerProps {
