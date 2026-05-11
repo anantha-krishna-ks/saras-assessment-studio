@@ -65,8 +65,8 @@ export function TransferToColleagueModal({
 
   const handleSubmit = () => {
     toast({
-      title: "Transfer request sent",
-      description: `“${assessment.title}” sent to ${selected?.name} for review.`,
+      title: "Transfer request sent to HOD",
+      description: `Your request to reassign “${assessment.title}” to ${selected?.name} has been sent to the HOD for approval. You'll be notified once it's reviewed under the Requests tab.`,
     });
     handleClose(false);
   };
