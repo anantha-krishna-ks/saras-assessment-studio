@@ -196,6 +196,30 @@ export default function CreateAssessmentV2() {
       </div>
 
       <AssessmentPreviewModal open={previewOpen} onOpenChange={setPreviewOpen} data={previewData} />
+
+      <Dialog open={sendOpen} onOpenChange={setSendOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+              <Send className="h-6 w-6 text-primary" />
+            </div>
+            <DialogTitle className="text-center">Send to HOD for review?</DialogTitle>
+            <DialogDescription className="text-center">
+              Your assessment will be submitted to the HOD for approval. You won't be able to edit it
+              until it's reviewed.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center gap-2">
+            <Button variant="outline" onClick={() => setSendOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmSend}>
+              <Send className="w-4 h-4" />
+              Send to HOD
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
