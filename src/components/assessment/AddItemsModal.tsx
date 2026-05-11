@@ -66,6 +66,16 @@ function collectQuestions(folder: RepositoryFolder): RepositoryQuestion[] {
   if (folder.children) for (const c of folder.children) qs = qs.concat(collectQuestions(c));
   return qs;
 }
+function findQuestionFolderName(folders: RepositoryFolder[], questionId: string): string | null {
+  for (const f of folders) {
+    if (f.questions.some((q) => q.id === questionId)) return f.name;
+    if (f.children) {
+      const r = findQuestionFolderName(f.children, questionId);
+      if (r) return r;
+    }
+  }
+  return null;
+}
 
 const FolderNode = ({ folder, activeFolderId, onSelect, depth = 0 }: {
   folder: RepositoryFolder; activeFolderId: string | null; onSelect: (id: string) => void; depth?: number;
