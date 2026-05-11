@@ -91,6 +91,28 @@ export default function CreateAssessmentV2() {
     navigate("/dashboard");
   };
 
+  const handleSaveDraft = () => {
+    const totalQuestions = sections.reduce((sum, s) => sum + s.items.length, 0);
+    const today = new Date().toISOString().slice(0, 10);
+    const draft: Assessment = {
+      id: `draft-${Date.now()}`,
+      title: ctx.title ?? "Untitled Assessment",
+      type: "Unit Test 1",
+      subject: ctx.subject ?? "General",
+      grade: ctx.grade ?? "Class 9",
+      status: "Draft",
+      createdAt: today,
+      scheduledAt: ctx.scheduledAt ?? today,
+      dueAt: ctx.scheduledAt ?? today,
+      questions: totalQuestions,
+      sections: sections.length,
+      totalMarks,
+    };
+    allAssessments.unshift(draft);
+    toast.success("Saved to draft");
+    navigate("/dashboard");
+  };
+
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in">
       <div className="flex items-center gap-3">
