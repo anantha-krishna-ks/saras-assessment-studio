@@ -372,6 +372,202 @@ export default function AdminDashboard() {
           )}
         </Card>
       )}
+
+      <QPPreviewDialog
+        job={previewJob}
+        onClose={() => setPreviewJob(null)}
+        onPrint={handlePrint}
+      />
+    </div>
+  );
+}
+
+function QPPreviewDialog({
+  job,
+  onClose,
+  onPrint,
+}: {
+  job: PrintJob | null;
+  onClose: () => void;
+  onPrint: (j: PrintJob) => void;
+}) {
+  const open = !!job;
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-4xl p-0 gap-0 overflow-hidden rounded-3xl">
+        <DialogHeader className="px-6 py-5 border-b border-border/70 bg-card">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <DialogTitle className="text-[18px] font-medium text-foreground truncate">
+                {job?.title}
+              </DialogTitle>
+              <p className="text-xs text-muted-foreground mt-1">
+                Question paper preview • {job?.id}
+              </p>
+            </div>
+          </div>
+
+          {job && (
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <MetaChip
+                icon={<GraduationCap className="h-3.5 w-3.5" />}
+                label="Class"
+                value={job.grade}
+              />
+              <MetaChip
+                icon={<BookOpen className="h-3.5 w-3.5" />}
+                label="Subject"
+                value={job.subject}
+              />
+              <MetaChip
+                icon={<Hash className="h-3.5 w-3.5" />}
+                label="Copies"
+                value={String(job.copies)}
+                highlight
+              />
+              <MetaChip
+                icon={<UserIcon className="h-3.5 w-3.5" />}
+                label="Sent by"
+                value={job.sentBy}
+              />
+            </div>
+          )}
+        </DialogHeader>
+
+        <ScrollArea className="max-h-[60vh] bg-secondary/30">
+          <div className="p-6">
+            <div className="mx-auto max-w-3xl bg-card rounded-2xl border border-border shadow-soft-xs p-8">
+              {/* Paper header */}
+              <div className="text-center border-b border-border pb-5">
+                <h2 className="text-[18px] font-medium text-foreground">
+                  {job?.title ?? sampleQP.title}
+                </h2>
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  {job?.grade ?? sampleQP.grade} •{" "}
+                  {job?.subject ?? sampleQP.subject} • {sampleQP.type}
+                </p>
+                <div className="mt-3 flex items-center justify-center gap-5 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Timer className="h-3.5 w-3.5" />
+                    {sampleQP.duration}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Target className="h-3.5 w-3.5" />
+                    Max marks: {sampleQP.totalMarks}
+                  </span>
+                </div>
+              </div>
+
+              {/* Instructions */}
+              <div className="mt-5">
+                <h3 className="text-[13px] font-medium text-foreground uppercase tracking-wide">
+                  General Instructions
+                </h3>
+                <ol className="mt-2 list-decimal list-inside space-y-1 text-sm text-muted-foreground">
+                  {sampleQP.generalInstructions.slice(0, 4).map((ins, i) => (
+                    <li key={i}>{ins}</li>
+                  ))}
+                </ol>
+              </div>
+
+              {/* Sections */}
+              <div className="mt-6 space-y-5">
+                {sampleQP.sections.slice(0, 2).map((sec) => (
+                  <div key={sec.name}>
+                    <div className="flex items-center justify-between border-b border-border pb-2">
+                      <h3 className="text-sm font-medium text-foreground">
+                        Section {sec.name}
+                      </h3>
+                      <span className="text-xs text-muted-foreground">
+                        {sec.description}
+                      </span>
+                    </div>
+                    <ol className="mt-3 space-y-2 text-sm text-foreground">
+                      {sec.questions.slice(0, 3).map((q) => (
+                        <li
+                          key={q.number}
+                          className="flex items-start gap-3 leading-relaxed"
+                        >
+                          <span className="text-muted-foreground font-medium tabular-nums shrink-0">
+                            {q.number}.
+                          </span>
+                          <span className="flex-1">{q.text}</span>
+                          <span className="text-xs text-muted-foreground shrink-0">
+                            [{q.marks}]
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                ))}
+                <p className="text-center text-xs text-muted-foreground italic pt-2">
+                  — Preview truncated —
+                </p>
+              </div>
+            </div>
+          </div>
+        </ScrollArea>
+
+        <DialogFooter className="px-6 py-4 border-t border-border/70 bg-card flex-row sm:justify-between items-center gap-3">
+          <div className="text-xs text-muted-foreground inline-flex items-center gap-1.5">
+            <Printer className="h-3.5 w-3.5" />
+            Will print{" "}
+            <span className="font-medium text-foreground">{job?.copies}</span>{" "}
+            copies
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={onClose}>
+              <X className="h-4 w-4 mr-1.5" />
+              Cancel
+            </Button>
+            <Button onClick={() => job && onPrint(job)}>
+              <Printer className="h-4 w-4 mr-1.5" />
+              Print
+            </Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function MetaChip({
+  icon,
+  label,
+  value,
+  highlight,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl px-3 py-2 ring-1",
+        highlight
+          ? "bg-primary-soft ring-primary/30"
+          : "bg-secondary/60 ring-border/60"
+      )}
+    >
+      <div
+        className={cn(
+          "inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-medium",
+          highlight ? "text-primary" : "text-muted-foreground"
+        )}
+      >
+        {icon}
+        {label}
+      </div>
+      <div
+        className={cn(
+          "mt-0.5 text-sm font-medium truncate",
+          highlight ? "text-primary" : "text-foreground"
+        )}
+      >
+        {value}
+      </div>
     </div>
   );
 }
