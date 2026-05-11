@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Send } from "lucide-react";
 import { createSection, type Section, type SectionItem } from "@/constants/assessmentSectionData";
+import { assessments as allAssessments, type Assessment } from "@/data/assessments";
 
 interface AssessmentContext {
   assessmentId?: string;
@@ -87,6 +88,28 @@ export default function CreateAssessmentV2() {
   const handleConfirmSend = () => {
     setSendOpen(false);
     toast.success("Assessment sent to HOD for review");
+    navigate("/dashboard");
+  };
+
+  const handleSaveDraft = () => {
+    const totalQuestions = sections.reduce((sum, s) => sum + s.items.length, 0);
+    const today = new Date().toISOString().slice(0, 10);
+    const draft: Assessment = {
+      id: `draft-${Date.now()}`,
+      title: ctx.title ?? "Untitled Assessment",
+      type: "Unit Test 1",
+      subject: ctx.subject ?? "General",
+      grade: ctx.grade ?? "Class 9",
+      status: "Draft",
+      createdAt: today,
+      scheduledAt: ctx.scheduledAt ?? today,
+      dueAt: ctx.scheduledAt ?? today,
+      questions: totalQuestions,
+      sections: sections.length,
+      totalMarks,
+    };
+    allAssessments.unshift(draft);
+    toast.success("Saved to draft");
     navigate("/dashboard");
   };
 
@@ -184,7 +207,7 @@ export default function CreateAssessmentV2() {
             <X className="w-4 h-4" />
             Cancel
           </Button>
-          <Button variant="outline" onClick={() => toast.success("Saved to draft")}>
+          <Button variant="outline" onClick={handleSaveDraft}>
             <Save className="w-4 h-4" />
             Save to draft
           </Button>
