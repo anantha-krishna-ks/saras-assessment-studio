@@ -111,11 +111,23 @@ export default function ReviewQP() {
 
   const confirmAccept = () => {
     setAcceptOpen(false);
+    if (isHM) {
+      setHmConfirmOpen(true);
+      return;
+    }
     // Move the first "Waiting for approval" (Draft) item into "Submitted to HM"
     const target = assessments.find((a) => a.status === "Draft") ?? assessments.find((a) => a.status === "Not yet received");
     if (target) target.status = "Submitted to HM";
     toast.success("Sent to HM for approval", {
       description: `${qp.title} has been forwarded to the Head Master for final approval.`,
+    });
+    navigate("/dashboard");
+  };
+
+  const confirmHmSendToAdmin = () => {
+    setHmConfirmOpen(false);
+    toast.success("Sent to Admin", {
+      description: `${qp.title} has been shared with the Admin.`,
     });
     navigate("/dashboard");
   };
