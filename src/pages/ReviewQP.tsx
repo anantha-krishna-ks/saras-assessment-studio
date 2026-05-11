@@ -128,17 +128,15 @@ export default function ReviewQP() {
   };
 
   const confirmAccept = () => {
-    setAcceptOpen(false);
     if (isHM) {
-      const count = parseInt(questionPaperCount, 10);
-      if (isNaN(count) || count <= 0) {
-        toast.error("Please enter a valid question paper count");
-        setAcceptOpen(true);
+      if (!validateQpCount(questionPaperCount)) {
         return;
       }
+      setAcceptOpen(false);
       setHmConfirmOpen(true);
       return;
     }
+    setAcceptOpen(false);
     // Move the first "Waiting for approval" (Draft) item into "Submitted to HM"
     const target = assessments.find((a) => a.status === "Draft") ?? assessments.find((a) => a.status === "Not yet received");
     if (target) target.status = "Submitted to HM";
@@ -155,6 +153,7 @@ export default function ReviewQP() {
       description: `${qp.title} (${count} copies) has been shared with the Admin for printing.`,
     });
     setQuestionPaperCount("");
+    setQpCountError("");
     navigate("/dashboard");
   };
 
