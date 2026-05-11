@@ -50,6 +50,21 @@ export default function ReviewQP() {
   const [hmConfirmOpen, setHmConfirmOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [questionPaperCount, setQuestionPaperCount] = useState<string>("");
+  const [qpCountError, setQpCountError] = useState<string>("");
+
+  const validateQpCount = (value: string) => {
+    if (!value.trim()) {
+      setQpCountError("Question paper count is required");
+      return false;
+    }
+    const count = parseInt(value, 10);
+    if (isNaN(count) || count <= 0) {
+      setQpCountError("Please enter a valid number greater than 0");
+      return false;
+    }
+    setQpCountError("");
+    return true;
+  };
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
   const commentCount = Object.values(comments).filter((c) => c.text.trim().length > 0).length;
