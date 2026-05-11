@@ -78,8 +78,15 @@ export default function CreateAssessmentV2() {
     sections,
   };
 
+  const [sendOpen, setSendOpen] = useState(false);
+
   const handleSubmit = () => {
-    toast.success("Assessment created successfully");
+    setSendOpen(true);
+  };
+
+  const handleConfirmSend = () => {
+    setSendOpen(false);
+    toast.success("Assessment sent to HOD for review");
     navigate("/dashboard");
   };
 
