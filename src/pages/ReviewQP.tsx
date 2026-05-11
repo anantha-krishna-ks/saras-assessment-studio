@@ -12,10 +12,12 @@ import {
   MessageSquarePlus,
   RotateCcw,
   User,
+  Printer,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -47,6 +49,7 @@ export default function ReviewQP() {
   const [acceptOpen, setAcceptOpen] = useState(false);
   const [hmConfirmOpen, setHmConfirmOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [questionPaperCount, setQuestionPaperCount] = useState<string>("");
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
   const commentCount = Object.values(comments).filter((c) => c.text.trim().length > 0).length;
