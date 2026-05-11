@@ -34,6 +34,8 @@ import { useRole } from "@/context/RoleContext";
 
 export default function ReviewQP() {
   const navigate = useNavigate();
+  const { role } = useRole();
+  const isHM = role === "HM";
   const qp = sampleQP;
 
   type CommentEntry = { text: string; createdAt: string };
