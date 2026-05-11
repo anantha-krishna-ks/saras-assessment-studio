@@ -4,6 +4,14 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
   Table,
   TableBody,
   TableCell,
@@ -20,9 +28,15 @@ import {
   Clock,
   Hash,
   Calendar as CalendarIcon,
+  GraduationCap,
+  BookOpen,
+  Timer,
+  User as UserIcon,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { sampleQP } from "@/data/sampleQP";
 
 type PrintJob = {
   id: string;
