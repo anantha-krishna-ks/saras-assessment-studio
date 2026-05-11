@@ -147,7 +147,7 @@ export function AssessmentCard({ a }: { a: Assessment }) {
               {role === "Teacher" ? (
                 <>
                   <DropdownMenuItem><Eye className="h-4 w-4 mr-2" />Preview</DropdownMenuItem>
-                  <DropdownMenuItem><UserPlus className="h-4 w-4 mr-2" />Reassign to teacher</DropdownMenuItem>
+                  <DropdownMenuItem><UserPlus className="h-4 w-4 mr-2" />Transfer to colleague</DropdownMenuItem>
                   <DropdownMenuItem className="text-destructive">
                     <Trash2 className="h-4 w-4 mr-2" />Delete
                   </DropdownMenuItem>
