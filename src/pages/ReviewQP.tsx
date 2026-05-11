@@ -50,6 +50,21 @@ export default function ReviewQP() {
   const [hmConfirmOpen, setHmConfirmOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [questionPaperCount, setQuestionPaperCount] = useState<string>("");
+  const [qpCountError, setQpCountError] = useState<string>("");
+
+  const validateQpCount = (value: string) => {
+    if (!value.trim()) {
+      setQpCountError("Question paper count is required");
+      return false;
+    }
+    const count = parseInt(value, 10);
+    if (isNaN(count) || count <= 0) {
+      setQpCountError("Please enter a valid number greater than 0");
+      return false;
+    }
+    setQpCountError("");
+    return true;
+  };
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
   const commentCount = Object.values(comments).filter((c) => c.text.trim().length > 0).length;
@@ -113,17 +128,15 @@ export default function ReviewQP() {
   };
 
   const confirmAccept = () => {
-    setAcceptOpen(false);
     if (isHM) {
-      const count = parseInt(questionPaperCount, 10);
-      if (isNaN(count) || count <= 0) {
-        toast.error("Please enter a valid question paper count");
-        setAcceptOpen(true);
+      if (!validateQpCount(questionPaperCount)) {
         return;
       }
+      setAcceptOpen(false);
       setHmConfirmOpen(true);
       return;
     }
+    setAcceptOpen(false);
     // Move the first "Waiting for approval" (Draft) item into "Submitted to HM"
     const target = assessments.find((a) => a.status === "Draft") ?? assessments.find((a) => a.status === "Not yet received");
     if (target) target.status = "Submitted to HM";
@@ -140,6 +153,7 @@ export default function ReviewQP() {
       description: `${qp.title} (${count} copies) has been shared with the Admin for printing.`,
     });
     setQuestionPaperCount("");
+    setQpCountError("");
     navigate("/dashboard");
   };
 
@@ -508,7 +522,7 @@ export default function ReviewQP() {
       </Dialog>
 
       {/* Accept confirmation dialog */}
-      <Dialog open={acceptOpen} onOpenChange={setAcceptOpen}>
+      <Dialog open={acceptOpen} onOpenChange={(o) => { setAcceptOpen(o); if (!o) { setQpCountError(""); setQuestionPaperCount(""); } }}>
         <DialogContent className="rounded-2xl p-0 overflow-hidden gap-0 sm:max-w-[460px]">
           {/* Header */}
           <div className="px-8 pt-8 pb-6 flex flex-col items-center text-center">
@@ -558,18 +572,30 @@ export default function ReviewQP() {
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Question paper count
                 </span>
+                <span className="text-destructive text-xs">*</span>
               </div>
               <Input
                 type="number"
                 min={1}
                 value={questionPaperCount}
-                onChange={(e) => setQuestionPaperCount(e.target.value)}
+                onChange={(e) => {
+                  setQuestionPaperCount(e.target.value);
+                  if (qpCountError) validateQpCount(e.target.value);
+                }}
+                onBlur={(e) => validateQpCount(e.target.value)}
                 placeholder="Enter number of copies"
-                className="rounded-lg bg-background text-sm"
+                className={cn(
+                  "rounded-lg bg-background text-sm",
+                  qpCountError && "border-destructive focus-visible:ring-destructive"
+                )}
               />
-              <p className="text-[11px] text-muted-foreground mt-1.5">
-                Number of copies to be printed and sent to Admin.
-              </p>
+              {qpCountError ? (
+                <p className="text-[11px] text-destructive font-medium mt-1.5">{qpCountError}</p>
+              ) : (
+                <p className="text-[11px] text-muted-foreground mt-1.5">
+                  Number of copies to be printed and sent to Admin.
+                </p>
+              )}
             </div>
           )}
 
