@@ -214,6 +214,8 @@ export function AssessmentCard({ a }: { a: Assessment }) {
         </div>
       </div>
     </Card>
+    <TransferToColleagueModal open={transferOpen} onOpenChange={setTransferOpen} assessment={a} />
+    </>
   );
 }
 
