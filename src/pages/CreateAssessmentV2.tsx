@@ -207,7 +207,7 @@ export default function CreateAssessmentV2() {
             <X className="w-4 h-4" />
             Cancel
           </Button>
-          <Button variant="outline" onClick={() => toast.success("Saved to draft")}>
+          <Button variant="outline" onClick={handleSaveDraft}>
             <Save className="w-4 h-4" />
             Save to draft
           </Button>
