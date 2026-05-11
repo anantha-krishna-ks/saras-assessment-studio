@@ -288,7 +288,7 @@ export default function AdminDashboard() {
                       <Button
                         size="sm"
                         className="h-9"
-                        onClick={() => handlePrint(job)}
+                        onClick={() => setPreviewJob(job)}
                       >
                         <Printer className="h-4 w-4 mr-1.5" />
                         Send to print
