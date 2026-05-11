@@ -101,11 +101,6 @@ export function TransferToColleagueModal({
                 {COLLEAGUES.map((c) => (
                   <SelectItem key={c.id} value={c.id}>
                     <div className="flex items-center gap-2">
-                      <Avatar className="h-6 w-6">
-                        <AvatarFallback className="text-[10px] bg-primary-soft text-primary">
-                          {c.initials}
-                        </AvatarFallback>
-                      </Avatar>
                       <span className="font-medium">{c.name}</span>
                       <span className="text-xs text-muted-foreground">
                         · {c.subject}
