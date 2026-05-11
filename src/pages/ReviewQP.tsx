@@ -12,10 +12,12 @@ import {
   MessageSquarePlus,
   RotateCcw,
   User,
+  Printer,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -47,6 +49,7 @@ export default function ReviewQP() {
   const [acceptOpen, setAcceptOpen] = useState(false);
   const [hmConfirmOpen, setHmConfirmOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [questionPaperCount, setQuestionPaperCount] = useState<string>("");
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
   const commentCount = Object.values(comments).filter((c) => c.text.trim().length > 0).length;
@@ -112,6 +115,12 @@ export default function ReviewQP() {
   const confirmAccept = () => {
     setAcceptOpen(false);
     if (isHM) {
+      const count = parseInt(questionPaperCount, 10);
+      if (isNaN(count) || count <= 0) {
+        toast.error("Please enter a valid question paper count");
+        setAcceptOpen(true);
+        return;
+      }
       setHmConfirmOpen(true);
       return;
     }
@@ -126,9 +135,11 @@ export default function ReviewQP() {
 
   const confirmHmSendToAdmin = () => {
     setHmConfirmOpen(false);
+    const count = parseInt(questionPaperCount, 10);
     toast.success("Sent to Admin", {
-      description: `${qp.title} has been shared with the Admin.`,
+      description: `${qp.title} (${count} copies) has been shared with the Admin for printing.`,
     });
+    setQuestionPaperCount("");
     navigate("/dashboard");
   };
 
@@ -540,6 +551,28 @@ export default function ReviewQP() {
             </div>
           )}
 
+          {isHM && (
+            <div className="mx-8 mb-6 rounded-xl border border-border bg-muted/40 p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Printer className="h-4 w-4 text-muted-foreground" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Question paper count
+                </span>
+              </div>
+              <Input
+                type="number"
+                min={1}
+                value={questionPaperCount}
+                onChange={(e) => setQuestionPaperCount(e.target.value)}
+                placeholder="Enter number of copies"
+                className="rounded-lg bg-background text-sm"
+              />
+              <p className="text-[11px] text-muted-foreground mt-1.5">
+                Number of copies to be printed and sent to Admin.
+              </p>
+            </div>
+          )}
+
           {/* Notice */}
           <div className="mx-8 mb-6 flex items-start gap-2 text-xs text-muted-foreground">
             <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
@@ -565,14 +598,33 @@ export default function ReviewQP() {
 
       {/* HM → Admin final confirmation */}
       <Dialog open={hmConfirmOpen} onOpenChange={setHmConfirmOpen}>
-        <DialogContent className="rounded-2xl sm:max-w-[420px]">
-          <DialogHeader>
-            <DialogTitle>Confirm send to Admin</DialogTitle>
-            <DialogDescription>
-              Please confirm you want to send <span className="font-medium text-foreground">{qp.title}</span> ({totalQuestions} questions) to the Admin.
+        <DialogContent className="rounded-2xl p-0 overflow-hidden gap-0 sm:max-w-[420px]">
+          {/* Header */}
+          <div className="px-8 pt-8 pb-6 flex flex-col items-center text-center">
+            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 ring-8 ring-primary/5">
+              <Printer className="h-7 w-7 text-primary" />
+            </div>
+            <DialogTitle className="text-[17px] leading-tight">Confirm send to Admin</DialogTitle>
+            <DialogDescription className="text-sm mt-2 leading-relaxed max-w-[320px]">
+              Please confirm you want to send <span className="font-medium text-foreground">{qp.title}</span> to the Admin for printing.
             </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:justify-end">
+          </div>
+
+          {/* Summary */}
+          <div className="mx-8 mb-6 rounded-xl border border-border bg-muted/40 px-4 py-3 space-y-3">
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-xs uppercase tracking-wide text-muted-foreground">Question paper</span>
+              <span className="text-xs text-muted-foreground">{qp.grade}</span>
+            </div>
+            <p className="text-sm font-medium text-foreground leading-snug">{qp.title}</p>
+            <div className="pt-2 border-t border-border/70 flex items-center justify-between">
+              <span className="text-xs uppercase tracking-wide text-muted-foreground">Copies to print</span>
+              <span className="text-lg font-semibold text-foreground tabular-nums">{questionPaperCount}</span>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <DialogFooter className="px-6 py-4 border-t border-border bg-muted/20 sm:justify-end gap-2">
             <Button variant="ghost" size="sm" onClick={() => setHmConfirmOpen(false)}>
               Cancel
             </Button>
