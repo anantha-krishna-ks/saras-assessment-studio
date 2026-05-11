@@ -167,6 +167,9 @@ export default function CreateAssessmentV2() {
           <Button variant="outline" onClick={() => navigate("/dashboard")}>
             Cancel
           </Button>
+          <Button variant="outline" onClick={() => toast.success("Saved to draft")}>
+            Save to draft
+          </Button>
           <Button onClick={handleSubmit} className="px-8">
             Create Assessment
           </Button>
