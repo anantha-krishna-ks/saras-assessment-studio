@@ -113,8 +113,8 @@ export function AssessmentCard({ a }: { a: Assessment }) {
 
       <div className="relative p-5 space-y-4">
         {/* Header: icon + title + menu */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3 min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <div
               className={cn(
                 "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ring-1 ring-inset ring-border/40",
@@ -124,11 +124,8 @@ export function AssessmentCard({ a }: { a: Assessment }) {
               <FileText className={cn("h-5 w-5", styles.iconColor)} />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-[15px] font-medium text-foreground leading-snug truncate">
-                {a.title}
-              </h3>
-              <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                <span className="font-medium text-foreground/70">{a.type}</span>
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">{a.type}</span>
                 <span className="text-muted-foreground/40">•</span>
                 <span>{a.grade}</span>
                 <span className="text-muted-foreground/40">•</span>
