@@ -522,7 +522,7 @@ export default function ReviewQP() {
       </Dialog>
 
       {/* Accept confirmation dialog */}
-      <Dialog open={acceptOpen} onOpenChange={setAcceptOpen}>
+      <Dialog open={acceptOpen} onOpenChange={(o) => { setAcceptOpen(o); if (!o) { setQpCountError(""); setQuestionPaperCount(""); } }}>
         <DialogContent className="rounded-2xl p-0 overflow-hidden gap-0 sm:max-w-[460px]">
           {/* Header */}
           <div className="px-8 pt-8 pb-6 flex flex-col items-center text-center">
