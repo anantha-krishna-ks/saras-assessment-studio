@@ -66,6 +66,16 @@ function collectQuestions(folder: RepositoryFolder): RepositoryQuestion[] {
   if (folder.children) for (const c of folder.children) qs = qs.concat(collectQuestions(c));
   return qs;
 }
+function findQuestionFolderName(folders: RepositoryFolder[], questionId: string): string | null {
+  for (const f of folders) {
+    if (f.questions.some((q) => q.id === questionId)) return f.name;
+    if (f.children) {
+      const r = findQuestionFolderName(f.children, questionId);
+      if (r) return r;
+    }
+  }
+  return null;
+}
 
 const FolderNode = ({ folder, activeFolderId, onSelect, depth = 0 }: {
   folder: RepositoryFolder; activeFolderId: string | null; onSelect: (id: string) => void; depth?: number;
@@ -171,6 +181,7 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
       score: Math.max(0, parseFloat(score) || 1),
       type,
       taxonomy,
+      chapter: selectedFolderName,
     };
     if (type === "True / False" && trueFalseAnswer !== null) item.correctAnswer = trueFalseAnswer ? "True" : "False";
     if (type === "Short Answer" && answerText.trim()) item.correctAnswer = answerText.trim();
@@ -324,7 +335,16 @@ const AddItemsModal = ({ open, onOpenChange, sectionLabel, onAddItems }: AddItem
     const allQuestions = REPOSITORY_FOLDERS.flatMap((f) => collectQuestions(f));
     const items: SectionItem[] = allQuestions
       .filter((q) => selectedIds.has(q.id))
-      .map((q) => ({ id: crypto.randomUUID(), question: q.question, options: q.options, correctAnswer: q.correctAnswer, score: q.score, type: q.type, taxonomy: "Remember" }));
+      .map((q) => ({
+        id: crypto.randomUUID(),
+        question: q.question,
+        options: q.options,
+        correctAnswer: q.correctAnswer,
+        score: q.score,
+        type: q.type,
+        taxonomy: getTaxonomyForQuestion(q.id),
+        chapter: findQuestionFolderName(REPOSITORY_FOLDERS, q.id) ?? undefined,
+      }));
     onAddItems(items);
     setSelectedIds(new Set());
     onOpenChange(false);
