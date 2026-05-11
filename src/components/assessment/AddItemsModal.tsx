@@ -181,6 +181,7 @@ const CreateNewItemForm = ({ onAddItem, activeFolderId }: { onAddItem: (item: Se
       score: Math.max(0, parseFloat(score) || 1),
       type,
       taxonomy,
+      chapter: selectedFolderName,
     };
     if (type === "True / False" && trueFalseAnswer !== null) item.correctAnswer = trueFalseAnswer ? "True" : "False";
     if (type === "Short Answer" && answerText.trim()) item.correctAnswer = answerText.trim();
