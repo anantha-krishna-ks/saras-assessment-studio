@@ -80,6 +80,8 @@ function formatDate(d: string) {
 
 function getHODLabel(status: AssessmentStatus): string {
   switch (status) {
+    case "Not yet started":
+      return "Submitted to HM";
     case "Not yet received":
       return "Submitted to teacher";
     case "Draft":
