@@ -6,6 +6,7 @@ import { assessments as allAssessments } from "@/data/assessments";
 import { AssessmentCard } from "@/components/dashboard/AssessmentCard";
 import { AssessmentCalendar } from "@/components/dashboard/AssessmentCalendar";
 import { InboxPanel } from "@/components/dashboard/InboxPanel";
+import AdminDashboard from "./AdminDashboard";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +34,8 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const isTeacher = role === "Teacher";
   const isHM = role === "HM";
+
+  if (role === "Admin") return <AdminDashboard />;
 
   const [statusFilter, setStatusFilter] = useState<AssessmentStatus | "All">("All");
   const [gradeFilter, setGradeFilter] = useState<string>("All");
