@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Send } from "lucide-react";
 import { createSection, type Section, type SectionItem } from "@/constants/assessmentSectionData";
+import { assessments as allAssessments, type Assessment } from "@/data/assessments";
 
 interface AssessmentContext {
   assessmentId?: string;
