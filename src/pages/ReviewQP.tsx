@@ -551,6 +551,28 @@ export default function ReviewQP() {
             </div>
           )}
 
+          {isHM && (
+            <div className="mx-8 mb-6 rounded-xl border border-border bg-muted/40 p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Printer className="h-4 w-4 text-muted-foreground" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Question paper count
+                </span>
+              </div>
+              <Input
+                type="number"
+                min={1}
+                value={questionPaperCount}
+                onChange={(e) => setQuestionPaperCount(e.target.value)}
+                placeholder="Enter number of copies"
+                className="rounded-lg bg-background text-sm"
+              />
+              <p className="text-[11px] text-muted-foreground mt-1.5">
+                Number of copies to be printed and sent to Admin.
+              </p>
+            </div>
+          )}
+
           {/* Notice */}
           <div className="mx-8 mb-6 flex items-start gap-2 text-xs text-muted-foreground">
             <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
