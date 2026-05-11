@@ -115,6 +115,12 @@ export default function ReviewQP() {
   const confirmAccept = () => {
     setAcceptOpen(false);
     if (isHM) {
+      const count = parseInt(questionPaperCount, 10);
+      if (isNaN(count) || count <= 0) {
+        toast.error("Please enter a valid question paper count");
+        setAcceptOpen(true);
+        return;
+      }
       setHmConfirmOpen(true);
       return;
     }
@@ -129,9 +135,11 @@ export default function ReviewQP() {
 
   const confirmHmSendToAdmin = () => {
     setHmConfirmOpen(false);
+    const count = parseInt(questionPaperCount, 10);
     toast.success("Sent to Admin", {
-      description: `${qp.title} has been shared with the Admin.`,
+      description: `${qp.title} (${count} copies) has been shared with the Admin for printing.`,
     });
+    setQuestionPaperCount("");
     navigate("/dashboard");
   };
 
