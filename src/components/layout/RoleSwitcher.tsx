@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, ChevronDown, ShieldCheck, Users, UserCog, LucideIcon } from "lucide-react";
+import { Check, ChevronDown, ShieldCheck, Users, UserCog, Printer, LucideIcon } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -19,6 +19,7 @@ const roleOptions: RoleOption[] = [
   { id: "HOD", label: "HOD", description: "Review papers & oversee assessments", icon: ShieldCheck },
   { id: "Teacher", label: "Teacher", description: "Create and manage assessments", icon: Users },
   { id: "HM", label: "HM", description: "Head Master oversight", icon: UserCog },
+  { id: "Admin", label: "Admin", description: "Print question papers from HM", icon: Printer },
 ];
 
 export function RoleSwitcher() {
