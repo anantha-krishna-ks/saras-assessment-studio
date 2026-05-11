@@ -521,13 +521,24 @@ export default function ReviewQP() {
               <span className="text-xs text-muted-foreground">{qp.grade}</span>
             </div>
             <p className="text-sm font-medium text-foreground leading-snug">{qp.title}</p>
-            {isHM && (
-              <div className="flex items-center justify-between pt-2 mt-1 border-t border-border/60">
-                <span className="text-xs text-muted-foreground">Total questions</span>
-                <span className="text-sm font-semibold text-foreground tabular-nums">{totalQuestions}</span>
-              </div>
-            )}
           </div>
+
+          {isHM && (
+            <div className="mx-8 mb-6 grid grid-cols-3 gap-2">
+              <div className="rounded-xl border border-border bg-background px-3 py-3 flex flex-col items-start gap-0.5">
+                <span className="text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground">Questions</span>
+                <span className="text-lg font-semibold text-foreground tabular-nums leading-none mt-1">{totalQuestions}</span>
+              </div>
+              <div className="rounded-xl border border-border bg-background px-3 py-3 flex flex-col items-start gap-0.5">
+                <span className="text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground">Marks</span>
+                <span className="text-lg font-semibold text-foreground tabular-nums leading-none mt-1">{qp.totalMarks}</span>
+              </div>
+              <div className="rounded-xl border border-border bg-background px-3 py-3 flex flex-col items-start gap-0.5">
+                <span className="text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground">Sections</span>
+                <span className="text-lg font-semibold text-foreground tabular-nums leading-none mt-1">{qp.sections.length}</span>
+              </div>
+            </div>
+          )}
 
           {/* Notice */}
           <div className="mx-8 mb-6 flex items-start gap-2 text-xs text-muted-foreground">
