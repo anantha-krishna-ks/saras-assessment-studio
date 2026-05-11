@@ -9,6 +9,15 @@ import { toast } from "sonner";
 import SectionPanel from "@/components/assessment/SectionPanel";
 import AssessmentBlueprintDrawer from "@/components/assessment/AssessmentBlueprintDrawer";
 import AssessmentPreviewModal from "@/components/assessment/AssessmentPreviewModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Send } from "lucide-react";
 import { createSection, type Section, type SectionItem } from "@/constants/assessmentSectionData";
 
 interface AssessmentContext {
