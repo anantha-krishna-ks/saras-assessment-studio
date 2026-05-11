@@ -243,24 +243,21 @@ export default function ReviewQPQueue() {
                   </span>
                 </div>
 
-                {/* Body: title, subject, teacher */}
+                {/* Body: subject + teacher */}
                 <div className="px-4 pb-3.5 flex-1">
                   <h3 className="text-[15px] font-medium text-foreground tracking-tight leading-snug line-clamp-1">
-                    {qp.title}
-                  </h3>
-                  <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">
                     {qp.subject}
-                  </p>
+                  </h3>
 
-                  <div className="mt-3 flex items-center gap-2 min-w-0">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary text-[11px] font-medium ring-2 ring-card">
+                  <div className="mt-3 flex items-center gap-2.5 min-w-0">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary text-[12px] font-medium ring-2 ring-card">
                       {qp.teacherInitials}
                     </span>
                     <div className="min-w-0">
-                      <div className="text-[12.5px] text-foreground truncate leading-tight">
+                      <div className="text-[13px] text-foreground truncate leading-tight">
                         {qp.teacher}
                       </div>
-                      <div className="text-[10.5px] text-muted-foreground leading-tight mt-0.5">
+                      <div className="text-[11px] text-muted-foreground leading-tight mt-0.5">
                         Submitted {qp.submittedOn}
                       </div>
                     </div>
