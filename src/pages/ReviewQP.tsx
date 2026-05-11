@@ -45,6 +45,7 @@ export default function ReviewQP() {
   const [revertOpen, setRevertOpen] = useState(false);
   const [revertNote, setRevertNote] = useState("");
   const [acceptOpen, setAcceptOpen] = useState(false);
+  const [hmConfirmOpen, setHmConfirmOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
 
   const totalQuestions = qp.sections.reduce((s, sec) => s + sec.questions.length, 0);
