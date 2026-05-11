@@ -20,6 +20,7 @@ import {
   Target,
   Trash2,
   User as UserIcon,
+  UserPlus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
