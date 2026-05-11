@@ -139,12 +139,12 @@ const buildSectionStats = (sections: Section[]): SectionStats[] =>
 const StackedBar = ({ stats }: { stats: ChapterStats }) => {
   if (stats.marks === 0) {
     return (
-      <div className="h-2 w-full rounded-full bg-muted" aria-hidden />
+      <div className="h-1 w-full rounded-full bg-muted" aria-hidden />
     );
   }
   return (
     <div
-      className="flex h-2 w-full overflow-hidden rounded-full bg-muted"
+      className="flex h-1 w-full overflow-hidden rounded-full bg-muted"
       role="img"
       aria-label="Taxonomy distribution"
     >
