@@ -19,6 +19,7 @@ export interface SectionItem {
   score: number;
   type: ItemType;
   taxonomy?: string;
+  chapter?: string;
   subQuestionStyle?: "alpha" | "roman";
   subItems?: SectionItem[];
   orItem?: SectionItem;
