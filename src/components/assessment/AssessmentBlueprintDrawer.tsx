@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, Layers, FileText } from "lucide-react";
+import { BarChart3, BookOpen, FileText, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -23,6 +23,7 @@ interface AssessmentBlueprintDrawerProps {
 
 type TaxonomyKey = "knowledge" | "understand" | "application";
 
+// Map all 6 Bloom levels into 3 buckets so taxonomy marks reconcile with totals.
 const TAXONOMY_MAP: Record<string, TaxonomyKey> = {
   remember: "knowledge",
   knowledge: "knowledge",
@@ -31,15 +32,50 @@ const TAXONOMY_MAP: Record<string, TaxonomyKey> = {
   comprehension: "understand",
   apply: "application",
   application: "application",
+  analyze: "application",
+  analyse: "application",
+  evaluate: "application",
+  create: "application",
 };
 
+const TAXONOMY_META: Record<
+  TaxonomyKey,
+  { label: string; bar: string; dot: string; chip: string }
+> = {
+  knowledge: {
+    label: "Knowledge",
+    bar: "bg-sky-500",
+    dot: "bg-sky-500",
+    chip: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
+  },
+  understand: {
+    label: "Understand",
+    bar: "bg-emerald-500",
+    dot: "bg-emerald-500",
+    chip: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+  },
+  application: {
+    label: "Application",
+    bar: "bg-amber-500",
+    dot: "bg-amber-500",
+    chip: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
+  },
+};
+
+const TAX_ORDER: TaxonomyKey[] = ["knowledge", "understand", "application"];
+
 const UNTAGGED = "__untagged__";
+
+interface BucketStats {
+  marks: number;
+  count: number;
+}
 
 interface ChapterStats {
   chapter: string;
   itemCount: number;
   marks: number;
-  taxonomy: Record<TaxonomyKey, number>;
+  taxonomy: Record<TaxonomyKey, BucketStats>;
 }
 
 interface SectionStats {
@@ -62,6 +98,12 @@ const flattenItems = (items: SectionItem[]): SectionItem[] => {
   return out;
 };
 
+const emptyBuckets = (): Record<TaxonomyKey, BucketStats> => ({
+  knowledge: { marks: 0, count: 0 },
+  understand: { marks: 0, count: 0 },
+  application: { marks: 0, count: 0 },
+});
+
 const buildSectionStats = (sections: Section[]): SectionStats[] =>
   sections.map((section) => {
     const map = new Map<string, ChapterStats>();
@@ -72,20 +114,17 @@ const buildSectionStats = (sections: Section[]): SectionStats[] =>
       const key = item.chapter ?? UNTAGGED;
       let stats = map.get(key);
       if (!stats) {
-        stats = {
-          chapter: key,
-          itemCount: 0,
-          marks: 0,
-          taxonomy: { knowledge: 0, understand: 0, application: 0 },
-        };
+        stats = { chapter: key, itemCount: 0, marks: 0, taxonomy: emptyBuckets() };
         map.set(key, stats);
       }
       stats.itemCount += 1;
       stats.marks += item.score;
       itemCount += 1;
       marks += item.score;
-      const tax = TAXONOMY_MAP[(item.taxonomy ?? "").toLowerCase()];
-      if (tax) stats.taxonomy[tax] += item.score;
+      // Default any unknown/missing taxonomy to "knowledge" so totals always reconcile.
+      const tax = TAXONOMY_MAP[(item.taxonomy ?? "").toLowerCase()] ?? "knowledge";
+      stats.taxonomy[tax].marks += item.score;
+      stats.taxonomy[tax].count += 1;
     }
 
     const chapters = [...map.values()].sort((a, b) => {
@@ -97,63 +136,90 @@ const buildSectionStats = (sections: Section[]): SectionStats[] =>
     return { section, chapters, itemCount, marks };
   });
 
-const TaxonomyBar = ({
-  label,
-  value,
-  total,
-  tone,
-}: {
-  label: string;
-  value: number;
-  total: number;
-  tone: "knowledge" | "understand" | "application";
-}) => {
-  const pct = total > 0 ? Math.round((value / total) * 100) : 0;
-  const toneClasses: Record<typeof tone, string> = {
-    knowledge: "bg-sky-500",
-    understand: "bg-emerald-500",
-    application: "bg-amber-500",
-  };
+const StackedBar = ({ stats }: { stats: ChapterStats }) => {
+  if (stats.marks === 0) {
+    return (
+      <div className="h-2 w-full rounded-full bg-muted" aria-hidden />
+    );
+  }
   return (
-    <div className="space-y-1">
-      <div className="flex items-center justify-between text-[11px]">
-        <span className="font-medium text-foreground">{label}</span>
-        <span className="tabular-nums text-muted-foreground">
-          {value} <span className="text-muted-foreground/70">· {pct}%</span>
-        </span>
-      </div>
-      <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-        <div
-          className={`h-full rounded-full transition-all ${toneClasses[tone]}`}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
+    <div
+      className="flex h-2 w-full overflow-hidden rounded-full bg-muted"
+      role="img"
+      aria-label="Taxonomy distribution"
+    >
+      {TAX_ORDER.map((k) => {
+        const pct = (stats.taxonomy[k].marks / stats.marks) * 100;
+        if (pct === 0) return null;
+        return (
+          <div
+            key={k}
+            className={`${TAXONOMY_META[k].bar} h-full transition-all`}
+            style={{ width: `${pct}%` }}
+            title={`${TAXONOMY_META[k].label}: ${stats.taxonomy[k].marks} marks`}
+          />
+        );
+      })}
     </div>
   );
 };
 
-const ChapterBlock = ({ stats }: { stats: ChapterStats }) => {
+const ChapterCard = ({ stats, sectionTotalMarks }: { stats: ChapterStats; sectionTotalMarks: number }) => {
   const isUntagged = stats.chapter === UNTAGGED;
+  const sharePct = sectionTotalMarks > 0 ? Math.round((stats.marks / sectionTotalMarks) * 100) : 0;
+
   return (
-    <div className="rounded-lg border border-border bg-background overflow-hidden">
-      <div className="flex items-center justify-between gap-2 border-b border-border bg-muted/30 px-3 py-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary/60 shrink-0" />
-          <span className="text-sm font-medium text-foreground truncate">
-            {isUntagged ? "Untagged questions" : stats.chapter}
-          </span>
-          <span className="text-[11px] text-muted-foreground shrink-0">
-            · {stats.itemCount} item{stats.itemCount !== 1 ? "s" : ""}
-          </span>
+    <div className="rounded-lg border border-border bg-background p-3 space-y-3 transition-colors hover:border-primary/30">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-2 min-w-0">
+          <BookOpen
+            className={`h-4 w-4 mt-0.5 shrink-0 ${isUntagged ? "text-muted-foreground" : "text-primary"}`}
+          />
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-foreground truncate">
+              {isUntagged ? "Untagged questions" : stats.chapter}
+            </p>
+            <p className="text-[11px] text-muted-foreground tabular-nums">
+              {stats.itemCount} item{stats.itemCount !== 1 ? "s" : ""} · {sharePct}% of section
+            </p>
+          </div>
         </div>
-        <span className="rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary tabular-nums shrink-0">
+        <span className="shrink-0 rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary tabular-nums">
           {stats.marks} marks
         </span>
       </div>
-      <div className="space-y-3 px-3 py-3">
-        <TaxonomyBar label="Knowledge" value={stats.taxonomy.knowledge} total={stats.marks} tone="knowledge" />
-        <TaxonomyBar label="Understand" value={stats.taxonomy.understand} total={stats.marks} tone="understand" />
-        <TaxonomyBar label="Application" value={stats.taxonomy.application} total={stats.marks} tone="application" />
+
+      {/* Stacked distribution bar */}
+      <StackedBar stats={stats} />
+
+      {/* Per-bucket chips */}
+      <div className="grid grid-cols-3 gap-1.5">
+        {TAX_ORDER.map((k) => {
+          const bucket = stats.taxonomy[k];
+          const pct = stats.marks > 0 ? Math.round((bucket.marks / stats.marks) * 100) : 0;
+          return (
+            <div
+              key={k}
+              className="rounded-md border border-border bg-card px-2 py-1.5 flex flex-col gap-0.5"
+            >
+              <div className="flex items-center gap-1.5">
+                <span className={`h-1.5 w-1.5 rounded-full ${TAXONOMY_META[k].dot}`} />
+                <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                  {TAXONOMY_META[k].label}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between gap-1">
+                <span className="text-sm font-semibold text-foreground tabular-nums">
+                  {bucket.marks}
+                </span>
+                <span className="text-[10px] text-muted-foreground tabular-nums">
+                  {bucket.count} Q · {pct}%
+                </span>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -164,7 +230,9 @@ const AssessmentBlueprintDrawer = ({ sections }: AssessmentBlueprintDrawerProps)
   const totalMarks = sectionStats.reduce((a, s) => a + s.marks, 0);
   const totalItems = sectionStats.reduce((a, s) => a + s.itemCount, 0);
   const uniqueChapters = new Set(
-    sectionStats.flatMap((s) => s.chapters.filter((c) => c.chapter !== UNTAGGED).map((c) => c.chapter))
+    sectionStats.flatMap((s) =>
+      s.chapters.filter((c) => c.chapter !== UNTAGGED).map((c) => c.chapter)
+    )
   ).size;
 
   return (
@@ -183,7 +251,7 @@ const AssessmentBlueprintDrawer = ({ sections }: AssessmentBlueprintDrawerProps)
           </SheetDescription>
         </SheetHeader>
 
-        {/* Summary bar */}
+        {/* Summary */}
         <div className="grid grid-cols-3 gap-3 border-b border-border bg-muted/30 px-6 py-4">
           <div>
             <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Chapters</p>
@@ -245,13 +313,29 @@ const AssessmentBlueprintDrawer = ({ sections }: AssessmentBlueprintDrawerProps)
                       </p>
                     ) : (
                       <>
-                        <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                          <Layers className="h-3.5 w-3.5" />
-                          Chapters in this section
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                            <Layers className="h-3.5 w-3.5" />
+                            Chapters in this section
+                          </div>
+                          <div className="flex items-center gap-2.5">
+                            {TAX_ORDER.map((k) => (
+                              <div key={k} className="flex items-center gap-1">
+                                <span className={`h-1.5 w-1.5 rounded-full ${TAXONOMY_META[k].dot}`} />
+                                <span className="text-[10px] text-muted-foreground">
+                                  {TAXONOMY_META[k].label}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                         <div className="space-y-2.5">
                           {stats.chapters.map((c) => (
-                            <ChapterBlock key={c.chapter} stats={c} />
+                            <ChapterCard
+                              key={c.chapter}
+                              stats={c}
+                              sectionTotalMarks={stats.marks}
+                            />
                           ))}
                         </div>
                       </>
