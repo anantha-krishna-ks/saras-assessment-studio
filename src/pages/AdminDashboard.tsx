@@ -117,6 +117,7 @@ export default function AdminDashboard() {
   const [queue, setQueue] = useState<PrintJob[]>(initialQueue);
   const [logs, setLogs] = useState<PrintJob[]>(initialLogs);
   const [search, setSearch] = useState("");
+  const [previewJob, setPreviewJob] = useState<PrintJob | null>(null);
 
   const filteredQueue = useMemo(
     () =>
@@ -144,6 +145,7 @@ export default function AdminDashboard() {
   const handlePrint = (job: PrintJob) => {
     setQueue((q) => q.filter((j) => j.id !== job.id));
     setLogs((l) => [{ ...job, printedAt: new Date().toISOString() }, ...l]);
+    setPreviewJob(null);
     toast.success("Sent to print", {
       description: `${job.title} • ${job.copies} copies`,
     });
