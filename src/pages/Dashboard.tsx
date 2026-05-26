@@ -137,8 +137,7 @@ export default function Dashboard() {
         {!isTeacher && (
           <div className="inline-flex items-center gap-3">
             <Button
-              variant="outline"
-              className="bg-card hover:bg-secondary/60 border-border h-10 px-5"
+              className="h-10 px-5"
               onClick={() => navigate("/review-qp")}
             >
               <FileSearch className="h-4 w-4 mr-2" />
@@ -153,15 +152,6 @@ export default function Dashboard() {
                 >
                   <ClipboardCheck className="h-4 w-4 mr-2" />
                   Assessment Tracker
-                </Button>
-              </>
-            )}
-            {!isHM && (
-              <>
-                <span aria-hidden="true" className="h-7 w-px bg-border/80" />
-                <Button className="h-10 px-5" onClick={() => navigate("/create")}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Assessment
                 </Button>
               </>
             )}
