@@ -234,20 +234,11 @@ export default function Dashboard() {
             {/* Actions group */}
             <div className="inline-flex items-center gap-3 lg:shrink-0">
               <Button
-                variant="outline"
-                className="bg-card hover:bg-secondary/60 border-border h-10 px-5"
+                className="h-10 px-5"
                 onClick={() => navigate("/question-repository")}
               >
                 <BookOpen className="h-4 w-4 mr-2" />
                 Question Repository
-              </Button>
-              <span aria-hidden="true" className="h-7 w-px bg-border/80" />
-              <Button
-                className="h-10 px-5"
-                onClick={() => navigate("/create-v2")}
-              >
-                <FilePlus2 className="h-4 w-4 mr-2" />
-                Create Question Paper
               </Button>
             </div>
           </div>
