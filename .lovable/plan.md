@@ -1,60 +1,38 @@
-## Goal
-Generate a single, self-contained design system document you can drop into any project (Tailwind + shadcn/ui or otherwise). It will be saved to `/mnt/documents/design-system.md` so you can download it directly, plus a ready-to-paste `index.css` and `tailwind.config.ts` snippet.
+# Master Design Prompt Artifact
 
-## What the document will contain
+Goal: produce a single, portable "master design prompt" you can paste into any AI/coding agent (Lovable, Cursor, ChatGPT, Claude, etc.) and have it reproduce this application's exact visual language — Apple-like minimalism, `#0070E0` brand blue, Poppins, soft elevation, pastel accents, 14px text floor — across any new app.
 
-**1. Brand & Philosophy**
-- Apple-like minimalism, sober tone, no gradients, soft shadows only
-- Primary brand color `#0070E0`, neutral Apple-grey surfaces
-- Font weight cap at 500, 14px minimum text size
+## Deliverable
 
-**2. Color Tokens (HSL, light + dark)**
-- Brand: `primary`, `primary-foreground`, `primary-soft`, `primary-hover`
-- Surfaces: `background` (#F7F8FA), `card`, `popover`, `secondary`, `muted`, `accent`
-- Status: `success`, `warning`, `destructive`, `info` + foregrounds
-- Pastels: lavender / mint / peach / sky / rose, each with an "ink" pair for AAA-contrast text
-- Form/structure: `border`, `input`, `ring`, `--radius: 0.875rem`
-- Sidebar token set
-- Full dark-mode override table
+One file: `/mnt/documents/master-design-prompt.md`
 
-**3. Typography**
-- Font: Poppins (300/400/500), system fallbacks
-- Tailwind override: `xs` and `sm` both = 14px, `base` = 16px (enforces 14px floor)
-- Weight rule: headings, `.font-medium`, `<strong>`, `<b>` capped at 500
+Written as a directive prompt (second-person "You will…"), not a reference doc. Self-contained — no links to read, no external assumptions. Copy-paste and go.
 
-**4. Elevation (Shadows)**
-- Three-tier soft shadow system: `--shadow-xs / sm / md` (multi-layer, low-opacity)
-- Utility classes: `.shadow-soft-xs / -sm / -md`
-- Rule: never use Tailwind's default harsh shadows
+## Sections inside the prompt
 
-**5. Radius Scale**
-- `lg` = `var(--radius)` (14px), `md` = 12px, `sm` = 10px
-- Buttons use `rounded-full` by default
+1. **Role & Mission** — frame the agent as a senior product designer building in this exact system.
+2. **Design Philosophy** — Apple-like restraint, sober pastel accents, no AI-generic aesthetics (no purple/indigo gradients on white, no Inter default, no neon).
+3. **Hard Constraints (non-negotiable)** — never hardcode colors, never exceed font-weight 500, never use default Tailwind shadows, never go below 14px, never use serif, never use gradients on surfaces.
+4. **Color System** — complete HSL token table (brand, surfaces, status, 5 pastel pairs with ink), light + dark mode values, usage rules per token, do/don't pairings.
+5. **Typography** — Poppins 300/400/500, 14px floor, 16px body, heading scale, weight cap, letter-spacing, line-height.
+6. **Spacing & Layout** — 4px base unit, container width, section rhythm, card padding standards.
+7. **Radius** — 14px base / 12 / 10, `rounded-full` for buttons & pills, never sharp corners on interactive elements.
+8. **Elevation** — three-tier soft shadow tokens, when to use each tier, never `shadow-lg`/`shadow-xl`.
+9. **Motion** — keyframes (`float`, `fadeInUp`, `shimmer`, `progress-grow`, accordion), easing curves, durations, when to animate vs. when not to.
+10. **Component Patterns** — buttons (pill, variants), cards (`rounded-lg border bg-card shadow-soft-sm`), inputs, badges/status chips with pastel pairs, dialogs/modals, empty states, tabs, tables, toasts.
+11. **Iconography** — lucide-react only, stroke 1.5–2, size scale.
+12. **Imagery** — flat illustration or none, no stock-photo gradients.
+13. **Accessibility** — AAA contrast for ink-on-pastel pairs, focus rings using `--ring`, keyboard-first.
+14. **Dark Mode** — full override table, parity rules.
+15. **Edge Cases** — long text truncation, empty/loading/error/skeleton states, disabled, hover/active/focus, RTL, dense vs. comfortable density, mobile breakpoints, very large numbers, very long names, zero-data charts, network failure UI, permission-denied UI, first-run/onboarding, success confirmations, destructive confirmations.
+16. **Drop-in Files** — full `index.css` and `tailwind.config.ts` embedded inline in fenced blocks so the agent can write them verbatim.
+17. **Acceptance Checklist** — 15-item checklist the agent must self-verify before shipping any screen.
 
-**6. Motion**
-- Keyframes: `accordion-down/up`, `float`, `fadeInUp`, `shimmer`, `progress-grow`
-- Animations with timings and easings (e.g. `cubic-bezier(0.22, 1, 0.36, 1)`)
+## Format notes
 
-**7. Component Patterns (shadcn-based)**
-- Button: pill-shaped (`rounded-full`), variants (default, destructive, outline, secondary, ghost, link), sizes (default/sm/lg/icon), `[&_svg]:size-4`
-- Card: `rounded-lg border bg-card shadow-soft-sm`, padding `p-6`
-- Dialog / Drawer / Input / Badge usage patterns
+- Single markdown file, ~600–900 lines.
+- Every rule phrased as an imperative ("Use…", "Never…").
+- Code blocks for tokens + config so paste-in is one step.
+- No project-specific references (no "Saras", no "Teacher LMS") — fully generic so it works on any future app.
 
-**8. Usage Rules (enforced)**
-- Never hardcode color utilities (`text-white`, `bg-[#...]`) — always semantic tokens
-- All colors authored in HSL inside `index.css`
-- No purple/indigo gradients on white; no default Inter/Poppins-on-purple AI aesthetic
-- Status colors only via tokens
-
-**9. Drop-in files**
-- Complete `index.css` (light + dark vars + base layer + utilities)
-- Complete `tailwind.config.ts` (color mapping, fontSize floor, keyframes, animations)
-- `components.json` snippet for shadcn projects
-- Quick install steps (Tailwind, `tailwindcss-animate`, Poppins import)
-
-## Deliverables
-- `/mnt/documents/design-system.md` — full doc
-- `/mnt/documents/design-system/index.css` — paste-ready
-- `/mnt/documents/design-system/tailwind.config.ts` — paste-ready
-
-Both will be surfaced as download artifacts at the end.
+After you approve, I'll write the file and surface it as a downloadable artifact.
